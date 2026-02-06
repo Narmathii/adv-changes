@@ -1,0 +1,839 @@
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+    :root {
+  --shadow-small: 0 1px 3px 0 rgba(0, 0, 0, 0.1),
+    0 1px 2px 0 rgba(0, 0, 0, 0.06);
+  --shadow-medium: 0 4px 6px -1px rgba(0, 0, 0, 0.1),
+    0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  --shadow-large: 0 10px 15px -3px rgba(0, 0, 0, 0.1),
+    0 4px 6px -2px rgba(0, 0, 0, 0.05);
+
+  --color: #c7232f;
+  --color2: #161d27;
+  --color2-dark: #0f131a;
+}
+
+
+*,
+*::before,
+*::after {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+  list-style: none;
+  list-style-type: none;
+  text-decoration: none;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+html {
+  scroll-behavior: smooth;
+  height: -webkit-fill-available;
+}
+
+body {
+  font-family: "Inter", sans-serif;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 1.4;
+  color: #000;
+  background-color: #fff;
+  transition: 0.35s;
+
+  &.darkmode {
+    color: #fff;
+    background-color: var(--color2-dark);
+  }
+}
+
+main {
+  overflow: hidden;
+}
+
+a,
+button {
+  cursor: pointer;
+  user-select: none;
+  border: none;
+  outline: none;
+  background: none;
+}
+
+@keyframes slideLeft {
+  0% {
+    opacity: 0;
+    transform: translateX(100%);
+  }
+
+  100% {
+    opacity: 1;
+    transform: translateX(0%);
+  }
+}
+
+@keyframes slideRight {
+  0% {
+    opacity: 1;
+    transform: translateX(0%);
+  }
+
+  100% {
+    opacity: 0;
+    transform: translateX(100%);
+  }
+}
+
+.section {
+  margin: 0 auto;
+  padding: 6rem 0 2rem;
+}
+
+.container {
+  max-width: 75rem;
+  height: auto;
+  margin-inline: auto;
+  padding-inline: 1.5rem;
+}
+
+.centered {
+  text-align: center;
+  vertical-align: middle;
+  margin-bottom: 1rem;
+}
+
+.header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: auto;
+  z-index: 100;
+  margin: 0 auto;
+  background-color: #fff;
+  box-shadow: var(--shadow-medium);
+  .darkmode & {
+    background-color: var(--color2);
+  }
+}
+
+.navbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-content: center;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  height: 65px;
+  margin: 0 auto;
+
+  .navbar__left {
+    display: flex;
+    align-items: center;
+    flex: 0 0 17%;
+
+    @media (max-width: (767px - 1)) {
+      flex: 0 0 auto;
+    }
+  }
+
+
+.brand {
+  display: flex;
+  align-items: center;
+  order: 1;
+
+  svg {
+    width: 60px;
+    height: 60px;
+  }
+}
+
+.menu {
+  @media (max-width: (767px - 1)) {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 350px;
+    max-width: 85%;
+    height: 100%;
+    z-index: 100;
+    overflow: hidden;
+    background-color: #fff;
+    transform: translate(-100%);
+    transition: all 0.4s ease-in-out;
+
+    &.is-active {
+      transform: translate(0%);
+    }
+
+    .darkmode & {
+      background-color: var(--color2);
+    }
+  }
+
+  .menu__header {
+    display: none;
+    box-shadow: var(--shadow-medium);
+
+    @media (max-width: (767px - 1)) {
+      position: relative;
+      top: 0;
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+      height: 4rem;
+      z-index: 110;
+      visibility: hidden;
+      background: transparent;
+
+      &.is-active {
+        visibility: visible;
+        background-color: #fff;
+
+        > .menu__arrow {
+          display: flex;
+        }
+
+        .darkmode & {
+          background-color: var(--color2);
+        }
+      }
+    }
+
+    .menu__arrow {
+      @media (max-width: (767px - 1)) {
+        display: none;
+        justify-content: center;
+        align-items: center;
+        cursor: pointer;
+        width: 3rem;
+
+        &:hover {
+          i {
+            color: var(--color);
+          }
+        }
+        > i {
+          font-size: 1.5rem;
+          color: #000;
+          transition: all 0.25s ease;
+
+          .darkmode & {
+            color: #fff;
+          }
+        }
+      }
+    }
+
+    .menu__title {
+      @media (max-width: (767px - 1)) {
+        cursor: pointer;
+        font-weight: 500;
+        text-transform: capitalize;
+        color: #000;
+        transition: all 0.25s ease;
+
+        &:hover {
+          color: var(--color);
+        }
+
+        .darkmode & {
+          color: #fff;
+        }
+      }
+    }
+  }
+
+  .menu__inner {
+    @media (max-width: (767px - 1)) {
+      height: 100%;
+      margin-top: -3rem;
+      overflow-y: auto;
+      overflow-x: hidden;
+    }
+
+    .menu__item {
+      position: static;
+      display: inline-block;
+      padding-right: 20px;
+      padding: 15px 20px 15px 0;
+      &:last-child {
+        padding-right: 0;
+      }
+
+      &:hover {
+        > .menu__link {
+          color: var(--color);
+        }
+        .darkmode & > .menu__link {
+          color: var(--color);
+        }
+      }
+
+      @media (max-width: (767px - 1)) {
+        display: block;
+        padding: 0;
+      }
+
+      @media (min-width: 767px) {
+        &:hover {
+          > .menu__link {
+            i {
+              transform: rotate(-90deg);
+            }
+          }
+        }
+      }
+
+      &.menu__dropdown {
+        @media (min-width: 767px) {
+          &:hover {
+            > .submenu {
+              opacity: 1;
+              visibility: visible;
+              top: 95%;
+            }
+          }
+        }
+      }
+
+      .menu__link {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        font-size: 16px;
+        font-weight: 500;
+        color: #000;
+        text-transform: capitalize;
+        transition: all 0.25s ease;
+
+        @media (max-width: (767px - 1)) {
+          justify-content: space-between;
+          padding: 20px;
+        }
+
+        > i {
+          margin-left: 5px;
+          font-size: 1.35rem;
+          transform: rotate(90deg);
+          transition: 0.35s;
+          @media (max-width: (767px - 1)) {
+            margin-left: 10px;
+            transform: rotate(0deg);
+          }
+        }
+
+        .darkmode & {
+          color: #fff;
+        }
+      }
+    }
+  }
+}
+
+.submenu {
+  position: absolute;
+  z-index: 100;
+  top: 110%;
+  left: 50%;
+  width: 100%;
+  height: auto;
+  padding: 20px 15px;
+  border-radius: 0.25rem;
+  border-top: 2px solid var(--color);
+  background-color: #fff;
+  box-shadow: var(--shadow-medium);
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.35s ease-in-out;
+  transform: translateX(-50%);
+
+  .darkmode & {
+    border-top: 2px solid var(--color);
+    background-color: var(--color2);
+  }
+
+  @media (max-width: (767px - 1)) {
+    position: absolute;
+    display: none;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    max-width: none;
+    min-width: auto;
+    margin: 0;
+    padding: 100px 15px 0 15px;
+    border-radius: 0;
+    border-top: 0;
+    box-shadow: none;
+    opacity: 1;
+    overflow-y: auto;
+    visibility: visible;
+    transform: translateX(0%);
+
+    &.is-active {
+      display: block;
+    }
+  }
+
+  @media (min-width: 767px) {
+    animation: none !important;
+  }
+
+  &.megamenu__normal {
+    @media (min-width: 767px) {
+      left: 65%;
+      max-width: 250px;
+      width: 100%;
+      height: auto;
+      margin: 0 auto;
+    }
+  }
+
+  &.megamenu__text,
+  &.megamenu__image {
+    @media (min-width: 767px) {
+      display: flex;
+      flex-wrap: wrap;
+      max-width: 95%;
+      height: auto;
+      margin: 0 auto;
+    }
+    @media (min-width: (767px + 208)) {
+      max-width: 992px;
+    }
+  }
+
+  &.megamenu__image {
+    .submenu__inner {
+      a {
+        display: flex;
+        flex-flow: column;
+        align-items: center;
+        @media (max-width: (767px - 1)) {
+          flex-flow: row;
+          align-items: center;
+          padding-bottom: 20px;
+        }
+        img {
+          display: block;
+          width: 100%;
+          height: 150px;
+          margin-bottom: 15px;
+          object-fit: cover;
+          border-radius: 10px;
+          @media (max-width: (767px - 1)) {
+            width: 30%;
+            height: 80px;
+            margin-bottom: 0;
+            margin-right: 15px;
+          }
+        }
+      }
+    }
+  }
+
+  .submenu__inner {
+    width: 25%;
+    padding: 0 15px;
+
+    @media (max-width: (767px - 1)) {
+      width: 100%;
+      padding: 0;
+    }
+
+    .submenu__title {
+      font-size: 16px;
+      font-weight: 500;
+      color: var(--color);
+      text-transform: uppercase;
+      transition: all 0.3s ease;
+
+      .darkmode & {
+        color: var(--color);
+      }
+    }
+  }
+
+  .submenu__list {
+    @media (max-width: (767px - 1)) {
+      margin-bottom: 20px;
+    }
+
+    li {
+      display: block;
+      line-height: 1;
+      margin: 0 auto;
+
+      a {
+        display: inline-block;
+        padding: 10px 0;
+        line-height: 1.4;
+        text-transform: capitalize;
+        color: #000;
+        transition: all 0.25s ease-in-out;
+
+        &:hover {
+          color: var(--color);
+        }
+
+        @media (max-width: (767px - 1)) {
+          display: block;
+        }
+
+        .darkmode & {
+          color: #fff;
+
+          &:hover {
+            color: var(--color);
+          }
+        }
+      }
+    }
+  }
+}
+
+.switch {
+  position: relative;
+  display: block;
+  cursor: pointer;
+  user-select: none;
+  margin-right: 10px;
+
+  .switch__light,
+  .switch__dark {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform-origin: center;
+    transform: translate(-50%, -50%);
+    transition: all 0.3s ease-in;
+  }
+
+  .switch__light {
+    font-size: 20px;
+    visibility: visible;
+    color: #000;
+
+    .darkmode & {
+      font-size: 0;
+      visibility: hidden;
+    }
+  }
+
+  .switch__dark {
+    font-size: 0;
+    visibility: hidden;
+    color: #fff;
+
+    .darkmode & {
+      font-size: 20px;
+      visibility: visible;
+    }
+  }
+}
+
+.overlay {
+  position: fixed;
+  display: block;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 9;
+  opacity: 0;
+  visibility: hidden;
+  background-color: rgba(0, 0, 0, 0.7);
+  transition: all 0.45s ease-in-out;
+  pointer-events: none;
+
+  @media (max-width: (767px - 1)) {
+    cursor: url("https://i.imgur.com/cPh9Zm5.png"), zoom-out;
+    pointer-events: visible;
+
+    &.is-active {
+      opacity: 1;
+      visibility: visible;
+    }
+  }
+}
+
+.burger {
+  position: relative;
+  display: block;
+  cursor: pointer;
+  width: 25px;
+  height: 15px;
+  margin-right: 15px;
+  opacity: 0;
+  visibility: hidden;
+  background: transparent;
+
+  @media (max-width: (767px - 1)) {
+    opacity: 1;
+    visibility: visible;
+  }
+
+  .burger-line {
+    position: absolute;
+    display: block;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    opacity: 1;
+    border-radius: 15px;
+    background: #000;
+
+    .darkmode & {
+      background: #fff;
+    }
+
+    &:nth-child(1) {
+      top: 0px;
+    }
+
+    &:nth-child(2) {
+      top: 8px;
+      width: 70%;
+    }
+
+    &:nth-child(3) {
+      top: 16px;
+    }
+  }
+}
+
+</style>
+<header class="header" id="header">
+  <nav class="navbar container">
+    <section class="navbar__left">
+      <a href="#" class="brand">
+        <svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 192.756 192.756">
+          <g fill-rule="evenodd" clip-rule="evenodd">
+            <path fill="#fff" fill-opacity="0" d="M0 0h192.756v192.756H0V0z" />
+            <path d="M130.424 44.314c6.051-3.026 9.156-2.561 9.234.465.076 3.957-.545 9.233-.934 13.035-2.326 20.64-6.051 37.477-6.361 58.737 10.01-25.916 18.312-43.762 29.098-65.875 3.414-7.061 5.664-5.742 8.457-7.061 10.941-4.889 11.328-1.863 9.854 4.189-5.275 21.959-18.777 91.403-20.871 102.035-.621 3.104-4.035 1.862-4.811.621-4.035-5.354-8.381-5.433-7.916-9.079 2.484-17.69 11.33-62.461 13.58-73.014-11.717 23.897-23.822 53.926-30.027 70.84-1.32 3.57-3.725 3.338-5.199.699-2.174-3.803-6.209-5.664-6.828-10.009-2.174-13.89 2.404-40.426 3.025-57.263-6.285 18.311-16.992 54.004-21.648 70.064-1.939 6.674-8.379 5.51-6.672-.853 7.137-27.08 22.424-74.799 29.018-91.947 1.552-4.11 5.663-3.877 9.001-5.584zM91.783 40.978c-2.096-.465-8.148 2.793-11.872 3.337-1.163.311-2.25 1.474-2.637 2.404C71.375 60.297 66.1 73.179 61.6 84.816a711.997 711.997 0 0 0-20.33 4.035c5.509-13.966 11.019-27.854 16.372-41.124 2.638-6.672-4.344-7.293-7.062-.62-3.491 8.613-10.087 24.828-17.38 43.685-5.354 1.319-11.174 2.793-17.07 4.578-4.345 1.163-4.501 2.326-2.639 4.966 1.086 1.396 3.104 1.241 4.113 2.328 2.561 2.637 4.113 5.819 8.689 6.284-4.189 10.863-8.225 21.959-11.793 32.589-2.328 6.75 4.267 8.147 6.75 1.009 4.035-11.406 8.302-22.967 12.726-34.685 3.647-.775 12.415-2.637 20.562-4.5-6.44 17.846-10.63 31.27-12.338 37.865-.309 1.241.311 1.862.543 2.482 2.096 3.104 4.268 3.259 7.061 7.217.699 1.087 3.259 1.629 4.191-1.009a1241.157 1241.157 0 0 1 17.768-50.279c2.406-.621 6.752-1.63 9.389-5.509 4.656-6.984 5.976-5.586 7.217-7.682 1.396-2.715.387-5.121-4.578-4.578 0 0-1.863.156-5.432.544 5.586-14.2 10.554-26.226 13.967-35.46 1.163-3.181 1.32-5.509-.543-5.974z" fill="#c7232f" />
+            <path d="M86.325 129.153c.807-1.024 1.539-2.081 2.199-3.057 2.94-4.35.078-6.907-2.948-4.346-.432.397-.881.83-1.327 1.28a980.885 980.885 0 0 1-1.477-4.66c1.387-1.7 2.737-3.445 3.889-5.233 4.863-7.542-4.654-11.871-8.768-6.982-2.171 2.561-1.628 5.121-1.008 7.371.18.676.46 1.642.807 2.814a104.967 104.967 0 0 0-4.376 4.866c-4.733 5.433-3.417 12.428 1.552 13.967 2.996.929 5.823-.425 8.272-2.585.118.308.231.601.341.879 1.319 3.259 5.432 2.25 3.802-1.707-.262-.665-.59-1.56-.958-2.607zm-6.736-6.837c.402 1.267.835 2.598 1.267 3.872-.541.451-1.09.907-1.643 1.227-1.924 1.113-3.337-.078-.854-3.414.406-.576.822-1.134 1.23-1.685zm1.553-9.501c-.143-.361-.225-.715-.3-.996-1.392-5.2 4.568-3.811 1.553-.388-.428.485-.817.965-1.253 1.384z" fill="#c7232f" />
+          </g>
+        </svg>
+      </a>
+      <div class="burger" id="burger">
+        <span class="burger-line"></span>
+        <span class="burger-line"></span>
+        <span class="burger-line"></span>
+      </div>
+    </section>
+    <section class="navbar__center">
+      <span class="overlay"></span>
+      <div class="menu" id="menu">
+        <div class="menu__header">
+          <span class="menu__arrow"><i class="bx bx-chevron-left"></i></span>
+          <span class="menu__title"></span>
+        </div>
+        <ul class="menu__inner">
+          <li class="menu__item"><a href="#" class="menu__link">Home</a></li>
+          <li class="menu__item menu__dropdown">
+            <a href="#" class="menu__link">
+              Products
+              <i class="bx bx-chevron-right"></i>
+            </a>
+            <div class="submenu megamenu__text">
+              <div class="submenu__inner">
+                <h4 class="submenu__title">Women</h4>
+                <ul class="submenu__list">
+                  <li><a href="#">Shirts & Blouses</a></li>
+                  <li><a href="#">Pants</a></li>
+                  <li><a href="#">Blazers & Vests</a></li>
+                  <li><a href="#">Cardigans & Sweaters</a></li>
+                </ul>
+              </div>
+              <div class="submenu__inner">
+                <h4 class="submenu__title">Men</h4>
+                <ul class="submenu__list">
+                  <li><a href="#">T-shirts & Tanks</a></li>
+                  <li><a href="#">Pants</a></li>
+                  <li><a href="#">Hoodies & Sweatshirts</a></li>
+                  <li><a href="#">Blazers & Suits</a></li>
+                </ul>
+              </div>
+              <div class="submenu__inner">
+                <h4 class="submenu__title">Kids</h4>
+                <ul class="submenu__list">
+                  <li><a href="#">Clothing</a></li>
+                  <li><a href="#">Outerwear</a></li>
+                  <li><a href="#">Activewear</a></li>
+                  <li><a href="#">Accessories</a></li>
+                </ul>
+
+              </div>
+              <div class="submenu__inner">
+                <h4 class="submenu__title">Sport</h4>
+                <ul class="submenu__list">
+                  <li><a href="#">Clothing</a></li>
+                  <li><a href="#">Swimwear</a></li>
+                  <li><a href="#">Outerwear</a></li>
+                  <li><a href="#">Accessories & Equipment</a></li>
+                </ul>
+              </div>
+            </div>
+          </li>
+          <li class="menu__item menu__dropdown">
+            <a href="#" class="menu__link">
+              More
+              <i class="bx bx-chevron-right"></i>
+            </a>
+            <div class="submenu megamenu__image">
+              <div class="submenu__inner">
+                <a href="#">
+                  <img src="https://plus.unsplash.com/premium_photo-1677013011737-ba61149ba70c?q=80&w=1740&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" class="submenu-image" alt="">
+                  <span class="submenu__title">Home</span>
+                </a>
+              </div>
+              <div class="submenu__inner">
+                <a href="#">
+                  <img src="https://images.unsplash.com/photo-1515688594390-b649af70d282?q=80&w=1612&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" class="submenu-image" alt="">
+                  <span class="submenu__title">Beauty</span>
+                </a>
+              </div>
+              <div class="submenu__inner">
+                <a href="#">
+                  <img src="https://plus.unsplash.com/premium_photo-1676550886096-bfc64aae1e2a?q=80&w=1740&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" class="submenu-image" alt="">
+                  <span class="submenu__title">Holiday</span>
+                </a>
+              </div>
+              <div class="submenu__inner">
+                <a href="#">
+                  <img src="https://images.unsplash.com/photo-1483985988355-763728e1935b?q=80&w=1740&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" class="submenu-image" alt="">
+                  <span class="submenu__title">Sale</span>
+                </a>
+              </div>
+            </div>
+          </li>
+          <li class="menu__item menu__dropdown">
+            <a href="#" class="menu__link">
+              Account
+              <i class="bx bx-chevron-right"></i>
+            </a>
+            <div class="submenu megamenu__normal">
+              <ul class="submenu__list">
+                <li><a href="#">Login</a></li>
+                <li><a href="#">Register</a></li>
+                <li><a href="#">Track Order</a></li>
+                <li><a href="#">Help</a></li>
+              </ul>
+            </div>
+          </li>
+          <li class="menu__item"><a href="#" class="menu__link">Support</a></li>
+        </ul>
+      </div>
+    </section>
+    <section class="navbar__right">
+      <button class="switch" id="switch">
+        <span class="switch__light"><i class="bx bx-sun"></i></span>
+        <span class="switch__dark"><i class="bx bx-moon"></i></span>
+      </button>
+    </section>
+  </nav>
+</header>
+
+<script>
+    const menu = document.querySelector(".menu");
+const menuInner = menu.querySelector(".menu__inner");
+const menuArrow = menu.querySelector(".menu__arrow");
+const menuTitle = menu.querySelector(".menu__title");
+const burger = document.querySelector(".burger");
+const overlay = document.querySelector(".overlay");
+
+// Navbar Menu Toggle Function
+function toggleMenu() {
+  menu.classList.toggle("is-active");
+  overlay.classList.toggle("is-active");
+}
+
+// Show Mobile Submenu Function
+function showSubMenu(children) {
+  subMenu = children.querySelector(".submenu");
+  subMenu.classList.add("is-active");
+  subMenu.style.animation = "slideLeft 0.35s ease forwards";
+  const menuTitle = children.querySelector("i").parentNode.childNodes[0]
+    .textContent;
+  menu.querySelector(".menu__title").textContent = menuTitle;
+  menu.querySelector(".menu__header").classList.add("is-active");
+}
+
+// Hide Mobile Submenu Function
+function hideSubMenu() {
+  subMenu.style.animation = "slideRight 0.35s ease forwards";
+  setTimeout(() => {
+    subMenu.classList.remove("is-active");
+  }, 300);
+
+  menu.querySelector(".menu__title").textContent = "";
+  menu.querySelector(".menu__header").classList.remove("is-active");
+}
+
+// Toggle Mobile Submenu Function
+function toggleSubMenu(e) {
+  if (!menu.classList.contains("is-active")) {
+    return;
+  }
+  if (e.target.closest(".menu__dropdown")) {
+    const children = e.target.closest(".menu__dropdown");
+    showSubMenu(children);
+  }
+}
+
+// Fixed Navbar Menu on Window Resize
+window.addEventListener("resize", () => {
+  if (window.innerWidth >= 768) {
+    if (menu.classList.contains("is-active")) {
+      toggleMenu();
+    }
+  }
+});
+
+// Dark and Light Mode with localStorage
+(function () {
+  let darkMode = localStorage.getItem("darkMode");
+  const darkSwitch = document.getElementById("switch");
+
+  // Enable and Disable Darkmode
+  const enableDarkMode = () => {
+    document.body.classList.add("darkmode");
+    localStorage.setItem("darkMode", "enabled");
+  };
+
+  const disableDarkMode = () => {
+    document.body.classList.remove("darkmode");
+    localStorage.setItem("darkMode", null);
+  };
+
+  // User Already Enable Darkmode
+  if (darkMode === "enabled") {
+    enableDarkMode();
+  }
+
+  // User Clicks the Darkmode Toggle
+  darkSwitch.addEventListener("click", () => {
+    darkMode = localStorage.getItem("darkMode");
+    if (darkMode !== "enabled") {
+      enableDarkMode();
+    } else {
+      disableDarkMode();
+    }
+  });
+})();
+
+// Initialize All Event Listeners
+burger.addEventListener("click", toggleMenu);
+overlay.addEventListener("click", toggleMenu);
+menuArrow.addEventListener("click", hideSubMenu);
+menuTitle.addEventListener("click", hideSubMenu);
+menuInner.addEventListener("click", toggleSubMenu);
+
+</script>

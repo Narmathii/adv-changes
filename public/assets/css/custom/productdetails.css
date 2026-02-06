@@ -1,0 +1,70 @@
+.block-with-text p,
+.block-with-text p strong,
+.block-with-text h2,
+.block-with-text h1,
+.block-with-text h3,
+.block-with-text h4,
+.block-with-text h5,
+.block-with-text h6,
+.block-with-text > span > p strong {
+  font-size: 15px !important;
+  font-family: "Poppins", sans-serif;
+  text-align: justify;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+
+  line-height: 1.5em;
+  max-height: calc(1.5em * 2);
+}
+
+.block-with-text > span > p strong,
+.block-with-text > span > h2,
+.block-with-text > span > h3,
+.block-with-text > span > h4,
+.block-with-text > span > h5,
+.block-with-text > span > h6,
+.block-with-text > span > h1,
+.block-with-text > span > ul > li strong,
+.nav-desc > h4 {
+  font-size: 15px !important;
+  font-weight: normal !important;
+  color: #000 !important;
+}
+
+.block-with-text > span > ul {
+  font-size: 15px !important;
+  font-family: "Poppins", sans-serif;
+  text-align: justify;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+
+  line-height: 1.5em;
+  max-height: calc(1.5em * 2);
+}
+
+.nav-desc > p,
+.nav-desc > p strong,
+.nav-desc > ul > li strong {
+  font-size: 15px !important;
+  font-weight: normal !important;
+}
+
+.block-with-text > span > ul,
+.nav-desc > ul {
+  padding-left: 0rem !important;
+}
+
+.drop-shipping {
+  background-color: blue;
+  padding: 6px;
+  color: #fff !important;
+  font-size: 15px !important;
+}
+
+/*  */

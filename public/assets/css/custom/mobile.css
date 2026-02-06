@@ -1,0 +1,530 @@
+/* For Samsung */
+@media only screen and (max-width: 361px) {
+  /* .mobile-search {
+    display: none !important;
+  } */
+
+  #suggestionsBox {
+    width: 217% !important;
+  }
+
+  .suggestion {
+    width: unset !important;
+  }
+  form a {
+    display: flex;
+    justify-content: unset !important;
+  }
+  .suggestion {
+    width: 0;
+  }
+  .suggestion-img {
+    margin-right: 0;
+  }
+  .searchInput {
+    margin-top: 14% !important;
+  }
+  .suggestion-img {
+    width: 35% !important;
+  }
+
+  address.s1 span {
+    background: none;
+    margin: 0;
+    padding: 0;
+    font-size: 14px !important;
+    line-height: 1.7em;
+    margin-bottom: 5px;
+  }
+  #burger {
+    position: fixed;
+    top: 4.3%;
+  }
+  .burger {
+    width: 22px;
+  }
+  .brand img {
+    margin-left: 15px;
+    height: 40px !important;
+    width: 80px !important;
+    margin-right: 12px;
+    margin-bottom: 10px;
+  }
+  .searchInput {
+    margin-top: 14% !important;
+  }
+
+  .search-container {
+    position: relative;
+    display: inline-block;
+    justify-content: center;
+    width: 100%;
+    margin-left: -37%;
+  }
+
+  /* .products_wrapper > .offer {
+    width: 35px !important;
+    height: 35px !important;
+    left:21px !important
+  } */
+  /* .offer {
+    position: absolute;
+    top: 4px !important;
+    left: 4px !important;
+    width: 30px;
+    height: 30px;
+    font-size: 10px !important;
+  } */
+  #section-newArrival .de-item {
+    min-height: 240px !important;
+  }
+  .new-arrival .de-item .d-info {
+    height: 193px !important;
+  }
+
+  .buynow_btn {
+    height: 30px !important;
+    font-size: 13px !important;
+  }
+
+  #section-newArrival .de-item h4 {
+    font-size: 11px !important;
+  }
+  .share-btn {
+    position: absolute;
+    top: 15% !important;
+    z-index: 99;
+    color: #fff !important;
+    right: 10% !important;
+    background: #85a229;
+    box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14),
+      0 3px 1px -2px rgba(0, 0, 0, 0.12), 0 1px 5px 0 rgba(0, 0, 0, 0.2);
+    padding: 8px;
+    border-radius: 50%;
+    font-size: 17px;
+  }
+  .form-check-input {
+    margin-top: 1px;
+    z-index: 99;
+    margin-left: 1% !important;
+  }
+  .ms-2 {
+    margin-left: 2.5rem !important;
+  }
+  
+}
+
+@media only screen and (max-width: 391px) {
+  .suggestion {
+    width: 0;
+  }
+  .suggestion-img {
+    margin-right: 0;
+  }
+  /*  
+  #section-hotsale .items_wrapper {
+    width: 0;
+  } */
+
+  #suggestionsBox {
+    width: 200% !important;
+  }
+
+  .search-container {
+    width: 158% !important;
+    margin-left: -97px !important;
+  }
+
+  .suggestion-img {
+    width: 35% !important;
+  }
+  img .searchInput {
+    margin-top: 14% !important;
+  }
+
+  .change-address {
+    top: 2px !important;
+    right: -28px !important;
+    bottom: 0;
+    width: 39px !important;
+    height: 36px;
+    border-radius: 5px !important;
+  }
+
+  .change_btn .change-address {
+    font-size: 0;
+  }
+
+  .change_btn .change-address i {
+    font-size: 16px;
+    margin-left: 0;
+  }
+  .ribbon {
+    top: -25px;
+    left: 0;
+  }
+
+  #cpnBtn {
+    border: 1px solid #000;
+    background: #000;
+    padding: 10px 7px;
+    color: #fff !important;
+    cursor: pointer;
+  }
+
+  .d-text.address-field {
+    font-size: 12px;
+    padding: 3px;
+  }
+  .share-btn {
+    right: 10%;
+    margin-top: 8% !important;
+  }
+  .btn-fullwidth {
+    font-size: 14px !important;
+  }
+
+  .addto_cart div {
+    margin: 1px;
+  }
+  .btn-detail div {
+    padding: 2px;
+    margin: 10px 0;
+  }
+
+  /* .tab-default .tab-content {
+    margin-top: 20px;
+    text-align: justify;
+  } */
+}
+@media only screen and (max-width: 768px) {
+  /* form a {
+    display: flex;
+    justify-content: unset !important;
+  } */
+  .suggestion {
+    width: 0;
+  }
+  .suggestion-img {
+    margin-right: 0;
+  }
+  .searchInput {
+    margin-top: 14% !important;
+  }
+  .suggestion-img {
+    width: 45% !important;
+    height: 45% !important;
+  }
+
+  /* .search-container {
+    width: 100% !important;
+    margin-left: -37% !important;
+  } */
+  .add-address {
+    right: 17px;
+    top: 52px;
+    left: inherit !important;
+  }
+  .cartlist-container {
+    padding: 75px 10px !important;
+  }
+
+  #section-newArrival .owl-carousel.owl-drag .owl-item {
+    padding-left: 0 !important;
+  }
+
+  #section-newArrival h2,
+  #section-helmets h2,
+  #social_media h2,
+  #section-hotsale h2 {
+    padding: 20px 30px 10px 30px;
+    font-size: 20px;
+  }
+
+  #section-offers h2,
+  #section-brands h2 {
+    font-size: 20px;
+  }
+}
+
+/* Mobile (Landscape) and small phones */
+@media only screen and (min-width: 425px) and (max-width: 767px) {
+  .change_btn .change-address {
+    font-size: 0;
+  }
+
+  #suggestionsBox {
+    width: 200% !important;
+  }
+
+  .search-container {
+    width: 110% !important;
+    margin-left: -50% !important;
+  }
+  .change_btn .change-address i {
+    font-size: 16px;
+    margin-left: 0;
+  }
+
+  .change-address {
+    text-transform: capitalize;
+    position: absolute !important;
+    background-color: #829b2f;
+    color: #fff !important;
+    top: 2px !important;
+    right: -28px !important;
+    bottom: 0;
+    width: 39px !important;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 5px;
+  }
+
+  #section-newArrival .owl-carousel.owl-drag .owl-item {
+    /* padding-left: 15px; */
+    /* padding: 3px !important; */
+  }
+  #section-offers h2,
+  #section-newArrival h2,
+  #section-brands h2,
+  #section-helmets h2,
+  #social_media h2,
+  #section-hotsale h2 {
+    font-size: 19px;
+  }
+  .owl-carousel.owl-loaded {
+    padding-right: 19px !important;
+  }
+
+  .share-btn {
+    top: 15%;
+    right: 9%;
+  }
+
+  .block-with-text p {
+    overflow: auto !important;
+  }
+
+  .nav-desc > p,
+  .nav-desc > p strong,
+  .nav-desc > ul > li strong {
+    text-align: justify !important;
+  }
+
+  .ribbon span {
+    width: 156px;
+    height: 38px;
+    line-height: 37px;
+    position: absolute;
+    top: 51px;
+    left: -38px;
+    /* margin-left: -6px; */
+    z-index: 2;
+    overflow: hidden;
+    -webkit-transform: rotate(-45deg);
+    transform: rotate(-46deg);
+    text-align: center;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+    font-size: 13px;
+  }
+
+  .hotsale-ribbon > span.ribbon {
+    left: 0 !important;
+  }
+  .ribbon {
+    width: 188px;
+    height: 188px;
+    position: absolute;
+    top: -26px;
+    left: 0;
+    overflow: hidden;
+    text-transform: uppercase;
+    color: #fff;
+    font-size: 13px;
+    background: unset;
+  }
+  #section-hotsale > span.view_all {
+    top: -8px !important;
+  }
+  .view_all {
+    display: flex;
+    justify-content: space-evenly;
+    position: absolute;
+    right: -8px;
+    top: 11px;
+    color: #606060 !important;
+    font-size: 15px;
+    font-weight: 600;
+    align-items: normal;
+    transition: all 0.6s ease;
+    width: 100px;
+    margin-top: 10px;
+    z-index: 10;
+    cursor: pointer;
+    pointer-events: auto;
+  }
+  #section-brands h2,
+  #section-offers h2 {
+    padding: 20px 30px 20px 31px;
+  }
+
+  /* #section-newArrival .de-item h4,
+  #section-newArrivalView h4,
+  #section-hotsale h4 {
+    min-height: 65px;
+  } */
+  /* section,
+  .section-padding {
+    padding: 0px 0px !important;
+  }
+  #section-offers .owl-stage-outer {
+    margin: 0px 38px; */
+  /* padding: 25px 10px 0 10px; */
+  /* padding: 25px 3px 0 19px;
+  } */
+
+  /* #section-newArrival .owl-carousel.owl-drag .owl-item {
+    padding-left: 70px;
+} */
+
+  #section-offers .owl-item .item,
+  #section-newArrival .owl-item .item {
+    margin: 0;
+    margin-left: 2px;
+  }
+
+  .discount-tag::after {
+    content: "";
+    position: absolute;
+    right: 6px;
+    top: 27px;
+    border-top: 0px solid transparent;
+    border-bottom: 11px solid transparent;
+    border-right: 56px solid #3b4d00;
+  }
+}
+
+.wrapper {
+  max-width: 55.25rem;
+  margin: 6rem auto;
+  width: 58%;
+}
+
+@media only screen and (min-width: 1200px) and (max-width: 1599px) {
+  /* .menu__inner {
+    margin-top: -53px !important;
+  } */
+
+  #section-offers .owl-stage-outer {
+    padding: 23px 33px 0px 33px !important;
+  }
+
+  .ribbon {
+    left: 6px;
+  }
+  .ribbon span {
+    left: -45px;
+  }
+  .owl-prev span,
+  .owl-next span {
+    font-size: 48px;
+  }
+  #section-offers h2,
+  #section-newArrival h2,
+  #section-brands h2,
+  #section-helmets h2 {
+    font-size: 26px;
+  }
+}
+
+/* Large Desktops and Monitors */
+@media only screen and (min-width: 1600px) and (max-width: 2560px) {
+  .owl-prev span,
+  .owl-next span {
+    font-size: 50px;
+  }
+}
+
+/* Menuuuu */
+
+/* Tablets (landscape) */
+@media only screen and (min-width: 768px) and (max-width: 1024px) {
+  .menu__inner {
+    margin-top: 16% !important;
+  }
+  .menu {
+    width: auto;
+    margin-top: -8rem; /* better than -131px */
+  }
+  .brand img {
+    width: auto;
+    height: 5.75rem; /* ~92px */
+  }
+
+  .wrapper {
+    width: 46%;
+  }
+}
+
+/* Small desktops & laptops */
+@media only screen and (min-width: 1025px) and (max-width: 1439px) {
+  .menu__inner {
+    margin-top: 9.5% !important;
+  }
+  .menu {
+    width: auto;
+    margin-top: -8rem;
+  }
+  .brand img {
+    width: auto;
+    height: 5.75rem !important;
+  }
+}
+
+/* Large desktops */
+@media only screen and (min-width: 1440px) and (max-width: 1919px) {
+  .menu__inner {
+    margin-top: 0.5rem !important;
+  }
+  .menu {
+    width: auto;
+    margin-top: -0.6rem !important;
+  }
+  .brand img {
+    height: 6.4rem !important; /* ~102px */
+    margin-top: -0.2rem !important;
+  }
+  .header {
+    padding: 16px 5px;
+  }
+}
+
+/* Extra large desktops / 2K screens */
+@media only screen and (min-width: 1920px) and (max-width: 2560px) {
+  .menu__inner {
+    margin-top: 0;
+  }
+  .menu {
+    width: auto;
+    margin-top: 0 !important;
+  }
+  .brand img {
+    height: 6.25rem !important; /* ~100px */
+    margin-top: -0.2rem !important;
+  }
+}
+
+/* CSS rules for Microsoft Edge only */
+@supports (-ms-ime-align: auto) {
+  @media only screen and (min-width: 1025px) and (max-width: 1439px) {
+    .menu__inner {
+      margin-top: 0.7rem !important;
+    }
+    .menu {
+      width: auto;
+      margin-top: -0.6rem !important;
+    }
+  }
+}

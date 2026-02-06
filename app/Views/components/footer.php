@@ -1,39 +1,37 @@
 <footer class="text-light">
-    <div class="container mw-100 m-0" style=" padding-bottom: 50px;">
+    <div class="container mw-100 m-0"style=" padding-bottom: 50px;">
         <div class="row g-custom-x justify-content-center">
-
+            
             <div class="col-lg-2 footersm">
                 <a href="<?php echo base_url() ?>">
-                    <img src="<?php echo base_url() ?>public/assets/images/logo-whiteBorder.png" class="jarallax-img"
-                        alt="" width="150">
+                    <img src="<?php echo base_url() ?>public/assets/images/logo-whiteBorder.png" class="jarallax-img" alt="" width="150">
                 </a>
             </div>
 
             <div class="col-lg-2">
                 <div class="widget p-sm-0">
                     <h5 class="text-center">About</h5>
-                    <p class="text-about-responsive">We provide the best camping, riding and motorcycle accessories in
-                        Coimbatore. Retail store & Wholesale.</p>
+                    <p class="text-about-responsive">We provide the best camping, riding and motorcycle accessories in Coimbatore. Retail store & Wholesale.</p>
                 </div>
             </div>
 
             <div class="col-lg-4">
                 <div class="widget p-sm-0">
                     <h5 class="text-center">Contact Info</h5>
-
+                    
                     <address class="s1">
                         <span style="cursor: default;">
-                            <i class="id-color fa fa-map-marker fa-lg"></i>Old no 44A, new no 69A, G.K.D.Nagar third
-                            Street,Pappanaickenpalayam, Coimbatore - 641037, Tamil Nadu , India
+                            <i class="id-color fa fa-map-marker fa-lg"></i><span class="footer_address">Old no 44A, new no 69A, G.K.D.Nagar third Street, Pappanaickenpalayam, Coimbatore - 641037, Tamil Nadu , India
+                            </span>
                         </span>
-
+                        
                         <div class="d-flex flex-wrap gap-2 align-items-center mt-2">
                             <span class="m-0" style="cursor: default;">
                                 <i class="id-color fa fa-phone fa-lg"></i>+91-7358992528
                             </span>
-
+                            
                             <span class="mx-1 separator-pipe">|</span>
-
+                            
                             <span class="m-0">
                                 <i class="id-color fa fa-envelope-o fa-lg"></i>
                                 <a href="mailto:abhishek@adventureshoppe.com">abhishek@adventureshoppe.com</a>
@@ -58,10 +56,8 @@
                 <div class="widget m-0 p-sm-0">
                     <h5 class="text-center">Social Network</h5>
                     <div class="socialmedia_links">
-                        <a href="https://www.instagram.com/ridersranchcoimbatore/" target="_blank"><i
-                                class="fa fa-instagram"></i></a>
-                        <a href="https://www.facebook.com/share/1AdUYKNcPB/" target="_blank"><i
-                                class="fa fa-facebook-f"></i></a>
+                        <a href="https://www.instagram.com/ridersranchcoimbatore/" target="_blank"><i class="fa fa-instagram"></i></a>
+                        <a href="https://www.facebook.com/share/1AdUYKNcPB/" target="_blank"><i class="fa fa-facebook-f"></i></a>
                         <a href="https://www.youtube.com/@adventureshoppe3772" target="_blank">
                             <img src="<?php echo base_url() ?>public/assets/images/icons/youtube.svg" alt="Youtube">
                         </a>
@@ -75,196 +71,184 @@
     <div class="subfooter">
         <div class="container mw-100 m-0 px-5">
             <div class="row align-items-center">
-
+                
                 <div class="col-md-6 text-copy-left mb-2 mb-md-0">
-                    <span>Copyright © <span id="current-year"></span> <a href="<?= base_url() ?>" class="dev-link">
-                            AdventureShoppe</a> All rights reserved</span>
+                    <span>Copyright © <span id="current-year"></span> AdventureShoppe All rights reserved</span>
                 </div>
 
                 <div class="col-md-6 text-copy-right">
-                    <span>Designed and Developed by <a href="https://www.appteq.in/" target="_blank"
-                            class="dev-link">Appteq Technology Solutions</a></span>
+                    <span>Designed and Developed by <a href="https://www.appteq.in/" target="_blank" class="dev-link">Appteq Technology Solutions</a></span>
                 </div>
 
             </div>
         </div>
     </div>
 
-    <style>
-        /* =========================================
+<style>
+    /* =========================================
        CUSTOM RESPONSIVE STYLES
        ========================================= */
 
-        .text-about-responsive {
-            text-align: center;
-        }
+    .text-about-responsive {
+        text-align: center;
+    }
 
-        .separator-pipe {
-            display: none !important;
-        }
+    .separator-pipe { 
+        display: none !important; 
+    }
 
-        .text-copy-left {
-            text-align: center;
-        }
-
-        .text-copy-right {
-            text-align: center;
-        }
+    .text-copy-left { text-align: center; }
+    .text-copy-right { text-align: center; }
 
 
-        @media (min-width: 992px) {
+    @media (min-width: 992px) {
+     
+        .text-about-responsive { text-align: left !important; }
 
-            .text-about-responsive {
-                text-align: left !important;
-            }
+        .separator-pipe { display: inline !important; }
 
-            .separator-pipe {
-                display: inline !important;
-            }
-
-            .text-copy-left {
-                text-align: left !important;
-            }
-
-            .text-copy-right {
-                text-align: right !important;
-            }
-        }
+        .text-copy-left { text-align: left !important; }
+        .text-copy-right { text-align: right !important; }
+    }
 
 
-        /* =========================================
+    /* =========================================
        GENERAL STYLES
        ========================================= */
-        .subfooter {
-            font-size: 13px !important;
-            padding: 15px 0;
+    .subfooter {
+        font-size: 13px !important;
+        padding: 15px 0;
+    }
+
+    .dev-link {
+        text-decoration: none !important;
+        color: inherit !important;
+        font-weight: bold;
+    }
+    .dev-link:hover {
+        color: #829b2f !important;
+    }
+
+    .widget address div span {
+        
+        margin-bottom: 0 !important;
+    }
+
+    .socialmedia_links {
+        display: flex !important;
+        justify-content: center !important;
+        gap: 15px !important;
+        margin-top: 15px !important;
+        text-align: center !important;
+    }
+
+    .socialmedia_links a {
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        width: 45px !important;
+        height: 45px !important;
+        background: #ffffff !important; 
+        border-radius: 50% !important;
+        transition: all 0.3s ease !important;
+        text-decoration: none !important;
+        position: relative !important;
+        overflow: hidden !important;
+        padding: 0 !important;
+        margin: 0 !important;
+        border: none !important;
+        box-shadow: none !important;
+    }
+
+    .socialmedia_links a::before, 
+    .socialmedia_links a::after,
+    .socialmedia_links a span {
+        display: none !important;
+        background: transparent !important;
+        content: none !important;
+    }
+
+    .socialmedia_links a i {
+        color: #000000 !important;
+        font-size: 20px !important;
+        background: transparent !important; 
+        position: relative !important;
+        z-index: 2 !important;
+        padding: 0 !important;
+        margin: 0 !important;
+    }
+
+    .socialmedia_links a img {
+        width: 20px !important;
+        height: auto !important;
+        display: block !important;
+        position: relative !important;
+        z-index: 2 !important;
+    }
+
+    .socialmedia_links a:hover {
+        background-color: #829b2f !important; 
+        background-image: none !important;
+        transform: translateY(-2px) !important;
+    }
+
+    .socialmedia_links a:hover i {
+        color: #ffffff !important;
+    }
+
+    .socialmedia_links a:hover img {
+        filter: brightness(0) invert(1) !important;
+    }
+    
+    .widget ul li a {
+        color: #a5a5a5;
+        text-decoration: none;
+    }
+    .widget ul li a:hover {
+        color: #829b2f;
+    }
+
+    @media (max-width: 768px) {
+        .subfooter span, .subfooter a {
+             font-weight: 500;
         }
+    }
 
-        .dev-link {
-            text-decoration: none !important;
-            color: inherit !important;
-            font-weight: bold;
+    @media (max-width: 576px) {
+        .footer-links {
+            text-align: center;
         }
-
-        .dev-link:hover {
-            color: #829b2f !important;
+        .footer-links a {
+            display: inline-block;
+            margin: 4px 10px;
+            font-size: 13px;
         }
-
-        .widget address div span {
-
-            margin-bottom: 0 !important;
+        .footer-links {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
         }
-
-        .socialmedia_links {
-            display: flex !important;
-            justify-content: center !important;
-            gap: 15px !important;
-            margin-top: 15px !important;
-            text-align: center !important;
+        .footer-links .footer-row {
+            display: flex;
+            justify-content: center;
+            gap: 16px;
         }
-
-        .socialmedia_links a {
-            display: flex !important;
-            align-items: center !important;
-            justify-content: center !important;
-            width: 45px !important;
-            height: 45px !important;
-            background: #ffffff !important;
-            border-radius: 50% !important;
-            transition: all 0.3s ease !important;
-            text-decoration: none !important;
-            position: relative !important;
-            overflow: hidden !important;
-            padding: 0 !important;
-            margin: 0 !important;
-            border: none !important;
-            box-shadow: none !important;
-        }
-
-        .socialmedia_links a::before,
-        .socialmedia_links a::after,
-        .socialmedia_links a span {
-            display: none !important;
-            background: transparent !important;
-            content: none !important;
-        }
-
-        .socialmedia_links a i {
-            color: #000000 !important;
-            font-size: 20px !important;
-            background: transparent !important;
-            position: relative !important;
-            z-index: 2 !important;
-            padding: 0 !important;
-            margin: 0 !important;
-        }
-
-        .socialmedia_links a img {
-            width: 20px !important;
-            height: auto !important;
-            display: block !important;
-            position: relative !important;
-            z-index: 2 !important;
-        }
-
-        .socialmedia_links a:hover {
-            background-color: #829b2f !important;
-            background-image: none !important;
-            transform: translateY(-2px) !important;
-        }
-
-        .socialmedia_links a:hover i {
-            color: #ffffff !important;
-        }
-
-        .socialmedia_links a:hover img {
-            filter: brightness(0) invert(1) !important;
-        }
-
-        .widget ul li a {
-            color: #a5a5a5;
-            text-decoration: none;
-        }
-
-        .widget ul li a:hover {
-            color: #829b2f;
-        }
-
-        @media (max-width: 768px) {
-
-            .subfooter span,
-            .subfooter a {
-                font-weight: 500;
-            }
-        }
-
-        @media (max-width: 576px) {
-            .footer-links {
-                text-align: center;
-            }
-
-            .footer-links a {
-                display: inline-block;
-                margin: 4px 10px;
-                font-size: 13px;
-            }
-
-            .footer-links {
-                display: flex;
-                flex-direction: column;
-                gap: 6px;
-            }
-
-            .footer-links .footer-row {
-                display: flex;
-                justify-content: center;
-                gap: 16px;
-            }
-        }
-    </style>
-    <script>
-        document.getElementById("current-year").innerHTML = new Date().getFullYear();
-    </script>
+    }
+    span.footer_address {
+        display: inline-block !important;
+        margin-left: 30px !important;
+        margin-top: -24px !important;
+}
+@media (min-width: 992px) {
+    span.footer_address {
+        display: inline-block !important;
+        margin-left: 30px !important;
+        margin-top: -28px !important;
+}}
+</style>
+<script>
+    document.getElementById("current-year").innerHTML = new Date().getFullYear();
+</script>
 </footer>
 <!-- footer close -->
 

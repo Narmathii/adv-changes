@@ -127,10 +127,15 @@
         color: #fff !important;
         font-weight: 600 !important;
         font-size: 15px !important;
+        padding: 10px 28px !important;
+        border-radius: 6px !important;
+        min-width: 130px;
+        text-align: center;
+        display: inline-block;
     }
 
     .banner_container {
-        width: 30%;
+        width: 100%;
         display: flex;
         justify-content: center;
     }
@@ -265,8 +270,30 @@
         } */
 
         #banner_img {
-            min-height: 350px;
+            min-height: 0;
         }
+
+        #banner_img .carousel-inner {
+            overflow: hidden;
+        }
+
+        #banner_img .carousel-item {
+            text-align: center;
+        }
+
+        #banner_img .mobile-banner-frame {
+            width: 100%;
+            background: #bdbdbd;
+        }
+
+        #banner_img .carousel-item img {
+            width: 100%;
+            height: auto;
+            object-fit: contain;
+            display: block;
+            margin: 0 auto;
+        }
+
     }
 
     @media only screen and (min-width: 768px) {
@@ -279,6 +306,56 @@
     #de-carousel {
         display: block;
     }
+
+
+
+    /*  Krish  */
+    .carousel-item img {
+        width: 100%;
+        height: 590px;
+    }
+
+    #de-carousel .desktop-banner-frame {
+        width: 100%;
+        height: 590px;
+        background: #bdbdbd;
+    }
+
+    #de-carousel .carousel-item {
+        background: #bdbdbd;
+    }
+
+    #de-carousel .carousel-item {
+        position: relative;
+    }
+
+    #de-carousel .carousel-item img {
+        position: relative;
+        z-index: 1;
+    }
+
+    #de-carousel .carousel-item .mask {
+        position: absolute;
+        inset: 0;
+        z-index: 2;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    #de-carousel .banner_container {
+        width: 100%;
+        position: relative;
+        z-index: 3;
+    }
+
+    #de-carousel .shop_now {
+        display: inline-block;
+    }
+
+
+
+
 </style>
 
 <body onload="initialize()" class="dark-scheme home_page-">
@@ -290,10 +367,14 @@
                 <!-- Inner -->
                 <div class="carousel-inner position-relative">
                     <!-- Single item -->
-                    <div class="carousel-item active jarallax">
-                        <img src="<?php echo base_url();
-                        echo $banner[0]['desktop_img']; ?>" class="jarallax-img img-fluid"
-                            alt="Top Riding Gear and Bike Accessories">
+                    <div class="carousel-item active">
+                        <div class="desktop-banner-frame">
+                            <?php $desktop0 = trim((string) ($banner[0]['desktop_img'] ?? '')); ?>
+                            <?php if ($desktop0 !== "") { ?>
+                                <img src="<?php echo base_url(); echo $desktop0; ?>" class="img-fluid"
+                                    alt="Top Riding Gear and Bike Accessories">
+                            <?php } ?>
+                        </div>
                         <div class="mask">
                             <div class="no-top no-bottom">
                                 <div class="h-100 v-center">
@@ -343,11 +424,14 @@
                             </a>
                         </div>
                     </div>
-                    <div class="carousel-item  jarallax">
-                        <img src="<?php
-                        echo base_url();
-                        echo $banner[1]['desktop_img'];
-                        ?>" class="jarallax-img img-fluid" alt="Motorcycle Accessories and Riding Gear">
+                    <div class="carousel-item">
+                        <div class="desktop-banner-frame">
+                            <?php $desktop1 = trim((string) ($banner[1]['desktop_img'] ?? '')); ?>
+                            <?php if ($desktop1 !== "") { ?>
+                                <img src="<?php echo base_url(); echo $desktop1; ?>" class="img-fluid"
+                                    alt="Motorcycle Accessories and Riding Gear">
+                            <?php } ?>
+                        </div>
                         <div class="mask">
                             <div class="no-top no-bottom">
                                 <div class="h-100 v-center">
@@ -372,11 +456,14 @@
                             </div>
                         </div>
                     </div>
-                    <div class="carousel-item  jarallax">
-                        <img src="<?php
-                        echo base_url();
-                        echo $banner[2]['desktop_img'];
-                        ?>" class="jarallax-img img-fluid" alt="Shop Bike Gear and Touring Accessories">
+                    <div class="carousel-item">
+                        <div class="desktop-banner-frame">
+                            <?php $desktop2 = trim((string) ($banner[2]['desktop_img'] ?? '')); ?>
+                            <?php if ($desktop2 !== "") { ?>
+                                <img src="<?php echo base_url(); echo $desktop2; ?>" class="img-fluid"
+                                    alt="Shop Bike Gear and Touring Accessories">
+                            <?php } ?>
+                        </div>
                         <div class=" mask">
                             <div class="no-top no-bottom">
                                 <div class="h-100 v-center">
@@ -416,23 +503,38 @@
                 </a>
                 <div class="de-gradient-edge-bottom"></div>
             </section>
-            <section id="banner_img" class="no-top no-bottom carousel slide carousel-fade" data-mdb-ride="carousel">
-                <div class="position-relative">
-                    <div class="">
-                        <div class="mask">
-                            <div class="no-top no-bottom">
-                                <div class="h-100 v-center">
-                                    <div class="container banner_container">
-                                        <!-- <div class="banner_content">
-                                            <h1>Two wheels,endless adventures.</h1>
-
-                                        </div> -->
-                                    </div>
-                                </div>
+            <section id="banner_img" class="no-top no-bottom carousel slide carousel-fade" data-mdb-ride="carousel"
+                data-mdb-interval="3000" data-mdb-touch="true">
+                <div class="carousel-indicators">
+                    <?php for ($i = 0; $i < count($banner); $i++) { ?>
+                        <button type="button" data-mdb-target="#banner_img" data-mdb-slide-to="<?php echo $i; ?>"
+                            class="<?php echo $i === 0 ? 'active' : ''; ?>" aria-current="<?php echo $i === 0 ? 'true' : 'false'; ?>"
+                            aria-label="Slide <?php echo $i + 1; ?>"></button>
+                    <?php } ?>
+                </div>
+                <div class="carousel-inner position-relative">
+                    <?php for ($i = 0; $i < count($banner); $i++) { 
+                        $mobileSrc = trim((string) $banner[$i]['mobile_img']);
+                    ?>
+                        <div class="carousel-item <?= $i === 0 ? 'active' : '' ?>">
+                            <div class="mobile-banner-frame">
+                                <?php if ($mobileSrc !== "") { ?>
+                                    <img src="<?php echo base_url(); echo $mobileSrc; ?>" class="img-fluid"
+                                        alt="Mobile Banner <?php echo $i + 1; ?>"
+                                        onerror="this.style.display='none'; this.parentElement.classList.add('img-missing');">
+                                <?php } ?>
                             </div>
                         </div>
-                    </div>
+                    <?php } ?>
                 </div>
+                <a class="carousel-control-prev" href="#banner_img" role="button" data-mdb-slide="prev">
+                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                    <span class="sr-only">Previous</span>
+                </a>
+                <a class="carousel-control-next" href="#banner_img" role="button" data-mdb-slide="next">
+                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                    <span class="sr-only">Next</span>
+                </a>
             </section>
         </div>
     </div>
@@ -1582,33 +1684,27 @@
 </script>
 <script>
 
-    var mobileBannerImage = "<?= base_url() . $banner[0]['mobile_img']; ?>";
-
-    function setMobileBanner() {
+    function toggleMobileBanner() {
         var $banner = $('#banner_img');
-
         if ($(window).width() <= 600) {
-            $banner
-                .show()
-                .css({
-                    'background-image': 'url(' + mobileBannerImage + ')',
-                    'background-size': 'cover',
-                    'background-position': 'center',
-                    'background-repeat': 'no-repeat'
-                });
+            $banner.show();
+            if (typeof mdb !== 'undefined' && mdb.Carousel) {
+                var instance = mdb.Carousel.getInstance($banner[0]);
+                if (!instance) {
+                    new mdb.Carousel($banner[0], { interval: 3000 });
+                }
+            }
         } else {
             $banner.hide();
         }
     }
 
     $(document).ready(function () {
-        setMobileBanner();
-
-
+        toggleMobileBanner();
     });
 
     $(window).on('resize', function () {
-        setMobileBanner();
+        toggleMobileBanner();
     });
 </script>
 

@@ -96,6 +96,56 @@ require("components/head.php");
         }
     }
 
+    /* Filter Styles */
+
+    .min-max {
+        padding: 5px;
+    }
+
+    .filter-price {
+        background-color: #eee !important;
+        padding: 12px !important;
+        border-radius: 10px !important;
+        width: 100%;
+    }
+
+    #products_page .filter-price .price-field {
+        width: 100%;
+        padding-left: 0 !important;
+        left: 0 !important;
+    }
+
+    #products_page .filter-price .price-field input[type="range"] {
+        width: 100% !important;
+        margin-left: 0 !important;
+        left: 0;
+    }
+
+    #products_page .filter-price .price-wrap {
+        width: 100%;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 12px;
+    }
+
+    #products_page .filter-price .price-value-group {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    #products_page .filter-price .price-wrap-1,
+    #products_page .filter-price .price-wrap-2 {
+        display: flex;
+        align-items: center;
+    }
+
+    #products_page .filter-price .price-wrap input {
+        width: 76px;
+        text-align: center;
+    }
+
     .orderby,
     .discount,
     .orderby_web,
@@ -172,17 +222,20 @@ require("components/head.php");
                                         <input type="range" min="0" class="input-max common_selector" max="50000"
                                             value="50000" id="mob_max_val">
                                     </div>
-                                    <div class="price-wrap">
-                                        <span class="min-max">Min</span>
-                                        <div class="price-wrap-1">
-                                            <input id="mob_one" readonly>
-                                            <label for="one"></label>
+                                     <div class="price-wrap">
+                                        <div class="price-value-group">
+                                            <span class="min-max">Min</span>
+                                            <div class="price-wrap-1">
+                                                <input id="mob_one">
+                                                <label for="one"></label>
+                                            </div>
                                         </div>
-                                        <div class="price-wrap_line">-</div>
-                                        <span class="min-max">Max</span>
-                                        <div class="price-wrap-2">
-                                            <input id="mob_two" readonly>
-                                            <label for="two"></label>
+                                        <div class="price-value-group">
+                                            <span class="min-max">Max</span>
+                                            <div class="price-wrap-2">
+                                                <input id="mob_two">
+                                                <label for="two"></label>
+                                            </div>
                                         </div>
                                     </div>
                                 </fieldset>
@@ -265,16 +318,19 @@ require("components/head.php");
                                         value="50000" id="web_max_val">
                                 </div>
                                 <div class="price-wrap">
-                                    <span class="min-max">Min</span>
-                                    <div class="price-wrap-1">
-                                        <input id="web_one" readonly>
-                                        <label for="one"></label>
+                                    <div class="price-value-group">
+                                        <span class="min-max">Min</span>
+                                        <div class="price-wrap-1">
+                                            <input id="web_one">
+                                            <label for="one"></label>
+                                        </div>
                                     </div>
-                                    <div class="price-wrap_line">-</div>
-                                    <span class="min-max">Max</span>
-                                    <div class="price-wrap-2">
-                                        <input id="web_two" readonly>
-                                        <label for="two"></label>
+                                    <div class="price-value-group">
+                                        <span class="min-max">Max</span>
+                                        <div class="price-wrap-2">
+                                            <input id="web_two">
+                                            <label for="two"></label>
+                                        </div>
                                     </div>
                                 </div>
                             </fieldset>

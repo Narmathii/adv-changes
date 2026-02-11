@@ -454,10 +454,6 @@ $buildBannerHref = static function ($link) {
     #de-carousel .shop_now {
         display: inline-block;
     }
-
-
-
-
 </style>
 
 <body onload="initialize()" class="dark-scheme home_page-">
@@ -1616,7 +1612,7 @@ $buildBannerHref = static function ($link) {
 
         })
 
-       
+
         $('.carousel-brand').owlCarousel({
 
             items: 4,

@@ -11,7 +11,6 @@
   overflow-y: auto !important;
 }
 
-
 .change-address {
   background-color: #a1c335;
 }
@@ -122,7 +121,9 @@
   background-clip: padding-box;
   border: var(--bs-border-width) solid var(--bs-border-color);
   border-radius: var(--bs-border-radius);
-  transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+  transition:
+    border-color 0.15s ease-in-out,
+    box-shadow 0.15s ease-in-out;
   /* text-transform: capitalize; */
 }
 
@@ -160,4 +161,49 @@
   overflow: hidden;
   text-overflow: ellipsis !important;
   white-space: initial !important;
+}
+
+/* Toggle Css
+ */
+
+.toggle-switch {
+  position: relative;
+  width: 46px;
+  height: 24px;
+}
+
+.toggle-switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.toggle-switch label {
+  position: absolute;
+  cursor: pointer;
+  background: #ccc;
+  border-radius: 20px;
+  inset: 0;
+  transition: 0.3s;
+}
+
+.toggle-switch label::before {
+  content: "";
+  position: absolute;
+  height: 18px;
+  width: 18px;
+  left: 3px;
+  top: 3px;
+  background: white;
+  border-radius: 50%;
+  transition: 0.3s;
+}
+
+/* checked */
+.toggle-switch input:checked + label {
+  background: #4caf50;
+}
+
+.toggle-switch input:checked + label::before {
+  transform: translateX(22px);
 }

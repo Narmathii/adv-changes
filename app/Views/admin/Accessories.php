@@ -6,6 +6,7 @@
 
 <?php require('components/head.php') ?>
 
+
 <body>
 
     <!-- LOADER -->
@@ -54,6 +55,7 @@
                                             <tr>
                                                 <th>S.No</th>
                                                 <th>Accessories Tilte</th>
+                                                <th>Active Status</th>
                                                 <th>Action</th>
 
                                             </tr>
@@ -83,7 +85,7 @@
                 <div class="modal-body">
                     <form id="accessories-form">
                         <div class="col-md-12">
-                            
+
                             <div class="my-2">
                                 <label for="access_title" class="form-label">Accessories Name</label>
                                 <input type="text" class="form-control access_title" id="access_title"

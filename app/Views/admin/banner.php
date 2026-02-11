@@ -56,7 +56,7 @@
                                                 <th>S.No</th>
                                                 <th>Mobile Image</th>
                                                 <th>Desktop Image</th>
-                                                <!-- <th>Link</th> -->
+                                                <th>Link</th>
                                                 <th>Action</th>
 
                                             </tr>
@@ -110,12 +110,12 @@
                                 <span class="error text-danger desktop_img mt-5"></span>
                             </div>
                         </div>
-                        <!-- <div class="my-2">
-                                <label for="link" class="form-label">Link</label>
-                                <input type="text" class="form-control link" id="link"
-                                    placeholder="link" name="link" value="">
-                                <span class="error text-danger link mt-10"></span>
-                            </div> -->
+                        <div class="my-2">
+                            <label for="link" class="form-label">Link</label>
+                            <input type="text" class="form-control link" id="link" placeholder="link" name="link"
+                                value="">
+                            <span class="error text-danger link mt-10"></span>
+                        </div>
 
                         <div class="mb-3 d-flex justify-content-end">
                             <a class="btn btn-success" id="btn-submit">Submit</a>

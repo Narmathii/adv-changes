@@ -165,6 +165,12 @@ require("components/head.php");
     .discount_mob>option {
         color: #000 !important
     }
+    
+    
+    @media only screen and (max-width: 500px) {
+    .btn-detail div {
+        padding: 1px;
+}}
 </style>
 
 <body id='products_page' class="dark-scheme">

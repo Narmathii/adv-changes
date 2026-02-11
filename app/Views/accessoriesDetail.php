@@ -102,7 +102,10 @@
     font-weight: bold !important;    
     color: #777 ;         
 }
-
+@media only screen and (max-width: 500px) {
+    .btn-detail div {
+        padding: 1px;
+}}
     
 </style>
 

@@ -1,10 +1,54 @@
 <!DOCTYPE html>
 <html lang="zxx">
 
-<?php for ($i = 0; $i < count($banner); $i++) {
-    $mobileImage = base_url() . $banner[$i]['mobile_img'];
-    $desktopImage = base_url() . $banner[$i]['desktop_img'];
-} ?>
+<?php
+$bannerShopLinks = ['shopby-brand/yamaha', 'helmet-view', 'brands-viewall'];
+$desktopAltTexts = [
+    'Top Riding Gear and Bike Accessories',
+    'Motorcycle Accessories and Riding Gear',
+    'Shop Bike Gear and Touring Accessories',
+];
+$desktopSlides = [];
+$mobileSlides = [];
+
+if (!empty($banner) && is_array($banner)) {
+    foreach ($banner as $i => $item) {
+        $desktopSrc = trim((string) ($item['desktop_img'] ?? ''));
+        $mobileSrc = trim((string) ($item['mobile_img'] ?? ''));
+        $shopPath = $bannerShopLinks[$i] ?? 'brands-viewall';
+        $rawLink = trim((string) ($item['link'] ?? ''));
+        $resolvedLink = $rawLink !== '' ? $rawLink : $shopPath;
+
+        if ($desktopSrc !== '') {
+            $desktopSlides[] = [
+                'src' => $desktopSrc,
+                'link' => $resolvedLink,
+                'alt' => $desktopAltTexts[$i] ?? ('Desktop Banner ' . ($i + 1)),
+            ];
+        }
+
+        if ($mobileSrc !== '') {
+            $mobileSlides[] = [
+                'src' => $mobileSrc,
+                'link' => $resolvedLink,
+            ];
+        }
+    }
+}
+
+$desktopBannerCount = count($desktopSlides);
+$mobileBannerCount = count($mobileSlides);
+$buildBannerHref = static function ($link) {
+    $link = trim((string) $link);
+    if ($link === '') {
+        return base_url();
+    }
+    if (preg_match('#^https?://#i', $link) === 1) {
+        return $link;
+    }
+    return base_url(ltrim($link, '/'));
+};
+?>
 
 <?php require "components/head.php"; ?>
 <style>
@@ -155,7 +199,7 @@
 
 
     #banner_img {
-        background-image: url('<?php echo $desktopImage; ?>');
+        background-image: none;
         padding: 20px 0;
         background-size: cover !important;
         background-repeat: no-repeat !important;
@@ -247,7 +291,7 @@
         font-size: 70px;
     }
 
-    @media only screen and (max-width: 600px) {
+    @media only screen and (max-width: 767px) {
         #de-carousel {
             display: none !important;
         }
@@ -257,7 +301,7 @@
         }
     }
 
-    @media only screen and (max-width: 600px) {
+    @media only screen and (max-width: 767px) {
         /* #banner_img {
             display: block;
             background-image: url('./public/assets/images/banner/mobile.jpg') !important;
@@ -271,6 +315,10 @@
 
         #banner_img {
             min-height: 0;
+            height: auto !important;
+            background-image: none !important;
+            background: transparent !important;
+            padding: 0 !important;
         }
 
         #banner_img .carousel-inner {
@@ -279,11 +327,14 @@
 
         #banner_img .carousel-item {
             text-align: center;
+            position: relative;
+            background: #bdbdbd;
         }
 
         #banner_img .mobile-banner-frame {
             width: 100%;
             background: #bdbdbd;
+            line-height: 0;
         }
 
         #banner_img .carousel-item img {
@@ -292,6 +343,57 @@
             object-fit: contain;
             display: block;
             margin: 0 auto;
+            position: relative;
+            z-index: 1;
+        }
+
+        #banner_img .carousel-item .mask {
+            position: absolute;
+            inset: 0;
+            z-index: 2;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        #banner_img .banner_container {
+            width: 100%;
+            position: relative;
+            z-index: 3;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        #banner_img .banner_content {
+            position: static !important;
+            top: auto !important;
+            left: auto !important;
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        #banner_img .shop_now {
+            display: inline-block;
+            width: auto !important;
+            min-width: 130px;
+            padding: 10px 28px !important;
+        }
+
+        #banner_img .shop_now.btn-fullwidth {
+            width: auto !important;
+            display: inline-block !important;
+        }
+
+        #banner_img .carousel-indicators {
+            position: absolute;
+            left: 0;
+            right: 0;
+            bottom: 12px;
+            margin-bottom: 0;
+            z-index: 4;
         }
 
     }
@@ -363,31 +465,34 @@
         <?php require "components/header.php"; ?>
         <div class="no-bottom no-top" id="content">
             <div id="top"></div>
-            <section id="de-carousel" class="no-top no-bottom carousel slide carousel-fade" data-mdb-ride="carousel">
-                <!-- Inner -->
-                <div class="carousel-inner position-relative">
-                    <!-- Single item -->
-                    <div class="carousel-item active">
-                        <div class="desktop-banner-frame">
-                            <?php $desktop0 = trim((string) ($banner[0]['desktop_img'] ?? '')); ?>
-                            <?php if ($desktop0 !== "") { ?>
-                                <img src="<?php echo base_url(); echo $desktop0; ?>" class="img-fluid"
-                                    alt="Top Riding Gear and Bike Accessories">
-                            <?php } ?>
-                        </div>
-                        <div class="mask">
-                            <div class="no-top no-bottom">
-                                <div class="h-100 v-center">
-                                    <div class="container">
-                                        <div class="row align-items-center">
-                                            <div class="col-lg-12 text-center p-3 mb-sm-30">
-                                                <div class="container">
-                                                    <div class="h-100 v-center">
-                                                        <div class="container banner_container">
-                                                            <div class="banner_content">
-                                                                <a href="<?php echo base_url(); ?>shopby-brand/yamaha"
-                                                                    type='button' id='buynowBtn'
-                                                                    class="btn-main btn-fullwidth shop_now">Shop Now</a>
+            <?php if ($desktopBannerCount > 0) { ?>
+                <section id="de-carousel" class="no-top no-bottom carousel slide carousel-fade" data-mdb-ride="carousel"
+                    data-mdb-interval="<?php echo $desktopBannerCount > 1 ? '3000' : 'false'; ?>"
+                    data-mdb-touch="<?php echo $desktopBannerCount > 1 ? 'true' : 'false'; ?>">
+                    <div class="carousel-inner position-relative">
+                        <?php foreach ($desktopSlides as $i => $slide) { ?>
+                            <div class="carousel-item <?php echo $i === 0 ? 'active' : ''; ?>">
+                                <div class="desktop-banner-frame">
+                                    <a href="<?php echo $buildBannerHref($slide['link']); ?>">
+                                        <img src="<?php echo base_url() . $slide['src']; ?>" class="img-fluid"
+                                            alt="<?php echo $slide['alt']; ?>">
+                                    </a>
+                                </div>
+                                <div class="mask">
+                                    <div class="no-top no-bottom">
+                                        <div class="h-100 v-center">
+                                            <div class="container">
+                                                <div class="row align-items-center">
+                                                    <div class="col-lg-12 text-center p-3 mb-sm-30">
+                                                        <div class="container">
+                                                            <div class="h-100 v-center">
+                                                                <div class="container banner_container">
+                                                                    <div class="banner_content">
+                                                                        <a href="<?php echo $buildBannerHref($slide['link']); ?>"
+                                                                            type='button' id='buynowBtn'
+                                                                            class="btn-main btn-fullwidth shop_now">Shop Now</a>
+                                                                    </div>
+                                                                </div>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -397,9 +502,9 @@
                                     </div>
                                 </div>
                             </div>
-                        </div>
+                        <?php } ?>
                     </div>
-                    <!-- Single item -->
+
                     <div class="social-icons follow_us">
                         <div class="d-flex justify-content-evenly">
                             <a href="https://www.facebook.com/share/1AdUYKNcPB/ " title="facebook" class="facebook">
@@ -424,118 +529,67 @@
                             </a>
                         </div>
                     </div>
-                    <div class="carousel-item">
-                        <div class="desktop-banner-frame">
-                            <?php $desktop1 = trim((string) ($banner[1]['desktop_img'] ?? '')); ?>
-                            <?php if ($desktop1 !== "") { ?>
-                                <img src="<?php echo base_url(); echo $desktop1; ?>" class="img-fluid"
-                                    alt="Motorcycle Accessories and Riding Gear">
-                            <?php } ?>
-                        </div>
-                        <div class="mask">
-                            <div class="no-top no-bottom">
-                                <div class="h-100 v-center">
-                                    <div class="container">
-                                        <div class="row align-items-center">
-                                            <div class="col-lg-12 text-center p-3 mb-sm-30">
-                                                <div class="container">
-                                                    <div class="h-100 v-center">
-                                                        <div class="container banner_container">
-                                                            <div class="banner_content">
-                                                                <a href="<?php echo base_url(); ?>/helmet-view"
-                                                                    type='button' id='buynowBtn'
-                                                                    class="btn-main btn-fullwidth shop_now">Shop Now</a>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="carousel-item">
-                        <div class="desktop-banner-frame">
-                            <?php $desktop2 = trim((string) ($banner[2]['desktop_img'] ?? '')); ?>
-                            <?php if ($desktop2 !== "") { ?>
-                                <img src="<?php echo base_url(); echo $desktop2; ?>" class="img-fluid"
-                                    alt="Shop Bike Gear and Touring Accessories">
-                            <?php } ?>
-                        </div>
-                        <div class=" mask">
-                            <div class="no-top no-bottom">
-                                <div class="h-100 v-center">
-                                    <div class="container">
-                                        <div class="row align-items-center">
-                                            <div class="col-lg-12 text-center p-3 mb-sm-30">
-                                                <div class="container">
-                                                    <div class="h-100 v-center">
-                                                        <div class="container banner_container">
-                                                            <div class="banner_content">
-                                                                <a href="<?php echo base_url(); ?>brands-viewall"
-                                                                    type='button' id='buynowBtn'
-                                                                    class="btn-main btn-fullwidth shop_now">Shop Now</a>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <!-- Single item -->
-                </div>
-                <!-- Inner -->
 
-                <!-- Controls -->
-                <a class="carousel-control-prev" href="#de-carousel" role="button" data-mdb-slide="prev">
-                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                    <span class="sr-only">Previous</span>
-                </a>
-                <a class="carousel-control-next" href="#de-carousel" role="button" data-mdb-slide="next">
-                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                    <span class="sr-only">Next</span>
-                </a>
-                <div class="de-gradient-edge-bottom"></div>
-            </section>
-            <section id="banner_img" class="no-top no-bottom carousel slide carousel-fade" data-mdb-ride="carousel"
-                data-mdb-interval="3000" data-mdb-touch="true">
-                <div class="carousel-indicators">
-                    <?php for ($i = 0; $i < count($banner); $i++) { ?>
-                        <button type="button" data-mdb-target="#banner_img" data-mdb-slide-to="<?php echo $i; ?>"
-                            class="<?php echo $i === 0 ? 'active' : ''; ?>" aria-current="<?php echo $i === 0 ? 'true' : 'false'; ?>"
-                            aria-label="Slide <?php echo $i + 1; ?>"></button>
+                    <?php if ($desktopBannerCount > 1) { ?>
+                        <a class="carousel-control-prev" href="#de-carousel" role="button" data-mdb-slide="prev">
+                            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                            <span class="sr-only">Previous</span>
+                        </a>
+                        <a class="carousel-control-next" href="#de-carousel" role="button" data-mdb-slide="next">
+                            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                            <span class="sr-only">Next</span>
+                        </a>
                     <?php } ?>
-                </div>
-                <div class="carousel-inner position-relative">
-                    <?php for ($i = 0; $i < count($banner); $i++) { 
-                        $mobileSrc = trim((string) $banner[$i]['mobile_img']);
-                    ?>
-                        <div class="carousel-item <?= $i === 0 ? 'active' : '' ?>">
-                            <div class="mobile-banner-frame">
-                                <?php if ($mobileSrc !== "") { ?>
-                                    <img src="<?php echo base_url(); echo $mobileSrc; ?>" class="img-fluid"
-                                        alt="Mobile Banner <?php echo $i + 1; ?>"
-                                        onerror="this.style.display='none'; this.parentElement.classList.add('img-missing');">
-                                <?php } ?>
-                            </div>
+                    <div class="de-gradient-edge-bottom"></div>
+                </section>
+            <?php } ?>
+
+            <?php if ($mobileBannerCount > 0) { ?>
+                <section id="banner_img" class="no-top no-bottom carousel slide carousel-fade" data-mdb-ride="carousel"
+                    data-mdb-interval="<?php echo $mobileBannerCount > 1 ? '3000' : 'false'; ?>"
+                    data-mdb-touch="<?php echo $mobileBannerCount > 1 ? 'true' : 'false'; ?>">
+                    <?php if ($mobileBannerCount > 1) { ?>
+                        <div class="carousel-indicators">
+                            <?php foreach ($mobileSlides as $i => $slide) { ?>
+                                <button type="button" data-mdb-target="#banner_img" data-mdb-slide-to="<?php echo $i; ?>"
+                                    class="<?php echo $i === 0 ? 'active' : ''; ?>"
+                                    aria-current="<?php echo $i === 0 ? 'true' : 'false'; ?>"
+                                    aria-label="Slide <?php echo $i + 1; ?>"></button>
+                            <?php } ?>
                         </div>
                     <?php } ?>
-                </div>
-                <a class="carousel-control-prev" href="#banner_img" role="button" data-mdb-slide="prev">
-                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                    <span class="sr-only">Previous</span>
-                </a>
-                <a class="carousel-control-next" href="#banner_img" role="button" data-mdb-slide="next">
-                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                    <span class="sr-only">Next</span>
-                </a>
-            </section>
+                    <div class="carousel-inner position-relative">
+                        <?php foreach ($mobileSlides as $i => $slide) { ?>
+                            <div class="carousel-item <?php echo $i === 0 ? 'active' : ''; ?>">
+                                <div class="mobile-banner-frame">
+                                    <a href="<?php echo $buildBannerHref($slide['link']); ?>">
+                                        <img src="<?php echo base_url() . $slide['src']; ?>" class="img-fluid"
+                                            alt="Mobile Banner <?php echo $i + 1; ?>">
+                                    </a>
+                                </div>
+                                <div class="mask">
+                                    <div class="container banner_container">
+                                        <div class="banner_content">
+                                            <a href="<?php echo $buildBannerHref($slide['link']); ?>" type='button'
+                                                class="btn-main btn-fullwidth shop_now">Shop Now</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        <?php } ?>
+                    </div>
+                    <?php if ($mobileBannerCount > 1) { ?>
+                        <a class="carousel-control-prev" href="#banner_img" role="button" data-mdb-slide="prev">
+                            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                            <span class="sr-only">Previous</span>
+                        </a>
+                        <a class="carousel-control-next" href="#banner_img" role="button" data-mdb-slide="next">
+                            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                            <span class="sr-only">Next</span>
+                        </a>
+                    <?php } ?>
+                </section>
+            <?php } ?>
         </div>
     </div>
 
@@ -1686,7 +1740,7 @@
 
     function toggleMobileBanner() {
         var $banner = $('#banner_img');
-        if ($(window).width() <= 600) {
+        if ($(window).width() <= 767) {
             $banner.show();
             if (typeof mdb !== 'undefined' && mdb.Carousel) {
                 var instance = mdb.Carousel.getInstance($banner[0]);

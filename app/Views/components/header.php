@@ -863,6 +863,10 @@ video {
     display: block;
 }
 
+.desktop-search #searchQuerySubmit svg path {
+    fill: #F4F4F4;
+}
+
 /* ---------- MOBILE ONLY ---------- */
 @media (max-width: 768px) {
 
@@ -986,6 +990,18 @@ video {
 
     .icon_heart_alt::before {
         font-size: 21px;
+    }
+
+    @media (max-width: 768px) {
+        .search-toggle.mobile-only {
+            margin-left: auto;
+            margin-right: 0.1rem !important;
+        }
+
+        .search-toggle.mobile-only .search-toggle-icon {
+            font-size: 21px;
+            line-height: 1;
+        }
     }
 
     .header i,
@@ -1144,8 +1160,10 @@ video {
                 </div>
             </div>
             
-            <div class="search-toggle mobile-only" id="searchToggle">
-                <i class="bx bx-search"></i>
+            <div class="search-toggle mobile-only me-3" id="searchToggle">
+                <div class="demo-icon-wrap-s2 cart_wrapper">
+                    <i aria-hidden="true" class="bx bx-search search-toggle-icon"></i>
+                </div>
             </div>
             <!-- K -->
 

@@ -118,6 +118,22 @@ $(document).ready(function () {
         {
           mDataProp: "access_title",
         },
+        {
+          mDataProp: function (data, type, full, meta) {
+            return `
+            <div class="toggle-switch">
+              <input 
+                type="checkbox"
+                class="statusToggle"
+                id="toggle-${meta.row}"
+                data-id="${meta.row}"
+                ${data.is_active == 1 ? "checked" : ""}
+              >
+              <label for="toggle-${meta.row}"></label>
+            </div>
+    `;
+          },
+        },
 
         {
           mDataProp: function (data, type, full, meta) {
@@ -148,6 +164,59 @@ $(document).ready(function () {
     access_id = res_DATA[index].access_id;
   });
 
+  $("#datatable").on("change", ".statusToggle", function () {
+    var index = $(this).data("id");
+    access_id = res_DATA[index].access_id;
+
+  
+    Swal.fire({
+      title: "Are you sure?",
+      text: "You want to deactivate it?",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, deactivate it!",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        $.ajax({
+          type: "POST",
+          url: base_Url + "deactivate-menu",
+          data: { id: access_id , key : "access_id" , tbl_name : "" },
+
+          success: function (data) {
+            var resData = $.parseJSON(data);
+
+            if (resData.code == 200) {
+              Swal.fire({
+                title: "Congratulations!",
+                text: resData["message"],
+                icon: "success",
+              });
+              $("#model-data").modal("hide");
+              refreshDetails();
+            } else {
+              Swal.fire({
+                title: "Failure",
+                text: resData["message"],
+                icon: "danger",
+              });
+
+              $("#model-data").modal("hide");
+              refreshDetails();
+            }
+          },
+        });
+      }
+    });
+  });
+
+  // $(document).on("change", ".statusToggle", function () {
+  //   console.log("Changed", this);
+  //   const id = $(this).data("id");
+  //   const checked = $(this).is(":checked");
+  //   console.log(id, checked);
+  // });
   // *************************** [Delete Data] *************************************************************************
   $(document).on("click", ".BtnDelete", function () {
     mode = "delete";

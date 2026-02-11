@@ -412,14 +412,16 @@ $buildBannerHref = static function ($link) {
 
 
     /*  Krish  */
-    .carousel-item img {
+    #de-carousel .carousel-item img {
         width: 100%;
-        height: 590px;
+        height: 100vh;
+        object-fit: cover;
+        object-position: center;
     }
 
     #de-carousel .desktop-banner-frame {
         width: 100%;
-        height: 590px;
+        height: 100vh;
         background: #bdbdbd;
     }
 
@@ -454,6 +456,10 @@ $buildBannerHref = static function ($link) {
     #de-carousel .shop_now {
         display: inline-block;
     }
+
+
+
+
 </style>
 
 <body onload="initialize()" class="dark-scheme home_page-">
@@ -1612,7 +1618,7 @@ $buildBannerHref = static function ($link) {
 
         })
 
-
+       
         $('.carousel-brand').owlCarousel({
 
             items: 4,

@@ -21,6 +21,10 @@ $(document).ready(function () {
     $("#mobile_image_url").css("display", "none");
     $("#desktop_image_url").css("display", "none");
     $("#model-data").val("");
+    $("#mobile_img").val("");
+    $("#desktop_img").val("");
+    $("#link").val("");
+
     $("#model-data").modal("show");
   });
 
@@ -193,6 +197,14 @@ $(document).ready(function () {
 
   $(document).on("click", ".btnEdit", function () {
     $("#model-data").modal("show");
+
+    $("#mobile_image_url").css("display", "none");
+    $("#desktop_image_url").css("display", "none");
+    $("#model-data").val("");
+    $("#mobile_img").val("");
+    $("#desktop_img").val("");
+    $("#link").val("");
+
     mode = "edit";
 
     var index = $(this).attr("id");

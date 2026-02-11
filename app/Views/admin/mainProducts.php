@@ -246,7 +246,7 @@
                                 <div class="col-lg-12 mt-3">
                                     <label for="prod_desc" class="form-label">Product
                                         Description</label>
-                                    <textarea class="form-control" id="prod_desc"  name="prod_desc" rows="3"></textarea>
+                                    <textarea class="form-control" id="prod_desc" name="prod_desc" rows="3"></textarea>
                                     <span class="error text-danger prod_desc mt-5"></span>
                                 </div>
 
@@ -257,12 +257,14 @@
 
                                 <div class="col-xl-4 mt-3 ">
                                     <label for="material" class="form-label">Material</label>
-                                    <input type="text" class="form-control" id="material"  name="material" placeholder="Material">
+                                    <input type="text" class="form-control" id="material" name="material"
+                                        placeholder="Material">
                                     <span class="error text-danger material mt-5"></span>
                                 </div>
                                 <div class="col-xl-4 mt-3">
                                     <label for="colour" class="form-label">Colour</label>
-                                    <input type="text" class="form-control" id="colour" name="colour"  placeholder="Colour">
+                                    <input type="text" class="form-control" id="colour" name="colour"
+                                        placeholder="Colour">
                                     <span class="error text-danger colour mt-5"></span>
                                 </div>
                                 <div class="col-xl-4 mt-3">
@@ -273,18 +275,20 @@
                                 </div>
                                 <div class="col-xl-4 mt-3">
                                     <label for="measurement" class="form-label">Product measurement L*B*H (cm)</label>
-                                    <input type="text" class="form-control" id="measurement" name ="measurement"
+                                    <input type="text" class="form-control" id="measurement" name="measurement"
                                         placeholder="Product measurement L*B*H (cm)">
                                     <span class="error text-danger measurement mt-5"></span>
                                 </div>
                                 <div class="col-xl-4 mt-3">
                                     <label for="fitment" class="form-label">Fitment</label>
-                                    <input type="text" class="form-control" id="fitment" name="fitment" placeholder="Fitment">
+                                    <input type="text" class="form-control" id="fitment" name="fitment"
+                                        placeholder="Fitment">
                                     <span class="error text-danger fitment mt-5"></span>
                                 </div>
                                 <div class="col-xl-4 mt-3">
                                     <label for="warrenty" class="form-label">Warranty</label>
-                                    <input type="text" class="form-control" id="warrenty" name="warrenty" placeholder="Warranty">
+                                    <input type="text" class="form-control" id="warrenty" name="warrenty"
+                                        placeholder="Warranty">
                                     <span class="error text-danger warrenty mt-5"></span>
                                 </div>
 

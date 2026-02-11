@@ -762,7 +762,7 @@
                         <!-- <span class="view_all">View all<i class="fa fa-angle-right d-none"></i></span> -->
                     </div>
                     <div class="col-12 col-carousel">
-                        <div class="owl-carousel carousel-main">
+                       <div class="owl-carousel carousel-recent" data-count="<?= count($recent_products) ?>">
                             <?php for ($i = 0; $i < count($recent_products); $i++) { ?>
                                 <div class="item">
                                     <div class="">

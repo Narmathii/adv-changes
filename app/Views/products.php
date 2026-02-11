@@ -534,6 +534,11 @@ require("components/head.php");
 
                             const count = data.products.length;
                             const totalPages = data.pagination.length;
+                            console.log("count");
+                            console.log(count);
+
+                            console.log("totalPages");
+                            console.log(totalPages);
 
                             let searchResults = "";
 
@@ -627,7 +632,7 @@ require("components/head.php");
 
 
 
-                                if (count >= 12 || (totalPages === 1 && count > 12)) {
+                                if (count >= 12 || (totalPages === 1 && count > 12) || (totalPages > 1 && count <= 12)) {
                                     renderPagination(data, page);
                                 } else {
                                     $('#pagination-container').html("");

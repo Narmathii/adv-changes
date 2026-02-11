@@ -169,9 +169,9 @@ $(document).ready(function () {
             else return "";
           },
         },
-        // {
-        //   mDataProp: "link",
-        // },
+        {
+          mDataProp: "link",
+        },
 
         {
           mDataProp: function (data, type, full, meta) {

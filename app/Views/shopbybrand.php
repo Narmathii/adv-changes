@@ -18,10 +18,10 @@
 
             <!-- section begin -->
             <section id="subheader" class="jarallax text-light">
-                <video autoplay muted loop id="myVideo" class="jarallax-img">
+                <!-- <video autoplay muted loop id="myVideo" class="jarallax-img">
                     <source src="<?php echo base_url() ?>public/assets/images/background/BIke_sliding.mp4"
                         type="video/mp4">
-                </video>
+                </video> -->
                 <!-- <img src="<?php echo base_url() ?>public/assets/images/background/2.jpg" class="jarallax-img" alt=""> -->
                 <div class="center-y relative text-center">
                     <div class="container">

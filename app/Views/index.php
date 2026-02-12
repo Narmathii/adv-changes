@@ -15,8 +15,10 @@ if (!empty($banner) && is_array($banner)) {
     foreach ($banner as $i => $item) {
         $desktopSrc = trim((string) ($item['desktop_img'] ?? ''));
         $mobileSrc = trim((string) ($item['mobile_img'] ?? ''));
-        $shopPath = $bannerShopLinks[$i] ?? 'brands-viewall';
-        $rawLink = trim((string) ($item['link'] ?? ''));
+        print_r($item['link']);
+        print_r("itemLink");
+        $shopPath = $item['link'] ?? 'brands-viewall';
+        $rawLink = $item['link'] ?? "";
         $resolvedLink = $rawLink !== '' ? $rawLink : $shopPath;
 
         if ($desktopSrc !== '') {
@@ -258,7 +260,7 @@ $buildBannerHref = static function ($link) {
         background-color: #000000cf;
         text-align: center;
         width: 100%;
-        position: absolute;
+        /* position: absolute; */
         bottom: 0;
         z-index: 9;
     }
@@ -456,10 +458,6 @@ $buildBannerHref = static function ($link) {
     #de-carousel .shop_now {
         display: inline-block;
     }
-
-
-
-
 </style>
 
 <body onload="initialize()" class="dark-scheme home_page-">
@@ -473,28 +471,28 @@ $buildBannerHref = static function ($link) {
                     data-mdb-touch="<?php echo $desktopBannerCount > 1 ? 'true' : 'false'; ?>">
                     <div class="carousel-inner position-relative">
                         <?php foreach ($desktopSlides as $i => $slide) { ?>
-                            <div class="carousel-item <?php echo $i === 0 ? 'active' : ''; ?>">
+                            <div class="carousel-item <?php echo $i === 0 ? 'active' : ''; ?>"
+                                onclick="window.location='<?php echo $buildBannerHref($slide['link']); ?>'">
+
                                 <div class="desktop-banner-frame">
                                     <a href="<?php echo $buildBannerHref($slide['link']); ?>">
                                         <img src="<?php echo base_url() . $slide['src']; ?>" class="img-fluid"
                                             alt="<?php echo $slide['alt']; ?>">
                                     </a>
                                 </div>
+
                                 <div class="mask">
                                     <div class="no-top no-bottom">
                                         <div class="h-100 v-center">
                                             <div class="container">
                                                 <div class="row align-items-center">
                                                     <div class="col-lg-12 text-center p-3 mb-sm-30">
-                                                        <div class="container">
-                                                            <div class="h-100 v-center">
-                                                                <div class="container banner_container">
-                                                                    <div class="banner_content">
-                                                                        <a href="<?php echo $buildBannerHref($slide['link']); ?>"
-                                                                            type='button' id='buynowBtn'
-                                                                            class="btn-main btn-fullwidth shop_now">Shop Now</a>
-                                                                    </div>
-                                                                </div>
+                                                        <div class="banner_container">
+                                                            <div class="banner_content">
+                                                                <a href="<?php echo $buildBannerHref($slide['link']); ?>"
+                                                                    class="btn-main btn-fullwidth shop_now">
+                                                                    Shop Now
+                                                                </a>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -503,34 +501,13 @@ $buildBannerHref = static function ($link) {
                                         </div>
                                     </div>
                                 </div>
+
                             </div>
                         <?php } ?>
                     </div>
 
-                    <div class="social-icons follow_us">
-                        <div class="d-flex justify-content-evenly">
-                            <a href="https://www.facebook.com/share/1AdUYKNcPB/ " title="facebook" class="facebook">
-                                <div class="socialmedia_content">
-                                    <p>Facebook</p>
-                                    <i class="fa fa-facebook-square" aria-hidden="true"></i>
-                                </div>
-                            </a>
-                            <a href="https://www.instagram.com/ridersranchcoimbatore/?igsh=MWxnZmJldmZmdDdq#"
-                                class="instagram" title="instagram">
-                                <div class="socialmedia_content">
-                                    <p>Instagram</p>
-                                    <i class="fa fa-instagram" aria-hidden="true"></i>
-                                </div>
-                            </a>
-                            <a href="https://www.youtube.com/@adventureshoppe3772?si=t6L5pC2zHRb4z1-i" title="youtube"
-                                class="youtube">
-                                <div class="socialmedia_content">
-                                    <p>Youtube</p>
-                                    <i class="fa fa-youtube-square" aria-hidden="true"></i>
-                                </div>
-                            </a>
-                        </div>
-                    </div>
+
+
 
                     <?php if ($desktopBannerCount > 1) { ?>
                         <a class="carousel-control-prev" href="#de-carousel" role="button" data-mdb-slide="prev">
@@ -562,21 +539,24 @@ $buildBannerHref = static function ($link) {
                     <?php } ?>
                     <div class="carousel-inner position-relative">
                         <?php foreach ($mobileSlides as $i => $slide) { ?>
-                            <div class="carousel-item <?php echo $i === 0 ? 'active' : ''; ?>">
-                                <div class="mobile-banner-frame">
-                                    <a href="<?php echo $buildBannerHref($slide['link']); ?>">
-                                        <img src="<?php echo base_url() . $slide['src']; ?>" class="img-fluid"
-                                            alt="Mobile Banner <?php echo $i + 1; ?>">
-                                    </a>
-                                </div>
-                                <div class="mask">
-                                    <div class="container banner_container">
-                                        <div class="banner_content">
-                                            <a href="<?php echo $buildBannerHref($slide['link']); ?>" type='button'
-                                                class="btn-main btn-fullwidth shop_now">Shop Now</a>
+                            <div class="carousel-item <?php echo $i === 0 ? 'active' : ''; ?>"
+                                onclick="window.location='<?php echo $buildBannerHref($slide['link']); ?>'">
+                                <a href="<?php echo $buildBannerHref($slide['link']); ?>">
+                                    <div class="mobile-banner-frame">
+                                        <a href="<?php echo $buildBannerHref($slide['link']); ?>">
+                                            <img src="<?php echo base_url() . $slide['src']; ?>" class="img-fluid"
+                                                alt="Mobile Banner <?php echo $i + 1; ?>">
+                                        </a>
+                                    </div>
+                                    <div class="mask">
+                                        <div class="container banner_container">
+                                            <div class="banner_content">
+                                                <a href="<?php echo $buildBannerHref($slide['link']); ?>" type='button'
+                                                    class="btn-main btn-fullwidth shop_now">Shop Now</a>
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
+                                </a>
                             </div>
                         <?php } ?>
                     </div>
@@ -687,9 +667,33 @@ $buildBannerHref = static function ($link) {
     </section> -->
     <!-- offers  End  -->
 
-
+    <div class="social-icons follow_us">
+        <div class="d-flex justify-content-evenly">
+            <a href="https://www.facebook.com/share/1AdUYKNcPB/ " target="_blank" title="facebook" class="facebook">
+                <div class="socialmedia_content">
+                    <p>Facebook</p>
+                    <i class="fa fa-facebook-square" aria-hidden="true"></i>
+                </div>
+            </a>
+            <a href="https://www.instagram.com/ridersranchcoimbatore/?igsh=MWxnZmJldmZmdDdq#" target="_blank"
+                class="instagram" title="instagram">
+                <div class="socialmedia_content">
+                    <p>Instagram</p>
+                    <i class="fa fa-instagram" aria-hidden="true"></i>
+                </div>
+            </a>
+            <a href="https://www.youtube.com/@adventureshoppe3772?si=t6L5pC2zHRb4z1-i" target="_blank" title="youtube"
+                class="youtube">
+                <div class="socialmedia_content">
+                    <p>Youtube</p>
+                    <i class="fa fa-youtube-square" aria-hidden="true"></i>
+                </div>
+            </a>
+        </div>
+    </div>
     <!-- New Arrivals Start  -->
     <section id="section-newArrival" class="p-5">
+
         <div class="container">
             <div class="row align-items-center">
                 <div class="col-lg-12 text-center newarrival_header">
@@ -1618,7 +1622,7 @@ $buildBannerHref = static function ($link) {
 
         })
 
-       
+
         $('.carousel-brand').owlCarousel({
 
             items: 4,

@@ -149,10 +149,11 @@ $(document).ready(function () {
                 "<a href='" +
                 base_Url +
                 data.mobile_img +
-                "'><img src='" +
+                "' target='_blank'>" +
+                "'<img src='" +
                 base_Url +
                 data.mobile_img +
-                "' alt='not-image' width='100'></a>"
+                "' alt='not-image' width='100' target='_blank'></a>"
               );
             else return "";
           },
@@ -162,17 +163,20 @@ $(document).ready(function () {
           mDataProp: function (data, type, full, meta) {
             if (data.desktop_img !== null)
               return (
-                "<a href=" +
-                base_Url +
-                +data.desktop_img +
-                "><img src=" +
+                "<a href='" +
                 base_Url +
                 data.desktop_img +
-                " alt='not-image' width=100></a>"
+                "' target='_blank'>" +
+                "<img src='" +
+                base_Url +
+                data.desktop_img +
+                "' alt='not-image' width='100'>" +
+                "</a>"
               );
             else return "";
           },
         },
+
         {
           mDataProp: "link",
         },

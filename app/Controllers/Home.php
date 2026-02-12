@@ -54,7 +54,8 @@ class Home extends BaseController
         $session = \Config\Services::session();
 
 
-         $res['banner'] = $db->query('SELECT `mobile_img`,`desktop_img` FROM `tbl_banner` WHERE  `flag` = 1 ORDER BY `banner_id` ASC')->getResultArray();
+        $res['banner'] = $db->query('SELECT `mobile_img`,`desktop_img`,`link` FROM `tbl_banner` WHERE  `flag` = 1 ORDER BY `banner_id` ASC')->getResultArray();
+
         $res['youtube'] = $db->query('SELECT `ytube_link`,`ytube_img` FROM `tbl_youtube` WHERE  `flag` = 1')->getResultArray();
 
         $res['helmets'] = $db->query(

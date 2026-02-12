@@ -22,6 +22,23 @@
     #invalid {
         color: #fff;
     }
+
+    .form {
+        padding: 100px 45px; 
+    }
+
+    .button, input, optgroup, select, textarea {
+    margin: 0px;
+    width: 25%;
+    border-radius: 6px;
+    padding: 2px;
+    border: 2px solid #8aa928;
+    }
+    .links a {
+        font-weight: bold;
+        font-size: 0.85rem;
+        color: #ddd;
+    }
 </style>
 
 <body>

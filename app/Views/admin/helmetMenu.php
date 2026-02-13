@@ -55,6 +55,7 @@
                                             <tr>
                                                 <th>S.No</th>
                                                 <th>Main Menu Tilte</th>
+                                                  <th>Active Status</th>
                                                 <th>Action</th>
                                             </tr>
                                         </thead>

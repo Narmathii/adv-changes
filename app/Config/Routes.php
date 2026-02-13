@@ -535,6 +535,12 @@ $routes->post('update-combo-products', 'admin\ComboProdController::updateProduct
 $routes->post('delete-combo-product', 'admin\ComboProdController::deleteProduct');
 
 
+// activation menu's & Submenu's
+$routes->post('deactivate-menu', 'admin\DashboardController::deactivateMenu');
+$routes->post('deactivate-submenu', 'admin\DashboardController::deactivateSubMenu');
+
+
+
 
 
 

@@ -361,4 +361,31 @@ class DashboardController extends BaseController
 
         echo json_encode($orderDetail);
     }
+
+    public function deactivateMenu()
+    {
+        $db = \Config\Database::connect();
+
+        $id = $this->request->getPost('id');
+        $column_name = $this->request->getPost('column_name');
+        $tbl_name = $this->request->getPost('tbl_name');
+        $active_status = $this->request->getPost('active_status');
+
+        $updateQuery = "UPDATE `$tbl_name` SET `is_active` = ? WHERE `$column_name` = ?";
+        $db->query($updateQuery, [$active_status, $id]);
+
+        $affectedRows = $db->affectedRows();
+        if ($affectedRows === 1) {
+            $result['code'] = 200;
+            $result['msg'] = 'Status updated Successfully';
+            $result['status'] = 'success';
+            echo json_encode($result);
+        } else {
+            $result['code'] = 400;
+            $result['msg'] = 'Something Wrong';
+            $result['status'] = 'failure';
+            echo json_encode($result);
+        }
+    }
+
 }

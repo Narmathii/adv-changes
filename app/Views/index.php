@@ -15,8 +15,7 @@ if (!empty($banner) && is_array($banner)) {
     foreach ($banner as $i => $item) {
         $desktopSrc = trim((string) ($item['desktop_img'] ?? ''));
         $mobileSrc = trim((string) ($item['mobile_img'] ?? ''));
-        print_r($item['link']);
-        print_r("itemLink");
+
         $shopPath = $item['link'] ?? 'brands-viewall';
         $rawLink = $item['link'] ?? "";
         $resolvedLink = $rawLink !== '' ? $rawLink : $shopPath;
@@ -1746,8 +1745,10 @@ $buildBannerHref = static function ($link) {
 
     function toggleMobileBanner() {
         var $banner = $('#banner_img');
+        var $socialMedia = $('.social-icons');
         if ($(window).width() <= 767) {
             $banner.show();
+            $socialMedia.addClass("d-none")
             if (typeof mdb !== 'undefined' && mdb.Carousel) {
                 var instance = mdb.Carousel.getInstance($banner[0]);
                 if (!instance) {

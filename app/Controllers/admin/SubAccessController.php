@@ -57,7 +57,7 @@ class SubAccessController extends BaseController
     {
         $db = \Config\Database::connect();
 
-        $query = 'SELECT a.access_title , b.* FROM tbl_access_master AS a INNER JOIN tbl_subaccess_master AS b 
+        $query = 'SELECT a.access_id ,a.access_title , b.* FROM tbl_access_master AS a INNER JOIN tbl_subaccess_master AS b 
         ON a.access_id = b.access_id WHERE b.`flag` =1  AND a.flag = 1 ORDER BY `access_title`  ASC;';
 
         $res = $db->query($query)->getResultArray();

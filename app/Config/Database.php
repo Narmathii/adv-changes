@@ -29,7 +29,7 @@ class Database extends Config
         'hostname' => 'localhost',
         'username' => 'root',
         'password' => '',
-        'database' => 'adv',
+        'database' => 'adv-latest',
         // 'hostname' => 'localhost',
         // 'username' => 'appteqin_adv',
         // 'password' => 'appteqin_adv',

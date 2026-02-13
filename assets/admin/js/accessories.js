@@ -167,22 +167,27 @@ $(document).ready(function () {
   $("#datatable").on("change", ".statusToggle", function () {
     var index = $(this).data("id");
     access_id = res_DATA[index].access_id;
+    var isChecked = $(this).is(":checked") ? 1 : 0;
 
-  
     Swal.fire({
       title: "Are you sure?",
-      text: "You want to deactivate it?",
+      text: "You want to update the active status?",
       icon: "warning",
       showCancelButton: true,
       confirmButtonColor: "#3085d6",
       cancelButtonColor: "#d33",
-      confirmButtonText: "Yes, deactivate it!",
+      confirmButtonText: "Yes!",
     }).then((result) => {
       if (result.isConfirmed) {
         $.ajax({
           type: "POST",
           url: base_Url + "deactivate-menu",
-          data: { id: access_id , key : "access_id" , tbl_name : "" },
+          data: {
+            id: access_id,
+            column_name: "access_id",
+            tbl_name: "tbl_access_master",
+            active_status: isChecked,
+          },
 
           success: function (data) {
             var resData = $.parseJSON(data);
@@ -190,7 +195,7 @@ $(document).ready(function () {
             if (resData.code == 200) {
               Swal.fire({
                 title: "Congratulations!",
-                text: resData["message"],
+                text: resData["msg"],
                 icon: "success",
               });
               $("#model-data").modal("hide");
@@ -198,7 +203,7 @@ $(document).ready(function () {
             } else {
               Swal.fire({
                 title: "Failure",
-                text: resData["message"],
+                text: resData["msg"],
                 icon: "danger",
               });
 

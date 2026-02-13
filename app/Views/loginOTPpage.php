@@ -39,6 +39,15 @@
         font-size: 0.85rem;
         color: #ddd;
     }
+
+    @media (max-width: 768px) {
+    .form {
+        padding: 65px 32px !important;
+        margin-left: 17px;
+        margin-right: 17px;
+    }
+}
+
 </style>
 
 <body>

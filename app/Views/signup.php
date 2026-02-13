@@ -185,8 +185,9 @@
     }
 
     #btn-signup input {
-        border: 1px solid;
+        border: 2px solid #8aa928;
         padding: 3px 0;
+        margin-bottom: 20px;
     }
 
     #invalid-data {
@@ -197,6 +198,66 @@
     {
     color: #fff !important
     }
+
+    /*  Krish  */
+    
+    @media only screen and (max-width: 600px) {
+        .signup-wrapper {
+            padding: 20px;
+        }
+        .signup-wrapper .inputBox {
+            width: 100%;
+        }
+        .signup-wrapper .box {
+            width: 100%;
+        }
+        body.sms-signup-mobile-active .signup-wrapper .form {
+            
+            margin-bottom: 50px !important;
+            margin-top: 75px !important;
+        }
+
+        body.sms-signup-mobile-active .signup-wrapper .box {
+            height: 330px !important;
+        } */
+
+        body.sms-signup-mobile-active .signup-wrapper .box::before,
+        body.sms-signup-mobile-active .signup-wrapper .box::after {
+            width: 100%;
+            height: 110%;
+            
+        }
+    }
+
+    .links a {
+        font-weight: bold;
+        font-size: 0.85rem;
+        color: #ddd;
+    }
+
+    input.w-25 {
+        border-radius: 5px;
+     border: 2px solid #8aa928;
+     /* margin-bottom: 20px; */
+
+    }
+
+    @media only screen and (min-width: 601px) {
+        body.sms-signup-desktop-active .signup-wrapper .form {
+            
+            margin-bottom: 190px;
+            margin-top: 0px;
+        }
+    }
+
+   
+
+    /* .sms-signup.form.active {
+        padding: 55px 45px;
+        margin-bottom: 75px;
+        margin-top: 125px;
+
+    }  */
 </style>
 
 <body>
@@ -268,7 +329,7 @@
                                         </div>
                                     </form>
                                 </div>
-                                <div id="sms-signup-content">
+                                <div id="sms-signup-content" class="sms-signup">
 
                                     <form id="sms_form" class="mt-0">
                                         <input type="hidden" name="<?= csrf_token() ?>" value="<?= csrf_hash() ?>" />
@@ -304,9 +365,15 @@
 
         <?php require("components/footer.php"); ?>
         <script src="<?php echo base_url() ?>public/assets/custom/signup.js"></script>
-        <script>
+          <script>
             jQuery(document).ready(function ($) {
                 tab = $('.tabs h3 a');
+
+                function updateSmsLayout() {
+                    var isSmsActive = $('.tabs h3 a.active').attr('href') === '#sms-signup-content';
+                    $('body').toggleClass('sms-signup-mobile-active', isSmsActive);
+                    $('body').toggleClass('sms-signup-desktop-active', isSmsActive && window.innerWidth > 600);
+                }
 
                 tab.on('click', function (event) {
 
@@ -317,7 +384,11 @@
                     tab_content = $(this).attr('href');
                     $('div[id$="signup-content"]').removeClass('active');
                     $(tab_content).addClass('active');
+                    updateSmsLayout();
                 });
+
+                $(window).on('resize', updateSmsLayout);
+                updateSmsLayout();
             });
         </script>
 </body>

@@ -155,6 +155,10 @@
         padding: 53px;
     }
 
+    .login-wrapper .box {
+        min-height: 685px;
+    }
+
     .login-wrapper .inputBox {
         position: relative;
         width: 300px;
@@ -221,6 +225,64 @@
         /* display: none; */
         text-align: center;
     }
+
+    @media only screen and (max-width: 600px) {
+        .login-wrapper {
+            padding: 20px;
+        }
+
+        .login-wrapper .inputBox {
+            width: 100%;
+        }
+
+        .login-wrapper .box {
+            width: 100%;
+        }
+
+        body.sms-login-mobile-active .login-wrapper .form {
+            padding: 50px 10px;
+            margin-bottom: 120px;
+            
+        }
+    }
+
+    .w-25 {
+    width: 28% !important;
+    height: 32px;
+    border-radius: 6px;
+    border: 2px solid #8aa928;
+}
+
+.links a {
+        font-weight: bold;
+        font-size: 0.85rem;
+        color: #ddd;
+    }
+
+    @media (max-width: 768px) {
+            .form {
+        padding: 10px !important;
+        padding-top: 40px !important;
+        margin-top: 100px !important;
+        margin-bottom: 70px !important;
+    }
+}
+
+.form {
+    position: absolute;
+    inset: 2px;
+    border-radius: 8px;
+    background: #28292d;
+    z-index: 10;
+    padding: 31px 45px;
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 185px;
+}
+
+a#sms-login {
+    padding-top: 30px;
+}
 </style>
 
 <body>
@@ -302,6 +364,11 @@
         jQuery(document).ready(function ($) {
             tab = $('.tabs h3 a');
 
+            function updateMobileSmsLoginLayout() {
+                var isSmsActive = $('.tabs h3 a.active').attr('href') === '#sms-tab-content';
+                $('body').toggleClass('sms-login-mobile-active', isSmsActive);
+            }
+
             tab.on('click', function (event) {
                 event.preventDefault();
                 tab.removeClass('active');
@@ -310,7 +377,10 @@
                 tab_content = $(this).attr('href');
                 $('div[id$="tab-content"]').removeClass('active');
                 $(tab_content).addClass('active');
+                updateMobileSmsLoginLayout();
             });
+
+            updateMobileSmsLoginLayout();
         });
 
         function togglePassword() {

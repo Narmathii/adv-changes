@@ -1,19 +1,24 @@
 $(document).ready(function () {
   var mode, JSON, res_DATA, brand_id;
 
-  getbrandDetails();
-
-  $.when(getbrandDetails()).done(function () {
-    dispbrandDetails(JSON);
+  getbrandDetails(function (brandDetails) {
+    dispbrandDetails(brandDetails);
   });
 
   function refreshDetails() {
-    $.when(getbrandDetails()).done(function (brandDetails) {
+    var currentPage = 0;
+
+    if ($.fn.DataTable.isDataTable("#datatable")) {
+      currentPage = $("#datatable").DataTable().page();
+    }
+
+    getbrandDetails(function (brandDetails) {
+      dispbrandDetails(brandDetails);
+
       var table = $("#datatable").DataTable();
-      table.clear();
-      table.rows.add(brandDetails);
-      table.draw();
-      window.location.reload();
+      var pageInfo = table.page.info();
+      var targetPage = Math.min(currentPage, Math.max(pageInfo.pages - 1, 0));
+      table.page(targetPage).draw("page");
     });
   }
 
@@ -103,15 +108,17 @@ $(document).ready(function () {
     }
   }
   // *************************** [get Data] *************************************************************************
-  function getbrandDetails() {
-    $.ajax({
+  function getbrandDetails(callback) {
+    return $.ajax({
       type: "POST",
       url: base_Url + "get-brandData",
       dataType: "json",
       success: function (data) {
         res_DATA = data;
 
-        dispbrandDetails(res_DATA);
+        if (typeof callback === "function") {
+          callback(res_DATA);
+        }
       },
       error: function () {
         console.log("Error");

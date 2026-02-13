@@ -1,17 +1,24 @@
 $(document).ready(function () {
   var mode, JSON, res_DATA, c_submenu_id;
 
-  $.when(getSubMenuList()).done(function () {
-    dispSubMenuList(JSON);
-  });
+    getSubMenuList(function (subMenuDetails) {
+      dispSubMenuList(subMenuDetails);
+    });
 
   function refreshDetails() {
-    $.when(getSubMenuList()).done(function (brandDetails) {
+    var currentPage = 0;
+
+    if ($.fn.DataTable.isDataTable("#datatable")) {
+      currentPage = $("#datatable").DataTable().page();
+    }
+
+    getSubMenuList(function (subMenuDetails) {
+      dispSubMenuList(subMenuDetails);
+
       var table = $("#datatable").DataTable();
-      table.clear();
-      table.rows.add(brandDetails);
-      table.draw();
-      window.location.reload();
+      var pageInfo = table.page.info();
+      var targetPage = Math.min(currentPage, Math.max(pageInfo.pages - 1, 0));
+      table.page(targetPage).draw("page");
     });
   }
 
@@ -89,14 +96,17 @@ $(document).ready(function () {
   }
 
   // *************************** [get Data] *************************************************************************
-  function getSubMenuList() {
-    $.ajax({
+  function getSubMenuList(callback) {
+    return $.ajax({
       type: "POST",
       url: base_Url + "get-camping-submenu",
       dataType: "json",
       success: function (data) {
         res_DATA = data;
-        dispSubMenuList(res_DATA);
+
+        if (typeof callback === "function") {
+          callback(res_DATA);
+        }
       },
       error: function () {
         console.log("Error");

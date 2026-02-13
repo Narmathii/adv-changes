@@ -777,7 +777,7 @@ video {
         justify-content: center;
     }
 
-/* krish */
+    /* krish */
     #search_bar {
         width: 80%;
         height: 2.8rem;
@@ -807,170 +807,175 @@ video {
     }
 
     #searchQuerySubmit:hover {
-    background-color: #8aa928 !important; 
-}
-
-@media (min-width: 992px) {
-    .brand img {
-        margin-left: 38px;
+        background-color: #8aa928 !important;
     }
-    
-}
-@media (max-width: 768px) {
-    #search_bar {
-        width: 96% !important;
-        height: 30px !important;
-        margin-bottom: 0 !important;
-    }
-    #searchQuerySubmit {
-        height: 42px !important;
-        margin-bottom: 0 !important;
-}}
 
-
-
-
-
-
-/* Mobile Search  */
-
-/* NEW CSS FOR  */
-@media (max-width: 768px) {
+    @media (min-width: 992px) {
         .brand img {
-        margin-left: 30px;
-        height: 70px !important;
-        width: 80px !important;
-        margin-right: 10px;
-        margin-bottom: 10px;
+            margin-left: 38px;
+        }
+
     }
 
-    #burger {
-        margin-left: 10px;
+    @media (max-width: 768px) {
+        #search_bar {
+            width: 96% !important;
+            height: 30px !important;
+            margin-bottom: 0 !important;
+        }
+
+        #searchQuerySubmit {
+            height: 42px !important;
+            margin-bottom: 0 !important;
+        }
     }
-}
-
-@media only screen and (max-width: 768px) {
-    .searchInput {
-        margin-top: 8% !important;
-    }}
 
 
-.mobile-only {
-    display: none;
-}
 
-.desktop-search {
-    display: block;
-}
 
-.desktop-search #searchQuerySubmit svg path {
-    fill: #F4F4F4;
-}
 
-/* ---------- MOBILE ONLY ---------- */
-@media (max-width: 768px) {
 
-    .desktop-search {
+    /* Mobile Search  */
+
+    /* NEW CSS FOR  */
+    @media (max-width: 768px) {
+        .brand img {
+            margin-left: 30px;
+            height: 60px !important;
+            width: 100px !important;
+            margin-right: 10px;
+            margin-bottom: 10px;
+        }
+
+        #burger {
+            margin-left: 10px;
+        }
+    }
+
+    @media only screen and (max-width: 768px) {
+        .searchInput {
+            margin-top: 8% !important;
+        }
+    }
+
+
+    .mobile-only {
         display: none;
     }
 
-    .mobile-only {
+    .desktop-search {
         display: block;
     }
 
-    .mobile-search-slide {
-        position: absolute;
-        top: 101% !important;
-        left: 0;
-        width: 100%;
-        background: #000;
-        padding: 8px 12px;
-        transform: translateY(-100%);
-        opacity: 0;
-        pointer-events: none;
-        transition: transform 0.3s ease, opacity 0.3s ease;
-        z-index: 9999;
-        border-bottom: 1px solid rgba(255,255,255,0.1);
-        
-        overflow: visible !important;
-        
-    }
-    .mobile-search-slide.active {
-        transform: translateY(0);
-        opacity: 1;
-        pointer-events: auto;
+    .desktop-search #searchQuerySubmit svg path {
+        fill: #F4F4F4;
     }
 
-    /* SEARCH BAR UI */
-    .mobile-search-slide .searchInput {
-        display: flex;
-        align-items: center;
-        height: 42px; 
-        background: #fff;
-        border-radius: 6px;
-        overflow: hidden;
+    /* ---------- MOBILE ONLY ---------- */
+    @media (max-width: 768px) {
+
+        .desktop-search {
+            display: none;
+        }
+
+        .mobile-only {
+            display: block;
+        }
+
+        .mobile-search-slide {
+            position: absolute;
+            top: 101% !important;
+            left: 0;
+            width: 100%;
+            background: #000;
+            padding: 8px 12px;
+            transform: translateY(-100%);
+            opacity: 0;
+            pointer-events: none;
+            transition: transform 0.3s ease, opacity 0.3s ease;
+            z-index: 9999;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+
+            overflow: visible !important;
+
+        }
+
+        .mobile-search-slide.active {
+            transform: translateY(0);
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        /* SEARCH BAR UI */
+        .mobile-search-slide .searchInput {
+            display: flex;
+            align-items: center;
+            height: 42px;
+            background: #fff;
+            border-radius: 6px;
+            overflow: hidden;
+        }
+
+        .mobile-search-slide input {
+            flex: 1;
+            height: 100%;
+            border: none;
+            padding: 0 12px;
+            font-size: 14px;
+            outline: none;
+        }
+
+        .mobile-search-slide button {
+            height: 100%;
+            background: #9acd32;
+            border: none;
+            padding: 0 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        #mobileSearch #suggestionsBox {
+            display: block !important;
+            position: absolute;
+            top: 100%;
+            left: 0;
+            width: 100%;
+            background: #ffffff;
+            color: #000000;
+            z-index: 100000 !important;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+            max-height: 300px;
+            overflow-y: auto;
+            border: 0px solid #ddd;
+        }
+
+        #mobileSearch .search-container {
+            position: relative;
+            width: 100%;
+            margin: 0;
+            padding: 0;
+        }
+
+        #mobileSearch .suggestion {
+            background: #fff !important;
+            border-bottom: 1px solid #eee;
+        }
+
+        .mobile-search-slide .resultBox {
+            display: block !important;
+            position: absolute;
+            top: 100%;
+            left: 0;
+            width: 100%;
+            background: #fff !important;
+            color: #000 !important;
+            z-index: 999999 !important;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
     }
 
-    .mobile-search-slide input {
-        flex: 1;
-        height: 100%;
-        border: none;
-        padding: 0 12px;
-        font-size: 14px;
-        outline: none;
-    }
-
-    .mobile-search-slide button {
-        height: 100%;
-        background: #9acd32;
-        border: none;
-        padding: 0 14px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-    }
-
-    #mobileSearch #suggestionsBox {
-        display: block !important; 
-        position: absolute;
-        top: 100%; 
-        left: 0;
-        width: 100%;
-        background: #ffffff;
-        color: #000000;
-        z-index: 100000 !important;
-        box-shadow: 0 8px 16px rgba(0,0,0,0.2);
-        max-height: 300px;
-        overflow-y: auto;
-        border: 0px solid #ddd;
-    }
-
-    #mobileSearch .search-container {
-        position: relative;
-        width: 100%;
-        margin: 0;
-        padding: 0;
-    }
-
-    #mobileSearch .suggestion {
-        background: #fff !important;
-        border-bottom: 1px solid #eee;
-    }
-       
-    .mobile-search-slide .resultBox {
-        display: block !important;
-        position: absolute;
-        top: 100%;
-        left: 0;
-        width: 100%;
-        background: #fff !important;
-        color: #000 !important;
-        z-index: 999999 !important;
-        box-shadow: 0 5px 15px rgba(0,0,0,0.3);
-    }
-}
-
-/*   */
+    /*   */
 
 
     #searchQuerySubmit:hover {
@@ -1090,6 +1095,7 @@ video {
 
     /* iOS Safari-only fixes for autocomplete dropdown scaling */
     @supports (-webkit-touch-callout: none) {
+
         html,
         body {
             -webkit-text-size-adjust: 100%;
@@ -1139,7 +1145,8 @@ video {
                     alt=""></a>
 
             <div class="wrapper">
-                <!-- K --><div class="desktop-search">
+                <!-- K -->
+                <div class="desktop-search">
                     <form action="<?php echo base_url() ?>search-data" method="get" class="mobile-search">
                         <div class="searchInput">
 
@@ -1159,7 +1166,7 @@ video {
                     </form>
                 </div>
             </div>
-            
+
             <div class="search-toggle mobile-only me-3" id="searchToggle">
                 <div class="demo-icon-wrap-s2 cart_wrapper">
                     <i aria-hidden="true" class="bx bx-search search-toggle-icon"></i>
@@ -1201,25 +1208,25 @@ video {
         </section>
     </nav>
     <!-- K -->
-<div class="mobile-search-slide mobile-only" id="mobileSearch">
-     <form action="<?php echo base_url() ?>search-data" method="get" class="mobile-search">
+    <div class="mobile-search-slide mobile-only" id="mobileSearch">
+        <form action="<?php echo base_url() ?>search-data" method="get" class="mobile-search">
             <div class="searchInput">
 
-            <input id="search_bar" type="search" name="search_bar" placeholder="Search"
-                onkeyup="fetchSuggestions(this)" autocomplete="off" />
+                <input id="search_bar" type="search" name="search_bar" placeholder="Search"
+                    onkeyup="fetchSuggestions(this)" autocomplete="off" />
 
-            <button id="searchQuerySubmit" type="submit" name="searchQuerySubmit">
-                <svg style="width:20px;height:18px" viewBox="0 0 24 24">
-                    <path fill="#000"
-                        d="M9.5,3A6.5,6.5 0 0,1 16,9.5C16,11.11 15.41,12.59 14.44,13.73L14.71,14H15.5L20.5,19L19,20.5L14,15.5V14.71L13.73,14.44C12.59,15.41 11.11,16 9.5,16A6.5,6.5 0 0,1 3,9.5A6.5,6.5 0 0,1 9.5,3M9.5,5C7,5 5,7 5,9.5C5,12 7,14 9.5,14C12,14 14,12 14,9.5C14,7 12,5 9.5,5Z" />
-                </svg>
-            </button>
-        </div>
-        <div class="search-container">
-            <div id="suggestionsBox" class="resultBox d-none"></div>
-        </div>
-    </form>            
-</div>
+                <button id="searchQuerySubmit" type="submit" name="searchQuerySubmit">
+                    <svg style="width:20px;height:18px" viewBox="0 0 24 24">
+                        <path fill="#000"
+                            d="M9.5,3A6.5,6.5 0 0,1 16,9.5C16,11.11 15.41,12.59 14.44,13.73L14.71,14H15.5L20.5,19L19,20.5L14,15.5V14.71L13.73,14.44C12.59,15.41 11.11,16 9.5,16A6.5,6.5 0 0,1 3,9.5A6.5,6.5 0 0,1 9.5,3M9.5,5C7,5 5,7 5,9.5C5,12 7,14 9.5,14C12,14 14,12 14,9.5C14,7 12,5 9.5,5Z" />
+                    </svg>
+                </button>
+            </div>
+            <div class="search-container">
+                <div id="suggestionsBox" class="resultBox d-none"></div>
+            </div>
+        </form>
+    </div>
 
 </header>
 
@@ -1371,7 +1378,7 @@ video {
                     HELMET AND ACCESSORIES
                     <i class="bx bx-chevron-right"></i>
                 </a>
-                 <div class="submenu megamenu__text" id="menu__item">
+                <div class="submenu megamenu__text" id="menu__item">
                     <?php for ($i = 0; $i < count($h_menu); $i++) { ?>
                         <div class="submenu__inner">
                             <h4 class="submenu__title">
@@ -1383,7 +1390,7 @@ video {
                                 if ($h_submenu[$j]['h_menu_id'] === $h_menu[$i]['h_menu_id']) {
 
                                     // $submenuData = strtolower(str_replace(' ', '-', $h_submenu[$j]['h_submenu']));
-
+                        
                                     // if ($submenuData == 'helmet-bluetooth') {
                                     //     continue;
                                     // }
@@ -1675,25 +1682,21 @@ video {
 
 <!-- K -->
 <script>
-    const searchToggle = document.getElementById("searchToggle");
-    const mobileSearch = document.getElementById("mobileSearch");
+    $(document).ready(function () {
+        const searchToggle = $("#searchToggle");
+        const mobileSearch = $("#mobileSearch");
+        const navbarCollapse = $(".burger");
 
-    // Toggle search
-    if (searchToggle && mobileSearch) {
-        searchToggle.addEventListener("click", () => {
-            mobileSearch.classList.toggle("active");
-        });
-    }
-</script>
-<script>
-document.addEventListener("DOMContentLoaded", function () {
-    const mobileSearch = document.getElementById("mobileSearch");
-    const navbarCollapse = document.querySelector(".burger");
+        if (searchToggle.length && mobileSearch.length) {
+            searchToggle.on("click", function () {
+                mobileSearch.toggleClass("active");
+            });
+        }
 
-    if (navbarCollapse && mobileSearch) {
-        navbarCollapse.addEventListener("click", function () {
-            mobileSearch.classList.remove("active");
-        });
-    }
-});
+        if (navbarCollapse.length && mobileSearch.length) {
+            navbarCollapse.on("click", function () {
+                mobileSearch.removeClass("active");
+            });
+        }
+    });
 </script>

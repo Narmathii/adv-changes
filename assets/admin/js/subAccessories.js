@@ -131,6 +131,22 @@ $(document).ready(function () {
         {
           mDataProp: "sub_access_name",
         },
+        {
+          mDataProp: function (data, type, full, meta) {
+            return `
+            <div class="toggle-switch">
+              <input 
+                type="checkbox"
+                class="statusToggle"
+                id="toggle-${meta.row}"
+                data-id="${meta.row}"
+                ${data.is_active == 1 ? "checked" : ""}
+              >
+              <label for="toggle-${meta.row}"></label>
+            </div>
+    `;
+          },
+        },
 
         {
           mDataProp: function (data, type, full, meta) {
@@ -157,9 +173,64 @@ $(document).ready(function () {
     var index = $(this).attr("id");
     $("#access_id").val(res_DATA[index].access_id);
     $("#sub_access_name").val(res_DATA[index].sub_access_name);
-    acc_id = res_DATA[index].access_id;
+    sub_access_id = res_DATA[index].access_id;
 
     sub_access_id = res_DATA[index].sub_access_id;
+  });
+
+  $("#datatable").on("change", ".statusToggle", function () {
+    var index = $(this).data("id");
+    sub_access_id = res_DATA[index].sub_access_id;
+    var isChecked = $(this).is(":checked") ? 1 : 0;
+
+    let accessID = res_DATA[index].access_id;
+
+    Swal.fire({
+      title: "Are you sure?",
+      text: "You want to update the active status?",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes!",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        $.ajax({
+          type: "POST",
+          url: base_Url + "deactivate-submenu",
+          data: {
+            menu_id: accessID,
+            sub_menu_id: sub_access_id,
+            sub_menu_col: "sub_access_id",
+            tbl_name: "tbl_subaccess_master",
+            active_status: isChecked,
+          },
+
+          success: function (data) {
+            var resData = $.parseJSON(data);
+
+            if (resData.code == 200) {
+              Swal.fire({
+                title: "Congratulations!",
+                text: resData["msg"],
+                icon: "success",
+              });
+              $("#model-data").modal("hide");
+              refreshDetails();
+            } else {
+              Swal.fire({
+                title: "Failure",
+                text: resData["msg"],
+                icon: "danger",
+              });
+
+              $("#model-data").modal("hide");
+              refreshDetails();
+            }
+          },
+        });
+      }
+    });
   });
 
   // *************************** [Delete Data] *************************************************************************

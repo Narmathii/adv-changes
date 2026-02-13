@@ -55,6 +55,7 @@
                                             <tr>
                                                 <th>S.No</th>
                                                 <th>Main Menu Tilte</th>
+                                                <th>Active Status</th>
                                                 <th>Action</th>
                                             </tr>
                                         </thead>
@@ -83,11 +84,11 @@
                 <div class="modal-body">
                     <form id="mainmenu-form">
                         <div class="col-md-12">
-                            
+
                             <div class="my-2">
                                 <label for="r_menu" class="form-label">Main Menu Name</label>
-                                <input type="text" class="form-control r_menu" id="r_menu"
-                                    placeholder="Main Menu Tilte" name="r_menu" value="">
+                                <input type="text" class="form-control r_menu" id="r_menu" placeholder="Main Menu Tilte"
+                                    name="r_menu" value="">
                                 <span class="error text-danger r_menu mt-10"></span>
                             </div>
 

@@ -117,6 +117,22 @@ $(document).ready(function () {
         {
           mDataProp: "camp_menu",
         },
+        {
+          mDataProp: function (data, type, full, meta) {
+            return `
+            <div class="toggle-switch">
+              <input 
+                type="checkbox"
+                class="statusToggle"
+                id="toggle-${meta.row}"
+                data-id="${meta.row}"
+                ${data.is_active == 1 ? "checked" : ""}
+              >
+              <label for="toggle-${meta.row}"></label>
+            </div>
+    `;
+          },
+        },
 
         {
           mDataProp: function (data, type, full, meta) {
@@ -146,6 +162,58 @@ $(document).ready(function () {
     console.log(res_DATA[index].camp_menu);
     //    console.log(res_DATA[index].camp_menu_id);
     camp_menu_id = res_DATA[index].camp_menu_id;
+  });
+
+  $("#datatable").on("change", ".statusToggle", function () {
+    var index = $(this).data("id");
+    camp_menu_id = res_DATA[index].camp_menu_id;
+    var isChecked = $(this).is(":checked") ? 1 : 0;
+
+    Swal.fire({
+      title: "Are you sure?",
+      text: "You want to update the active status?",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes!",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        $.ajax({
+          type: "POST",
+          url: base_Url + "deactivate-menu",
+          data: {
+            id: camp_menu_id,
+            column_name: "camp_menu_id",
+            tbl_name: "tbl_camping_menu",
+            active_status: isChecked,
+          },
+
+          success: function (data) {
+            var resData = $.parseJSON(data);
+
+            if (resData.code == 200) {
+              Swal.fire({
+                title: "Congratulations!",
+                text: resData["msg"],
+                icon: "success",
+              });
+              $("#model-data").modal("hide");
+              refreshDetails();
+            } else {
+              Swal.fire({
+                title: "Failure",
+                text: resData["msg"],
+                icon: "danger",
+              });
+
+              $("#model-data").modal("hide");
+              refreshDetails();
+            }
+          },
+        });
+      }
+    });
   });
 
   // *************************** [Delete Data] *************************************************************************

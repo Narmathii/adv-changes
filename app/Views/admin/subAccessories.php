@@ -55,6 +55,7 @@
                                                 <th>S.No</th>
                                                 <th>Accessories Title</th>
                                                 <th>SubAccessories Name </th>
+                                                <th>Active Status</th>
                                                 <th>Action</th>
 
                                             </tr>
@@ -92,7 +93,7 @@
                                     <?php foreach ($access_data as $access) {
                                         ?>
                                         <option value="<?php echo $access['access_id']; ?>">
-                                            <?php echo  $access['access_title']; ?>
+                                            <?php echo $access['access_title']; ?>
                                         </option>
                                     <?php } ?>
                                 </select>

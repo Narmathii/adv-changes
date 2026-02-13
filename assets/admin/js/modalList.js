@@ -1,19 +1,24 @@
 $(document).ready(function () {
   var mode, JSON, res_DATA, modal_id;
 
-  getModalDetails();
-
-  $.when(getModalDetails()).done(function () {
-    dispmodalDetails(JSON);
+  getModalDetails(function (modalDetails) {
+    dispmodalDetails(modalDetails);
   });
 
   function refreshDetails() {
-    $.when(getModalDetails()).done(function (brandDetails) {
+    var currentPage = 0;
+
+    if ($.fn.DataTable.isDataTable("#datatable")) {
+      currentPage = $("#datatable").DataTable().page();
+    }
+
+    getModalDetails(function (modalDetails) {
+      dispmodalDetails(modalDetails);
+
       var table = $("#datatable").DataTable();
-      table.clear();
-      table.rows.add(brandDetails);
-      table.draw();
-      window.location.reload();
+      var pageInfo = table.page.info();
+      var targetPage = Math.min(currentPage, Math.max(pageInfo.pages - 1, 0));
+      table.page(targetPage).draw("page");
     });
   }
 
@@ -106,15 +111,17 @@ $(document).ready(function () {
   }
 
   // *************************** [get Data] *************************************************************************
-  function getModalDetails() {
-    $.ajax({
+  function getModalDetails(callback) {
+    return $.ajax({
       type: "POST",
       url: base_Url + "get-modal-data",
       dataType: "json",
       success: function (data) {
         res_DATA = data;
 
-        dispmodalDetails(res_DATA);
+        if (typeof callback === "function") {
+          callback(res_DATA);
+        }
       },
       error: function () {
         console.log("Error");

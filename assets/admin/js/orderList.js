@@ -3,30 +3,39 @@ $(document).ready(function () {
   var orderID = "",
     PrintID;
 
-  $.when(getOrderList()).done(function () {
-    dispOrderDetails(JSON);
+  getOrderList(function (orderDetails) {
+    dispOrderDetails(orderDetails);
   });
 
   function refreshDetails() {
-    $.when(getOrderList()).done(function (brandDetails) {
+    var currentPage = 0;
+
+    if ($.fn.DataTable.isDataTable("#datatable")) {
+      currentPage = $("#datatable").DataTable().page();
+    }
+
+    getOrderList(function (orderDetails) {
+      dispOrderDetails(orderDetails);
+
       var table = $("#datatable").DataTable();
-      table.clear();
-      table.rows.add(brandDetails);
-      table.draw();
-      window.location.reload();
+      var pageInfo = table.page.info();
+      var targetPage = Math.min(currentPage, Math.max(pageInfo.pages - 1, 0));
+      table.page(targetPage).draw("page");
     });
   }
 
   // *************************** [get Data] *************************************************************************
-  function getOrderList() {
-    $.ajax({
+  function getOrderList(callback) {
+    return $.ajax({
       type: "POST",
       url: base_Url + "get-order-list",
       dataType: "json",
       success: function (data) {
         res_DATA = data;
 
-        dispOrderDetails(res_DATA);
+        if (typeof callback === "function") {
+          callback(res_DATA);
+        }
       },
       error: function () {
         console.log("Error");
@@ -189,7 +198,8 @@ $(document).ready(function () {
 
       success: function (data) {
         if (data.code == 200) {
-          location.reload();
+          $("#delivery-status").modal("hide");
+          refreshDetails();
         } else {
           Swal.fire({
             title: "Failure",
@@ -486,7 +496,7 @@ $(document).ready(function () {
             icon: "success",
           });
           $("#tracking-order").modal("hide");
-          location.reload();
+          refreshDetails();
         } else {
           Swal.fire({
             title: "Failure!",

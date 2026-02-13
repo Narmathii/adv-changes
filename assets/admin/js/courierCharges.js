@@ -1,22 +1,47 @@
 $(document).ready(function () {
   var mode, JSON, res_DATA, charge_id;
+  var defaultStateOptions = $("#state_id").html();
+  var defaultCourierOptions = $("#courier_id").html();
+  var defaultActiveOptions = $("#active_sts").html();
 
-  $.when(getCourierDetails()).done(function () {
-    dispCourierDetails(JSON);
+  getCourierDetails(function (courierDetails) {
+    dispCourierDetails(courierDetails);
   });
 
-  // function refreshDetails() {
-  //   $.when(getCourierDetails()).done(function (brandDetails) {
-  //     var table = $("#datatable").DataTable();
-  //     table.clear();
-  //     table.rows.add(brandDetails);
-  //     table.draw();
-  //     window.location.reload();
-  //   });
-  // }
+  function refreshDetails() {
+    var currentPage = 0;
+
+    if ($.fn.DataTable.isDataTable("#datatable")) {
+      currentPage = $("#datatable").DataTable().page();
+    }
+
+    getCourierDetails(function (courierDetails) {
+      dispCourierDetails(courierDetails);
+
+      var table = $("#datatable").DataTable();
+      var pageInfo = table.page.info();
+      var targetPage = Math.min(currentPage, Math.max(pageInfo.pages - 1, 0));
+      table.page(targetPage).draw("page");
+    });
+  }
+
+  function resetModalForm() {
+    var form = document.getElementById("modal-form");
+    if (form) {
+      form.reset();
+    }
+
+    $("#state_id").html(defaultStateOptions).val("");
+    $("#dist_id").html('<option value="">Select District</option>');
+    $("#courier_id").html(defaultCourierOptions).val("");
+    $("#active_sts").html(defaultActiveOptions).val("");
+    $("#charges").val("");
+    $("#comments").val("");
+  }
 
   $("#addUserData").click(function () {
     mode = "new";
+    resetModalForm();
     $("#distric_modal").modal("show");
   });
 
@@ -122,11 +147,9 @@ $(document).ready(function () {
             text: convertData["msg"],
             icon: "success",
           });
-          $("#modal-form").empty();
-          document.getElementById("modal-form").innerHTML = "";
           $("#distric_modal").modal("hide");
-
-          getCourierDetails();
+          resetModalForm();
+          refreshDetails();
         } else {
           Swal.fire({
             title: "Failure",
@@ -135,21 +158,23 @@ $(document).ready(function () {
           });
 
           $("#distric_modal").modal("hide");
-          getCourierDetails();
+          refreshDetails();
         }
       },
     });
   }
 
   // *************************** [get Data] *************************************************************************
-  function getCourierDetails() {
-    $.ajax({
+  function getCourierDetails(callback) {
+    return $.ajax({
       type: "POST",
       url: base_Url + "get-charges",
       dataType: "json",
       success: function (data) {
         res_DATA = data;
-        dispCourierDetails(res_DATA);
+        if (typeof callback === "function") {
+          callback(res_DATA);
+        }
       },
       error: function () {
         console.log("Error");
@@ -244,11 +269,14 @@ $(document).ready(function () {
     $("#state_id").val(stateID);
     $("#state_id").val(stateID).trigger("change");
 
-    let charge = "";
-    charge += `<option value="${res_DATA[index].courier_id}">
-    ${res_DATA[index].courier_name}
-</option>`;
-    $("#courier_id").html(charge);
+    $("#courier_id").html(defaultCourierOptions);
+    $("#courier_id").val(res_DATA[index].courier_id);
+    if ($("#courier_id").val() === null) {
+      $("#courier_id").append(
+        `<option value="${res_DATA[index].courier_id}">${res_DATA[index].courier_name}</option>`
+      );
+      $("#courier_id").val(res_DATA[index].courier_id);
+    }
 
     $("#charges").val(res_DATA[index].charges);
     $("#comments").val(res_DATA[index].comments);
@@ -289,7 +317,7 @@ $(document).ready(function () {
                 text: resData["message"],
                 icon: "success",
               });
-              $("#model-data").modal("hide");
+              $("#distric_modal").modal("hide");
               refreshDetails();
             } else {
               Swal.fire({
@@ -297,7 +325,7 @@ $(document).ready(function () {
                 text: resData["message"],
                 icon: "danger",
               });
-              $("#model-data").modal("hide");
+              $("#distric_modal").modal("hide");
               refreshDetails();
             }
           },

@@ -1,19 +1,24 @@
 $(document).ready(function () {
   var mode, JSON, res_DATA, sub_access_id, acc_id;
 
-  getSubAccessories();
-
-  $.when(getSubAccessories()).done(function () {
-    dispSubAccessories(JSON);
+  getSubAccessories(function (subAccessDetails) {
+    dispSubAccessories(subAccessDetails);
   });
 
   function refreshDetails() {
-    $.when(getSubAccessories()).done(function (brandDetails) {
+    var currentPage = 0;
+
+    if ($.fn.DataTable.isDataTable("#datatable")) {
+      currentPage = $("#datatable").DataTable().page();
+    }
+
+    getSubAccessories(function (subAccessDetails) {
+      dispSubAccessories(subAccessDetails);
+
       var table = $("#datatable").DataTable();
-      table.clear();
-      table.rows.add(brandDetails);
-      table.draw();
-      window.location.reload();
+      var pageInfo = table.page.info();
+      var targetPage = Math.min(currentPage, Math.max(pageInfo.pages - 1, 0));
+      table.page(targetPage).draw("page");
     });
   }
 
@@ -88,14 +93,17 @@ $(document).ready(function () {
   }
 
   // *************************** [get Data] *************************************************************************
-  function getSubAccessories() {
-    $.ajax({
+  function getSubAccessories(callback) {
+    return $.ajax({
       type: "POST",
       url: base_Url + "get-sub-accessories",
       dataType: "json",
       success: function (data) {
         res_DATA = data;
-        dispSubAccessories(res_DATA);
+
+        if (typeof callback === "function") {
+          callback(res_DATA);
+        }
       },
       error: function () {
         console.log("Error");

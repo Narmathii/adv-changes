@@ -19,31 +19,31 @@ class Home extends BaseController
     {
         $db = \Config\Database::connect();
         $res['brand_master'] = $db->query('SELECT * FROM `brand_master` WHERE  `flag` =1 ORDER BY brand_name ASC')->getResultArray();
-        $res['brand'] = $db->query('SELECT `brand_id`,UPPER(`brand_name`) AS `brand_name` ,`brand_img` FROM `tbl_brand_master` WHERE  `flag` =1 ORDER BY brand_name ASC')->getResultArray();
-        $res['modal'] = $db->query('SELECT `modal_id` ,`brand_id`, CONCAT(UPPER(SUBSTRING(modal_name, 1, 1)), LOWER(SUBSTRING(modal_name, 2))) AS `modal_name` FROM `tbl_modal_master` WHERE  `flag` = 1 ORDER BY modal_name ASC ')->getResultArray();
+        $res['brand'] = $db->query('SELECT `brand_id`,UPPER(`brand_name`) AS `brand_name` ,`brand_img` FROM `tbl_brand_master` WHERE  `flag` =1  ORDER BY brand_name ASC')->getResultArray();
+        $res['modal'] = $db->query('SELECT `modal_id` ,`brand_id`, CONCAT(UPPER(SUBSTRING(modal_name, 1, 1)), LOWER(SUBSTRING(modal_name, 2))) AS `modal_name` FROM `tbl_modal_master` WHERE  `flag` = 1 AND `is_active` = 1 ORDER BY modal_name ASC ')->getResultArray();
 
         $res['accessories'] = $db->query('SELECT `access_id`, UPPER(`access_title`) AS `access_title`  FROM `tbl_access_master` WHERE `flag` = 1 AND `is_active` =1  ORDER BY  `access_title` ASC;')->getResultArray();
         $res['sub_accessories'] = $db->query('SELECT `sub_access_id`, `access_id`, 
        CONCAT(UPPER(SUBSTRING(`sub_access_name`, 1, 1)), LOWER(SUBSTRING(`sub_access_name`, 2))) AS `sub_access_name`  
         FROM `tbl_subaccess_master` 
-        WHERE `flag` = 1 
+        WHERE `flag` = 1 and `is_active` = 1
         ORDER BY sub_access_name ASC
         ')->getResultArray();
 
 
-        $res['riding_menu'] = $db->query('SELECT `r_menu_id` , UPPER(`r_menu`) AS `r_menu`  FROM `tbl_riding_menu` WHERE `flag` =1 ORDER BY r_menu ASC;')->getResultArray();
-        $res['riding_submenu'] = $db->query('SELECT `r_sub_id`,`r_menu_id`,CONCAT(UPPER(SUBSTRING(`r_sub_menu`, 1, 1)), LOWER(SUBSTRING(`r_sub_menu`, 2))) AS `r_sub_menu`  FROM `tbl_riding_submenu` WHERE flag =1 ORDER BY r_sub_menu ASC')->getResultArray();
+        $res['riding_menu'] = $db->query('SELECT `r_menu_id` , UPPER(`r_menu`) AS `r_menu`  FROM `tbl_riding_menu` WHERE `flag` =1 AND `is_active` = 1 ORDER BY r_menu ASC;')->getResultArray();
+        $res['riding_submenu'] = $db->query('SELECT `r_sub_id`,`r_menu_id`,CONCAT(UPPER(SUBSTRING(`r_sub_menu`, 1, 1)), LOWER(SUBSTRING(`r_sub_menu`, 2))) AS `r_sub_menu`  FROM `tbl_riding_submenu` WHERE flag =1 AND is_active = 1 ORDER BY r_sub_menu ASC')->getResultArray();
 
-        $res['lug_menu'] = $db->query('SELECT `lug_menu_id`,UPPER(`lug_menu`) AS `lug_menu`  FROM `tbl_luggage_menu` WHERE  `flag` = 1 ORDER BY lug_menu')->getResultArray();
-        $res['lud_submenu'] = $db->query('SELECT `lug_submenu_id`,`lug_menu_id`,CONCAT(UPPER(SUBSTRING(`lug_submenu`, 1, 1)), LOWER(SUBSTRING(`lug_submenu`, 2))) AS `lug_submenu` FROM `tbl_luggage_submenu` WHERE  `flag` =1 ORDER BY lug_submenu ASC')->getResultArray();
+        $res['lug_menu'] = $db->query('SELECT `lug_menu_id`,UPPER(`lug_menu`) AS `lug_menu`  FROM `tbl_luggage_menu` WHERE  `flag` = 1 AND `is_active` = 1 ORDER BY lug_menu')->getResultArray();
+        $res['lud_submenu'] = $db->query('SELECT `lug_submenu_id`,`lug_menu_id`,CONCAT(UPPER(SUBSTRING(`lug_submenu`, 1, 1)), LOWER(SUBSTRING(`lug_submenu`, 2))) AS `lug_submenu` FROM `tbl_luggage_submenu` WHERE  `flag` =1 AND `is_active` = 1 ORDER BY lug_submenu ASC')->getResultArray();
 
-        $res['h_menu'] = $db->query('SELECT `h_menu_id`,UPPER(`h_menu`) AS `h_menu` FROM `tbl_helmet_menu` WHERE `flag` = 1 ORDER BY h_menu ASC')->getResultArray();
-        $res['h_submenu'] = $db->query('SELECT `h_submenu_id`,`h_menu_id`, CONCAT(UPPER(SUBSTRING(`h_submenu`, 1, 1)), LOWER(SUBSTRING(`h_submenu`, 2))) AS `h_submenu`,`hsubmenu_img`FROM `tbl_helmet_submenu` WHERE `flag` = 1 ORDER BY h_submenu ASC')->getResultArray();
+        $res['h_menu'] = $db->query('SELECT `h_menu_id`,UPPER(`h_menu`) AS `h_menu` FROM `tbl_helmet_menu` WHERE `flag` = 1 AND `is_active` = 1 ORDER BY h_menu ASC')->getResultArray();
+        $res['h_submenu'] = $db->query('SELECT `h_submenu_id`,`h_menu_id`, CONCAT(UPPER(SUBSTRING(`h_submenu`, 1, 1)), LOWER(SUBSTRING(`h_submenu`, 2))) AS `h_submenu`,`hsubmenu_img`FROM `tbl_helmet_submenu` WHERE `flag` = 1 AND `is_active` = 1 ORDER BY h_submenu ASC')->getResultArray();
 
         $res['h_submenu_list'] = $db->query('SELECT `h_submenu_id`,`h_menu_id`, CONCAT(UPPER(SUBSTRING(`h_submenu`, 1, 1)), LOWER(SUBSTRING(`h_submenu`, 2))) AS `h_submenu`,`hsubmenu_img`FROM `tbl_helmet_submenu` WHERE `flag` = 1 AND  `h_menu_id` = 2 ORDER BY h_submenu ASC')->getResultArray();
 
-        $res['camp_menu'] = $db->query('SELECT `camp_menu_id` ,UPPER(`camp_menu`) AS `camp_menu` FROM `tbl_camping_menu` WHERE flag = 1 ORDER BY camp_menu ASC;')->getResultArray();
-        $res['camp_submenu'] = $db->query('SELECT `c_submenu_id`,`camp_menuid`,  CONCAT(UPPER(SUBSTRING(`c_submenu`, 1, 1)), LOWER(SUBSTRING(`c_submenu`, 2))) AS `c_submenu`,`csubmenu_img` FROM `tbl_camping_submenu` WHERE flag = 1 ORDER BY `c_submenu` ASC')->getResultArray();
+        $res['camp_menu'] = $db->query('SELECT `camp_menu_id` ,UPPER(`camp_menu`) AS `camp_menu` FROM `tbl_camping_menu` WHERE flag = 1 AND is_active = 1 ORDER BY camp_menu ASC;')->getResultArray();
+        $res['camp_submenu'] = $db->query('SELECT `c_submenu_id`,`camp_menuid`,  CONCAT(UPPER(SUBSTRING(`c_submenu`, 1, 1)), LOWER(SUBSTRING(`c_submenu`, 2))) AS `c_submenu`,`csubmenu_img` FROM `tbl_camping_submenu` WHERE flag = 1 AND is_active = 1 ORDER BY `c_submenu` ASC')->getResultArray();
         return $res;
     }
     public function index(): string
@@ -289,6 +289,12 @@ GROUP BY `product_id` HAVING SUM(`prod_count`)<=10";
 
         $res['recent_products'] = $recent;
 
+        // Hide products tied to inactive menu/submenu entries.
+        $res['hotsale'] = $this->filterProductsByActiveMenus($res['hotsale']);
+        $res['new_arrivals'] = $this->filterProductsByActiveMenus($res['new_arrivals']);
+        $res['offers'] = $this->filterProductsByActiveMenus($res['offers']);
+        $res['recent_products'] = $this->filterProductsByActiveMenus($res['recent_products']);
+
 
         // Recently viewed products END 
 
@@ -316,6 +322,75 @@ GROUP BY `product_id` HAVING SUM(`prod_count`)<=10";
             $res = 0;
         }
         return $res;
+    }
+
+    private function getActiveProductLookup(): array
+    {
+        $db = \Config\Database::connect();
+
+        return [
+            'brand' => array_column($db->query("SELECT brand_master_id FROM brand_master WHERE flag = 1 AND is_active = 1")->getResultArray(), 'brand_master_id'),
+            'modal' => array_column($db->query("SELECT modal_id FROM tbl_modal_master WHERE flag = 1 AND is_active = 1")->getResultArray(), 'modal_id'),
+            'access' => array_column($db->query("SELECT access_id FROM tbl_access_master WHERE flag = 1 AND is_active = 1")->getResultArray(), 'access_id'),
+            'sub_access' => array_column($db->query("SELECT sub_access_id FROM tbl_subaccess_master WHERE flag = 1 AND is_active = 1")->getResultArray(), 'sub_access_id'),
+            'r_menu' => array_column($db->query("SELECT r_menu_id FROM tbl_riding_menu WHERE flag = 1 AND is_active = 1")->getResultArray(), 'r_menu_id'),
+            'r_sub' => array_column($db->query("SELECT r_sub_id FROM tbl_riding_submenu WHERE flag = 1 AND is_active = 1")->getResultArray(), 'r_sub_id'),
+            'h_menu' => array_column($db->query("SELECT h_menu_id FROM tbl_helmet_menu WHERE flag = 1 AND is_active = 1")->getResultArray(), 'h_menu_id'),
+            'h_sub' => array_column($db->query("SELECT h_submenu_id FROM tbl_helmet_submenu WHERE flag = 1 AND is_active = 1")->getResultArray(), 'h_submenu_id'),
+            'lug_menu' => array_column($db->query("SELECT lug_menu_id FROM tbl_luggage_menu WHERE flag = 1 AND is_active = 1")->getResultArray(), 'lug_menu_id'),
+            'lug_sub' => array_column($db->query("SELECT lug_submenu_id FROM tbl_luggage_submenu WHERE flag = 1 AND is_active = 1")->getResultArray(), 'lug_submenu_id'),
+            'camp_menu' => array_column($db->query("SELECT camp_menu_id FROM tbl_camping_menu WHERE flag = 1 AND is_active = 1")->getResultArray(), 'camp_menu_id'),
+            'camp_sub' => array_column($db->query("SELECT c_submenu_id FROM tbl_camping_submenu WHERE flag = 1 AND is_active = 1")->getResultArray(), 'c_submenu_id'),
+        ];
+    }
+
+    private function filterProductsByActiveMenus(array $products): array
+    {
+        $active = $this->getActiveProductLookup();
+
+        $filtered = array_filter($products, function ($product) use ($active) {
+            $table = $product['tbl_name'] ?? '';
+
+            if ($table === 'tbl_products') {
+                $brandId = (int) ($product['brand_id'] ?? 0);
+                $modalId = (int) ($product['modal_id'] ?? 0);
+                return in_array($brandId, $active['brand']) && in_array($modalId, $active['modal']);
+            }
+
+            if ($table === 'tbl_accessories_list') {
+                $accessId = (int) ($product['access_id'] ?? $product['brand_id'] ?? 0);
+                $subAccessId = (int) ($product['sub_access_id'] ?? $product['modal_id'] ?? 0);
+                return in_array($accessId, $active['access']) && in_array($subAccessId, $active['sub_access']);
+            }
+
+            if ($table === 'tbl_rproduct_list') {
+                $menuId = (int) ($product['r_menu_id'] ?? $product['brand_id'] ?? 0);
+                $subMenuId = (int) ($product['r_sub_id'] ?? $product['modal_id'] ?? 0);
+                return in_array($menuId, $active['r_menu']) && in_array($subMenuId, $active['r_sub']);
+            }
+
+            if ($table === 'tbl_helmet_products') {
+                $menuId = (int) ($product['h_menu_id'] ?? $product['brand_id'] ?? 0);
+                $subMenuId = (int) ($product['h_submenu_id'] ?? $product['modal_id'] ?? 0);
+                return in_array($menuId, $active['h_menu']) && in_array($subMenuId, $active['h_sub']);
+            }
+
+            if ($table === 'tbl_luggagee_products') {
+                $menuId = (int) ($product['lug_menu_id'] ?? $product['brand_id'] ?? 0);
+                $subMenuId = (int) ($product['lug_submenu_id'] ?? $product['modal_id'] ?? 0);
+                return in_array($menuId, $active['lug_menu']) && in_array($subMenuId, $active['lug_sub']);
+            }
+
+            if ($table === 'tbl_camping_products') {
+                $menuId = (int) ($product['camp_menu_id'] ?? $product['brand_id'] ?? 0);
+                $subMenuId = (int) ($product['c_submenu_id'] ?? $product['modal_id'] ?? 0);
+                return in_array($menuId, $active['camp_menu']) && in_array($subMenuId, $active['camp_sub']);
+            }
+
+            return true;
+        });
+
+        return array_values($filtered);
     }
 
     public function detail($segName, $prodID)
@@ -4065,32 +4140,32 @@ LIMIT ? OFFSET ?', [$perPage, $offset])->getResultArray();
         $res['search_brand'] = $db->query("SELECT DISTINCT a.search_brand,a.tbl_name , b.`brand_name`
  FROM tbl_products AS a INNER JOIN brand_master AS b 
  ON a.search_brand = b.brand_master_id
- WHERE (a.hot_sale = 1 OR a.offer_type = 0) AND a.flag = 1  AND b.flag = 1 
+ WHERE (a.hot_sale = 1 OR a.offer_type = 0) AND a.flag = 1 AND b.flag = 1 
  UNION ALL
  SELECT DISTINCT a.search_brand , a.tbl_name , b.`brand_name`
  FROM tbl_accessories_list AS a INNER JOIN brand_master AS b 
  ON a.search_brand = b.brand_master_id
- WHERE (a.hot_sale = 1 OR a.offer_type = 0) AND a.flag = 1  AND b.flag = 1 
+ WHERE (a.hot_sale = 1 OR a.offer_type = 0) AND a.flag = 1 AND b.flag = 1 
  UNION ALL
  SELECT DISTINCT a.search_brand ,a.tbl_name, b.`brand_name`
  FROM tbl_rproduct_list AS a INNER JOIN brand_master AS b 
  ON a.search_brand = b.brand_master_id
- WHERE (a.hot_sale = 1 OR a.offer_type = 0) AND a.flag = 1  AND b.flag = 1 
+ WHERE (a.hot_sale = 1 OR a.offer_type = 0) AND a.flag = 1 AND b.flag = 1 
  UNION 
  SELECT DISTINCT a.search_brand ,a.tbl_name, b.`brand_name`
  FROM tbl_helmet_products AS a INNER JOIN brand_master AS b 
  ON a.search_brand = b.brand_master_id
- WHERE (a.hot_sale = 1 OR a.offer_type = 0) AND a.flag = 1  AND b.flag = 1 
+ WHERE (a.hot_sale = 1 OR a.offer_type = 0) AND a.flag = 1 AND b.flag = 1 
  UNION
  SELECT DISTINCT a.search_brand ,a.tbl_name, b.`brand_name`
  FROM tbl_luggagee_products AS a INNER JOIN brand_master AS b 
  ON a.search_brand = b.brand_master_id
- WHERE (a.hot_sale = 1 OR a.offer_type = 0) AND a.flag = 1  AND b.flag = 1 
+ WHERE (a.hot_sale = 1 OR a.offer_type = 0) AND a.flag = 1 AND b.flag = 1 
  UNION 
  SELECT DISTINCT a.search_brand ,a.tbl_name, b.`brand_name`
  FROM tbl_camping_products AS a INNER JOIN brand_master AS b 
  ON a.search_brand = b.brand_master_id
- WHERE (a.hot_sale = 1 OR a.offer_type = 0) AND a.flag = 1  AND b.flag = 1 
+ WHERE (a.hot_sale = 1 OR a.offer_type = 0) AND a.flag = 1 AND b.flag = 1 
  ")->getResultArray();
         $res['search_brand'] = $this->getDistinctValues($res['search_brand'], 'search_brand');
 
@@ -4417,3 +4492,5 @@ LIMIT ? OFFSET ?', [$perPage, $offset])->getResultArray();
 
 
 }
+
+

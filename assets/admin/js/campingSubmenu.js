@@ -218,60 +218,56 @@ $(document).ready(function () {
   });
 
   $("#datatable").on("change", ".statusToggle", function () {
-    var index = $(this).data("id");
-    c_submenu_id = res_DATA[index].c_submenu_id;
-    var isChecked = $(this).is(":checked") ? 1 : 0;
+  var $this = $(this);
+  var index = $this.data("id");
+  var c_submenu_id = res_DATA[index].c_submenu_id;
+  var camp_menu_id = res_DATA[index].camp_menu_id;
 
-    let camp_menu_id = res_DATA[index].camp_menu_id;
+  var previousState = !$this.is(":checked"); // state before change
+  var isChecked = $this.is(":checked") ? 1 : 0;
 
-    Swal.fire({
-      title: "Are you sure?",
-      text: "You want to update the active status?",
-      icon: "warning",
-      showCancelButton: true,
-      confirmButtonColor: "#3085d6",
-      cancelButtonColor: "#d33",
-      confirmButtonText: "Yes!",
-    }).then((result) => {
-      if (result.isConfirmed) {
-        $.ajax({
-          type: "POST",
-          url: base_Url + "deactivate-submenu",
-          data: {
-            menu_id: camp_menu_id,
-            sub_menu_id: c_submenu_id,
-            menu_col: "camp_menuid",
-            sub_menu_col: "c_submenu_id",
-            tbl_name: "tbl_camping_submenu",
-            active_status: isChecked,
-          },
+  Swal.fire({
+    title: "Are you sure?",
+    text: "You want to update the active status?",
+    icon: "warning",
+    showCancelButton: true,
+    confirmButtonColor: "#3085d6",
+    cancelButtonColor: "#d33",
+    confirmButtonText: "Yes!",
+  }).then((result) => {
+    if (result.isConfirmed) {
+      $.ajax({
+        type: "POST",
+        url: base_Url + "deactivate-submenu",
+        data: {
+          menu_id: camp_menu_id,
+          sub_menu_id: c_submenu_id,
+          menu_col: "camp_menuid",
+          sub_menu_col: "c_submenu_id",
+          tbl_name: "tbl_camping_submenu",
+          active_status: isChecked,
+        },
+        success: function (data) {
+          var resData = $.parseJSON(data);
 
-          success: function (data) {
-            var resData = $.parseJSON(data);
-
-            if (resData.code == 200) {
-              Swal.fire({
-                title: "Congratulations!",
-                text: resData["msg"],
-                icon: "success",
-              });
-              $("#model-data").modal("hide");
-              refreshDetails();
-            } else {
-              Swal.fire({
-                title: "Failure",
-                text: resData["msg"],
-                icon: "danger",
-              });
-
-              $("#model-data").modal("hide");
-              refreshDetails();
-            }
-          },
-        });
-      }
-    });
+          if (resData.code == 200) {
+            Swal.fire("Success", resData.msg, "success");
+            refreshDetails();
+          } else {
+            Swal.fire("Failure", resData.msg, "error");
+            $this.prop("checked", previousState);
+          }
+        },
+        error: function () {
+          $this.prop("checked", previousState);
+        }
+      });
+    } else {
+      $this.prop("checked", previousState);
+    }
   });
+});
+
 
   // *************************** [Delete Data] *************************************************************************
   $(document).on("click", ".BtnDelete", function () {

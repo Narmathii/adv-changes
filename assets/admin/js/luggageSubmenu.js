@@ -3,8 +3,7 @@ $(document).ready(function () {
 
   getSubMenuList(function (subMenuDetails) {
     dispSubMenuList(subMenuDetails);
-  }); 
-
+  });
 
   function refreshDetails() {
     var currentPage = 0;
@@ -132,6 +131,22 @@ $(document).ready(function () {
         {
           mDataProp: "lug_submenu",
         },
+        {
+          mDataProp: function (data, type, full, meta) {
+            return `
+            <div class="toggle-switch">
+              <input 
+                type="checkbox"
+                class="statusToggle"
+                id="toggle-${meta.row}"
+                data-id="${meta.row}"
+                ${data.is_active == 1 ? "checked" : ""}
+              >
+              <label for="toggle-${meta.row}"></label>
+            </div>
+    `;
+          },
+        },
 
         {
           mDataProp: function (data, type, full, meta) {
@@ -161,6 +176,62 @@ $(document).ready(function () {
     $("#lug_submenu").val(res_DATA[index].lug_submenu);
 
     lug_submenu_id = res_DATA[index].lug_submenu_id;
+  });
+
+  $("#datatable").on("change", ".statusToggle", function () {
+    var index = $(this).data("id");
+    lug_submenu_id = res_DATA[index].lug_submenu_id;
+    var isChecked = $(this).is(":checked") ? 1 : 0;
+
+    let lug_menu_id = res_DATA[index].lug_menu_id;
+
+    Swal.fire({
+      title: "Are you sure?",
+      text: "You want to update the active status?",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes!",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        $.ajax({
+          type: "POST",
+          url: base_Url + "deactivate-submenu",
+          data: {
+            menu_id: lug_menu_id,
+            sub_menu_id: lug_submenu_id,
+            menu_col: "lug_menu_id",
+            sub_menu_col: "lug_submenu_id",
+            tbl_name: "tbl_luggage_submenu",
+            active_status: isChecked,
+          },
+
+          success: function (data) {
+            var resData = $.parseJSON(data);
+
+            if (resData.code == 200) {
+              Swal.fire({
+                title: "Congratulations!",
+                text: resData["msg"],
+                icon: "success",
+              });
+              $("#model-data").modal("hide");
+              refreshDetails();
+            } else {
+              Swal.fire({
+                title: "Failure",
+                text: resData["msg"],
+                icon: "danger",
+              });
+
+              $("#model-data").modal("hide");
+              refreshDetails();
+            }
+          },
+        });
+      }
+    });
   });
 
   // *************************** [Delete Data] *************************************************************************

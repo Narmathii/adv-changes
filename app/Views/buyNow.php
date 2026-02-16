@@ -418,16 +418,16 @@ require("components/head.php");
   }
 
   @media only screen and (min-width: 392px) and (max-width: 425px) {
-        .change-address {
-        width: 39px !important;
-        height: 36px;
-        border-radius: 5px;
-        font-size: 0;
-        padding: 0;
-        top: ;
-        margin-top: -11%;
-        margin-right: 6%;
-        }
+    .change-address {
+      width: 39px !important;
+      height: 36px;
+      border-radius: 5px;
+      font-size: 0;
+      padding: 0;
+      top: ;
+      margin-top: -11%;
+      margin-right: 6%;
+    }
 
     .change-address i {
       font-size: 16px;
@@ -617,13 +617,13 @@ require("components/head.php");
                 </div>
                 <div class="col-12 col-lg-7 mt-5 <?= $dispAddClass ?>">
                   <h4 class="text-center mb-5">Select Courier Option</h4>
-                   <div class="couriercharge">
+                  <div class="couriercharge">
                     <?php foreach ($courier_type as $type) { ?>
                       <div class="acc_panel d-none">
                         <input class="form-check-input courier-type" type="radio" name="courier_option"
                           id="<?= $type['courier_id'] ?>" value="<?= $type['courier_id'] ?>">
                         <div class="d-text">
-                          <label class="form-check-label" for="st_courier"><?= $type['courier_name'] ?></label>
+                          <label class="form-check-label"><?= $type['courier_name'] ?></label>
                         </div>
                       </div>
                     <?php } ?>

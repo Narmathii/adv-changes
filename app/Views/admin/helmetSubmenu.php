@@ -4,7 +4,7 @@
 <html lang="en" dir="ltr" data-nav-layout="vertical" data-theme-mode="light" data-header-styles="light"
     data-menu-styles="dark" data-toggled="close">
 
-<?php require ('components/head.php') ?>
+<?php require('components/head.php') ?>
 
 <body>
 
@@ -16,9 +16,9 @@
 
     <!-- PAGE -->
     <div class="page">
-        <?php require ('components/topnav.php') ?>
+        <?php require('components/topnav.php') ?>
 
-        <?php require ('components/sidenavbar.php') ?>
+        <?php require('components/sidenavbar.php') ?>
 
         <!-- MAIN-CONTENT -->
         <div class="main-content app-content">
@@ -58,6 +58,7 @@
                                                 <th>Menu</th>
                                                 <th>Sub Menu</th>
                                                 <th>Images</th>
+                                                 <th>Active status</th>
                                                 <th>Action</th>
                                             </tr>
                                         </thead>
@@ -134,7 +135,7 @@
 
 
     <!-- FOOTER-->
-    <?php require ('components/footer.php') ?>
+    <?php require('components/footer.php') ?>
 
     <!-- FOOTER -->
 

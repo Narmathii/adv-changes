@@ -1,9 +1,9 @@
 $(document).ready(function () {
   var mode, JSON, res_DATA, c_submenu_id;
 
-    getSubMenuList(function (subMenuDetails) {
-      dispSubMenuList(subMenuDetails);
-    });
+  getSubMenuList(function (subMenuDetails) {
+    dispSubMenuList(subMenuDetails);
+  });
 
   function refreshDetails() {
     var currentPage = 0;
@@ -134,6 +134,7 @@ $(document).ready(function () {
         {
           mDataProp: "c_submenu",
         },
+
         {
           mDataProp: function (data, type, full, meta) {
             if (data.csubmenu_img !== null)
@@ -147,6 +148,22 @@ $(document).ready(function () {
                 "' alt='not-image' width='100'></a>"
               );
             else return "";
+          },
+        },
+        {
+          mDataProp: function (data, type, full, meta) {
+            return `
+            <div class="toggle-switch">
+              <input 
+                type="checkbox"
+                class="statusToggle"
+                id="toggle-${meta.row}"
+                data-id="${meta.row}"
+                ${data.is_active == 1 ? "checked" : ""}
+              >
+              <label for="toggle-${meta.row}"></label>
+            </div>
+    `;
           },
         },
 
@@ -198,6 +215,62 @@ $(document).ready(function () {
 
     c_submenu_id = res_DATA[index].c_submenu_id;
     console.log(c_submenu_id);
+  });
+
+  $("#datatable").on("change", ".statusToggle", function () {
+    var index = $(this).data("id");
+    c_submenu_id = res_DATA[index].c_submenu_id;
+    var isChecked = $(this).is(":checked") ? 1 : 0;
+
+    let camp_menu_id = res_DATA[index].camp_menu_id;
+
+    Swal.fire({
+      title: "Are you sure?",
+      text: "You want to update the active status?",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes!",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        $.ajax({
+          type: "POST",
+          url: base_Url + "deactivate-submenu",
+          data: {
+            menu_id: camp_menu_id,
+            sub_menu_id: c_submenu_id,
+            menu_col: "camp_menuid",
+            sub_menu_col: "c_submenu_id",
+            tbl_name: "tbl_camping_submenu",
+            active_status: isChecked,
+          },
+
+          success: function (data) {
+            var resData = $.parseJSON(data);
+
+            if (resData.code == 200) {
+              Swal.fire({
+                title: "Congratulations!",
+                text: resData["msg"],
+                icon: "success",
+              });
+              $("#model-data").modal("hide");
+              refreshDetails();
+            } else {
+              Swal.fire({
+                title: "Failure",
+                text: resData["msg"],
+                icon: "danger",
+              });
+
+              $("#model-data").modal("hide");
+              refreshDetails();
+            }
+          },
+        });
+      }
+    });
   });
 
   // *************************** [Delete Data] *************************************************************************

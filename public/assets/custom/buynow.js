@@ -25,7 +25,7 @@ $(document).ready(function () {
           }
 
           $("#dist_id_val").html(
-            `<option value=''> Select District </option>` + distDta
+            `<option value=''> Select District </option>` + distDta,
           );
         },
         error: function (error) {
@@ -466,7 +466,7 @@ $(document).ready(function () {
               $(".overAllTotalValue").text(Total);
 
               $(".step-" + currentStep).addClass(
-                "animate__animated animate__fadeOutLeft"
+                "animate__animated animate__fadeOutLeft",
               );
               currentStep++;
               setTimeout(function () {
@@ -488,7 +488,7 @@ $(document).ready(function () {
   $(".prev-step").click(function () {
     if (currentStep > 1) {
       $(".step-" + currentStep).addClass(
-        "animate__animated animate__fadeOutRight"
+        "animate__animated animate__fadeOutRight",
       );
       currentStep--;
       setTimeout(function () {

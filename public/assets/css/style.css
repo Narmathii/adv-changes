@@ -11961,7 +11961,8 @@ i.bg-color-secondary {
 .dark-scheme .input-max{
     color: #000;
     background: none;
-    background: rgba(255, 255, 255, .05);
+    /* background: rgba(255, 255, 255, .05); */
+     background: rgba(255, 255, 255, .05);
     border: 1px solid #d3d3d3;
     padding: 0 5px;
     font-size: 14px;

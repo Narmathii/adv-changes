@@ -53,7 +53,7 @@ class LsubController extends BaseController
     {
         $db = \Config\Database::connect();
 
-        $query = 'SELECT a.lug_menu , b.* FROM
+        $query = 'SELECT a.lug_menu_id , a.lug_menu , b.* FROM
         tbl_luggage_menu AS a INNER JOIN tbl_luggage_submenu AS b 
         ON a.lug_menu_id = b.lug_menu_id AND b.`flag` = 1 ORDER BY  lug_menu ASC;';
         $res = $db->query($query)->getResultArray();

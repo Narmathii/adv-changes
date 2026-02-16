@@ -388,4 +388,33 @@ class DashboardController extends BaseController
         }
     }
 
+
+    public function deactivateSubMenu()
+    {
+        $db = \Config\Database::connect();
+
+        $menu_id = $this->request->getPost('menu_id');
+        $sub_menu_id = $this->request->getPost('sub_menu_id');
+        $sub_menu_col = $this->request->getPost('sub_menu_col');
+        $menu_col = $this->request->getPost('menu_col');
+        $tbl_name = $this->request->getPost('tbl_name');
+        $active_status = $this->request->getPost('active_status');
+
+
+        $updateQuery = "UPDATE `$tbl_name` SET `is_active` = ? WHERE $menu_col  = ? AND $sub_menu_col = ? ";
+        $db->query($updateQuery, [$active_status, $menu_id, $sub_menu_id]);
+
+        $affectedRows = $db->affectedRows();
+        if ($affectedRows === 1) {
+            $result['code'] = 200;
+            $result['msg'] = 'Status updated Successfully';
+            $result['status'] = 'success';
+            echo json_encode($result);
+        } else {
+            $result['code'] = 400;
+            $result['msg'] = 'Something Wrong';
+            $result['status'] = 'failure';
+            echo json_encode($result);
+        }
+    }
 }

@@ -201,6 +201,7 @@ $(document).ready(function () {
           data: {
             menu_id: accessID,
             sub_menu_id: sub_access_id,
+            menu_col: "access_id",
             sub_menu_col: "sub_access_id",
             tbl_name: "tbl_subaccess_master",
             active_status: isChecked,

@@ -576,6 +576,20 @@ require("components/head.php");
                             brand_id
                         },
                         success: function (data) {
+                            if (data.status === 400) {
+                                const errorText = data.data || 'This category is inactive.';
+                                $('.seach_results').html(`
+                            <div class="container">
+                                <div class="row">
+                                    <div class="col-lg-12 text-center newarrival_header">
+                                        <h3 class="no-product">${errorText}</h3>
+                                    </div>
+                                </div>
+                            </div>`);
+                                $('#pagination-container').addClass('d-none').html("");
+                                scrollToTop();
+                                return;
+                            }
 
                             const count = data.products.length;
                             const totalPages = data.pagination.length;

@@ -11,7 +11,7 @@ class ModalController extends BaseController
     {
         $db = \Config\Database::connect();
 
-        $query = "SELECT * FROM `tbl_brand_master` WHERE `flag` =1 ORDER BY brand_name ASC;";
+        $query = "SELECT * FROM `tbl_brand_master` WHERE `flag` =1 AND `is_active` = 1 ORDER BY brand_name ASC;";
         $getData['brand_list'] = $db->query($query)->getResult();
 
         $session = \Config\Services::session();

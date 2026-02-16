@@ -416,6 +416,8 @@ require("components/head.php");
                     </div>
 
                     <input type="hidden" id="sub_id" value="<?= $sub_id ?>">
+                    <input type="hidden" id="menu_id" value="<?= $menu_id ?>">
+                    <input type="hidden" id="tbl_name" value="<?= $tbl_name ?>">
                     <input type="hidden" value="<?= $segment ?>" data-segment="<?= $segment ?>" id="dataSegment">
                     <div class="col-lg-9">
 
@@ -597,7 +599,9 @@ require("components/head.php");
                     const orderby_mob = $('.orderby_mob').val();
                     const discount = $('.discount').val();
                     const discount_mob = $('.discount_mob').val();
-                    const tablename = 'tbl_camping_products';
+                    const tablename = $('#tbl_name').val();
+                    const tbl_name = $('#tbl_name').val();
+                    const menu_id = $('#menu_id').val();
                     const submenu_id = $('#sub_id').val();
                     const action = 'fetch_data';
 
@@ -612,6 +616,8 @@ require("components/head.php");
                             brand,
                             orderby_web,
                             tablename,
+                            tbl_name,
+                            menu_id,
                             submenu_id,
                             discount,
                             orderby_mob,
@@ -619,6 +625,21 @@ require("components/head.php");
                             action
                         },
                         success: function (data) {
+                            if (data.status === 400) {
+                                const errorText = data.data || 'This category is inactive.';
+                                $('.seach_results').html(`
+                            <div class="container">
+                                <div class="row">
+                                    <div class="col-lg-12 text-center newarrival_header">
+                                        <h3 class="no-product">${errorText}</h3>
+                                    </div>
+                                </div>
+                            </div>`);
+                                $('#pagination-container').addClass('d-none').html("");
+                                scrollToTop();
+                                return;
+                            }
+
                             const count = data.products.length;
                             const totalPages = data.pagination.length;
 

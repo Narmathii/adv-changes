@@ -19,7 +19,7 @@ class Home extends BaseController
     {
         $db = \Config\Database::connect();
         $res['brand_master'] = $db->query('SELECT * FROM `brand_master` WHERE  `flag` =1 ORDER BY brand_name ASC')->getResultArray();
-        $res['brand'] = $db->query('SELECT `brand_id`,UPPER(`brand_name`) AS `brand_name` ,`brand_img` FROM `tbl_brand_master` WHERE  `flag` =1  ORDER BY brand_name ASC')->getResultArray();
+        $res['brand'] = $db->query('SELECT `brand_id`,UPPER(`brand_name`) AS `brand_name` ,`brand_img` FROM `tbl_brand_master` WHERE  `flag` =1 AND `is_active` = 1 ORDER BY brand_name ASC')->getResultArray();
         $res['modal'] = $db->query('SELECT `modal_id` ,`brand_id`, CONCAT(UPPER(SUBSTRING(modal_name, 1, 1)), LOWER(SUBSTRING(modal_name, 2))) AS `modal_name` FROM `tbl_modal_master` WHERE  `flag` = 1 AND `is_active` = 1 ORDER BY modal_name ASC ')->getResultArray();
 
         $res['accessories'] = $db->query('SELECT `access_id`, UPPER(`access_title`) AS `access_title`  FROM `tbl_access_master` WHERE `flag` = 1 AND `is_active` =1  ORDER BY  `access_title` ASC;')->getResultArray();
@@ -959,6 +959,12 @@ GROUP BY `product_id` HAVING SUM(`prod_count`)<=10";
         )->getResultArray();
 
         $res['sub_id'] = $subID;
+        $res['tbl_name'] = 'tbl_accessories_list';
+        $menuDetails = $db->query(
+            "SELECT access_id FROM tbl_subaccess_master WHERE sub_access_id = ? AND flag = 1 LIMIT 1",
+            [$subID]
+        )->getRowArray();
+        $res['menu_id'] = (int) ($menuDetails['access_id'] ?? 0);
 
 
         $res['segment'] = $segName;
@@ -1235,6 +1241,12 @@ GROUP BY `product_id` HAVING SUM(`prod_count`)<=10";
         $res['search_brand'] = $this->db->query($searchquery, [$subID])->getResultArray();
 
         $res['sub_id'] = $subID;
+        $res['tbl_name'] = 'tbl_rproduct_list';
+        $menuDetails = $this->db->query(
+            "SELECT r_menu_id FROM tbl_riding_submenu WHERE r_sub_id = ? AND flag = 1 LIMIT 1",
+            [$subID]
+        )->getRowArray();
+        $res['menu_id'] = (int) ($menuDetails['r_menu_id'] ?? 0);
         $res['segment'] = $segName;
 
         // Calculate Visible Page Links
@@ -1887,6 +1899,12 @@ GROUP BY `product_id` HAVING SUM(`prod_count`)<=10";
 
 
         $res['sub_id'] = $lugIDD;
+        $res['tbl_name'] = 'tbl_luggagee_products';
+        $menuDetails = $db->query(
+            "SELECT lug_menu_id FROM tbl_luggage_submenu WHERE lug_submenu_id = ? AND flag = 1 LIMIT 1",
+            [$lugIDD]
+        )->getRowArray();
+        $res['menu_id'] = (int) ($menuDetails['lug_menu_id'] ?? 0);
         $res['segment'] = $segName;
 
 
@@ -2156,6 +2174,12 @@ GROUP BY `product_id` HAVING SUM(`prod_count`)<=10";
 
 
         $res['sub_id'] = $hsubIDD;
+        $res['tbl_name'] = 'tbl_helmet_products';
+        $menuDetails = $db->query(
+            "SELECT h_menu_id FROM tbl_helmet_submenu WHERE h_submenu_id = ? AND flag = 1 LIMIT 1",
+            [$hsubIDD]
+        )->getRowArray();
+        $res['menu_id'] = (int) ($menuDetails['h_menu_id'] ?? 0);
 
         $res['segment'] = $segName;
 
@@ -3830,6 +3854,12 @@ LIMIT ? OFFSET ?
         $res['search_brand'] = $db->query($searchQry, [$subID])->getResultArray();
 
         $res['sub_id'] = $subID;
+        $res['tbl_name'] = 'tbl_camping_products';
+        $menuDetails = $db->query(
+            "SELECT camp_menuid FROM tbl_camping_submenu WHERE c_submenu_id = ? AND flag = 1 LIMIT 1",
+            [$subID]
+        )->getRowArray();
+        $res['menu_id'] = (int) ($menuDetails['camp_menuid'] ?? 0);
 
 
         // Calculate Visible Page Links

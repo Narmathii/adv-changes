@@ -57,6 +57,7 @@
                                                 <th>Brand Name</th>
                                                 <th>Modal Name </th>
                                                 <th>Modal Image</th>
+                                                <th>Active Status</th>
                                                 <th>Action</th>
 
                                             </tr>

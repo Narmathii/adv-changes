@@ -664,10 +664,27 @@ class SearchController extends BaseController
         $orderby_mob = $this->request->getPost('orderby_mob');
 
         $tablename = $this->request->getPost('tablename');
+        $tbl_name = $this->request->getPost('tbl_name');
+        $menu_id = (int) $this->request->getPost('menu_id');
         $submenu_id = $this->request->getPost('submenu_id');
         $discount = $this->request->getPost('discount');
         $discount_mob = $this->request->getPost('discount_mob');
 
+        $menu = "false";
+        $tableForMenuCheck = !empty($tbl_name) ? $tbl_name : $tablename;
+        if ($this->isMenuAndSubmenuActive($tableForMenuCheck, $menu_id, (int) $submenu_id)) {
+            $menu = "true";
+        }
+
+        if ($menu === "false") {
+            echo json_encode([
+                'status' => 400,
+                'data' => 'This category or subcategory is inactive.',
+                'products' => [],
+                'pagination' => []
+            ]);
+            return;
+        }
 
 
 
@@ -831,6 +848,98 @@ class SearchController extends BaseController
             'pagination' => $paginationLinks
         ]);
 
+    }
+
+    private function isMenuAndSubmenuActive($tableName, $menuId, $submenuId)
+    {
+        $db = \Config\Database::connect();
+
+        if ($tableName === 'tbl_helmet_products') {
+            if (empty($menuId) || empty($submenuId)) {
+                return false;
+            }
+
+            $menuActive = $db->query(
+                "SELECT h_menu_id FROM tbl_helmet_menu WHERE h_menu_id = ? AND flag = 1 AND is_active = 1 LIMIT 1",
+                [$menuId]
+            )->getRowArray();
+            $submenuActive = $db->query(
+                "SELECT h_submenu_id FROM tbl_helmet_submenu WHERE h_submenu_id = ? AND h_menu_id = ? AND flag = 1 AND is_active = 1 LIMIT 1",
+                [$submenuId, $menuId]
+            )->getRowArray();
+
+            return !empty($menuActive) && !empty($submenuActive);
+        }
+
+        if ($tableName === 'tbl_accessories_list') {
+            if (empty($menuId) || empty($submenuId)) {
+                return false;
+            }
+
+            $menuActive = $db->query(
+                "SELECT access_id FROM tbl_access_master WHERE access_id = ? AND flag = 1 AND is_active = 1 LIMIT 1",
+                [$menuId]
+            )->getRowArray();
+            $submenuActive = $db->query(
+                "SELECT sub_access_id FROM tbl_subaccess_master WHERE sub_access_id = ? AND access_id = ? AND flag = 1 AND is_active = 1 LIMIT 1",
+                [$submenuId, $menuId]
+            )->getRowArray();
+
+            return !empty($menuActive) && !empty($submenuActive);
+        }
+
+        if ($tableName === 'tbl_camping_products') {
+            if (empty($menuId) || empty($submenuId)) {
+                return false;
+            }
+
+            $menuActive = $db->query(
+                "SELECT camp_menu_id FROM tbl_camping_menu WHERE camp_menu_id = ? AND flag = 1 AND is_active = 1 LIMIT 1",
+                [$menuId]
+            )->getRowArray();
+            $submenuActive = $db->query(
+                "SELECT c_submenu_id FROM tbl_camping_submenu WHERE c_submenu_id = ? AND camp_menuid = ? AND flag = 1 AND is_active = 1 LIMIT 1",
+                [$submenuId, $menuId]
+            )->getRowArray();
+
+            return !empty($menuActive) && !empty($submenuActive);
+        }
+
+        if ($tableName === 'tbl_luggagee_products') {
+            if (empty($menuId) || empty($submenuId)) {
+                return false;
+            }
+
+            $menuActive = $db->query(
+                "SELECT lug_menu_id FROM tbl_luggage_menu WHERE lug_menu_id = ? AND flag = 1 AND is_active = 1 LIMIT 1",
+                [$menuId]
+            )->getRowArray();
+            $submenuActive = $db->query(
+                "SELECT lug_submenu_id FROM tbl_luggage_submenu WHERE lug_submenu_id = ? AND lug_menu_id = ? AND flag = 1 AND is_active = 1 LIMIT 1",
+                [$submenuId, $menuId]
+            )->getRowArray();
+
+            return !empty($menuActive) && !empty($submenuActive);
+        }
+
+        if ($tableName === 'tbl_rproduct_list') {
+            if (empty($menuId) || empty($submenuId)) {
+                return false;
+            }
+
+            $menuActive = $db->query(
+                "SELECT r_menu_id FROM tbl_riding_menu WHERE r_menu_id = ? AND flag = 1 AND is_active = 1 LIMIT 1",
+                [$menuId]
+            )->getRowArray();
+            $submenuActive = $db->query(
+                "SELECT r_sub_id FROM tbl_riding_submenu WHERE r_sub_id = ? AND r_menu_id = ? AND flag = 1 AND is_active = 1 LIMIT 1",
+                [$submenuId, $menuId]
+            )->getRowArray();
+
+            return !empty($menuActive) && !empty($submenuActive);
+        }
+
+        return true;
     }
 
 

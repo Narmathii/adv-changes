@@ -106,6 +106,13 @@
     .btn-detail div {
         padding: 1px;
 }}
+
+
+@media only screen and (min-width: 425px) and (max-width: 767px) {
+    .block-with-text p {
+        overflow: hidden !important;
+    }
+}
     
 </style>
 

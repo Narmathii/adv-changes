@@ -975,8 +975,126 @@ video {
         }
     }
 
-    /*   */
+    /* iPhone 13 / iPhone 14 specific fixes for search suggestions dropdown */
+    @media only screen and (device-width: 390px) and (device-height: 844px) and (-webkit-device-pixel-ratio: 3) {
+        #mobileSearch .search-container {
+            position: relative !important;
+            width: 100% !important;
+            overflow: visible !important;
+        }
 
+        #mobileSearch #suggestionsBox {
+            position: absolute !important;
+            top: 100% !important;
+            left:25% !important;
+            right: 0 !important;
+            width: 100% !important;
+            max-width: 100% !important;
+            margin-top: 10px !important;
+            box-sizing: border-box !important;
+            overflow-x: hidden !important;
+            max-height: 360px !important;
+            border-radius: 4px !important;
+            background: #f5f5f5 !important;
+            box-shadow: 0 6px 18px rgba(0, 0, 0, 0.25) !important;
+            z-index: 100000 !important;
+        }
+
+        #mobileSearch .suggestion-link {
+            display: block !important;
+            width: 100% !important;
+            text-decoration: none !important;
+        }
+
+        #mobileSearch .suggestion {
+            display: flex !important;
+            align-items: center !important;
+            gap: 12px !important;
+            width: 100% !important;
+            margin: 0 !important;
+            padding: 12px !important;
+            box-sizing: border-box !important;
+            background: #f5f5f5 !important;
+            border-bottom: 1px solid #dedede !important;
+        }
+
+        #mobileSearch .suggestion-img {
+            flex: 0 0 84px !important;
+            width: 84px !important;
+            height: 56px !important;
+            object-fit: contain !important;
+            margin: 0 !important;
+        }
+
+        #mobileSearch .suggestion p {
+            margin: 0 !important;
+            line-height: 1.35 !important;
+            font-size: 15px !important;
+            color: #1d1d1d !important;
+            word-break: break-word !important;
+        }
+    }
+
+    /* iPhone 14 Pro Max / iPhone 15 Plus / iPhone 15 specific fixes for search suggestions dropdown */
+    @media only screen and (device-width: 393px) and (device-height: 852px) and (-webkit-device-pixel-ratio: 3),
+    only screen and (device-width: 430px) and (device-height: 932px) and (-webkit-device-pixel-ratio: 3) {
+        #mobileSearch .search-container {
+            position: relative !important;
+            width: 100% !important;
+            overflow: visible !important;
+        }
+
+        #mobileSearch #suggestionsBox {
+            position: absolute !important;
+            top: 100% !important;
+            left: 50% !important;
+            right: 0 !important;
+            width: 100% !important;
+            max-width: 100% !important;
+            margin-top: 10px !important;
+            box-sizing: border-box !important;
+            overflow-x: hidden !important;
+            max-height: 360px !important;
+            border-radius: 4px !important;
+            background: #f5f5f5 !important;
+            box-shadow: 0 6px 18px rgba(0, 0, 0, 0.25) !important;
+            z-index: 100000 !important;
+        }
+
+        #mobileSearch .suggestion-link {
+            display: block !important;
+            width: 100% !important;
+            text-decoration: none !important;
+        }
+
+        #mobileSearch .suggestion {
+            display: flex !important;
+            align-items: center !important;
+            gap: 12px !important;
+            width: 100% !important;
+            margin: 0 !important;
+            padding: 12px !important;
+            box-sizing: border-box !important;
+            background: #f5f5f5 !important;
+            border-bottom: 1px solid #dedede !important;
+        }
+
+        #mobileSearch .suggestion-img {
+            flex: 0 0 84px !important;
+            width: 84px !important;
+            height: 56px !important;
+            object-fit: contain !important;
+            margin: 0 !important;
+        }
+
+        #mobileSearch .suggestion p {
+            margin: 0 !important;
+            line-height: 1.35 !important;
+            font-size: 15px !important;
+            color: #1d1d1d !important;
+            word-break: break-word !important;
+        }
+    }
 
     #searchQuerySubmit:hover {
         cursor: pointer;
@@ -1135,6 +1253,11 @@ video {
             max-height: 60px;
             object-fit: contain;
         }
+    }
+
+    html.iphone-device #mobileSearch input[type="search"],
+    html.iphone-device .mobile-search-slide input[type="search"] {
+        font-size: 16px !important;
     }
 </style>
 <header class="header clone nav-up" id="header">
@@ -1538,6 +1661,8 @@ video {
     const burger = document.querySelector(".burger");
     const overlay = document.querySelector(".overlay");
     const menuButton = document.getElementById('icon_close');
+    const searchToggleButton = document.getElementById("searchToggle");
+    const mobileSearchPanel = document.getElementById("mobileSearch");
 
 
     // Navbar Menu Toggle Function
@@ -1545,11 +1670,59 @@ video {
         menu.classList.toggle("is-active");
         overlay.classList.toggle("is-active");
     }
+
+    function closeMenu() {
+        menu.classList.remove("is-active");
+        overlay.classList.remove("is-active");
+    }
+
+    function closeMobileSearch() {
+        if (mobileSearchPanel) {
+            mobileSearchPanel.classList.remove("active");
+            const mobileSearchInput = mobileSearchPanel.querySelector('input[name="search_bar"]');
+            if (mobileSearchInput) {
+                mobileSearchInput.blur();
+            }
+        }
+    }
+
     document.addEventListener('click', (event) => {
-        if (menuButton.contains(event.target)) {
-            menu.classList.remove("is-active");
+        if (menuButton && menuButton.contains(event.target)) {
+            closeMenu();
         }
     });
+
+    document.addEventListener("click", function (event) {
+        const menuIsOpen = menu.classList.contains("is-active");
+        const searchIsOpen = mobileSearchPanel && mobileSearchPanel.classList.contains("active");
+
+        if (menuIsOpen) {
+            const clickedInsideMenu = menu.contains(event.target);
+            const clickedBurger = burger.contains(event.target);
+            const clickedSearchToggle = searchToggleButton && searchToggleButton.contains(event.target);
+            if (clickedSearchToggle) {
+                closeMenu();
+            } else if (!clickedInsideMenu && !clickedBurger) {
+                event.preventDefault();
+                event.stopPropagation();
+                closeMenu();
+                return;
+            }
+        }
+
+        if (searchIsOpen) {
+            const clickedInsideSearch = mobileSearchPanel.contains(event.target);
+            const clickedSearchToggle = searchToggleButton && searchToggleButton.contains(event.target);
+            const clickedBurger = burger.contains(event.target);
+            if (clickedBurger) {
+                closeMobileSearch();
+            } else if (!clickedInsideSearch && !clickedSearchToggle) {
+                event.preventDefault();
+                event.stopPropagation();
+                closeMobileSearch();
+            }
+        }
+    }, true);
     // Show Mobile Submenu Function
     function showSubMenu(children) {
         subMenu = children.querySelector(".submenu");
@@ -1686,9 +1859,31 @@ video {
         const searchToggle = $("#searchToggle");
         const mobileSearch = $("#mobileSearch");
         const navbarCollapse = $(".burger");
+        const menu = $(".menu");
+        const overlay = $(".overlay");
+        const isIPhone = /iPhone/i.test(navigator.userAgent || "");
+
+        function blurSearchInputForIPhone() {
+            if (!isIPhone) {
+                return;
+            }
+            const activeEl = document.activeElement;
+            if (activeEl && activeEl.matches('input[name="search_bar"]')) {
+                activeEl.blur();
+            }
+        }
 
         if (searchToggle.length && mobileSearch.length) {
-            searchToggle.on("click", function () {
+            searchToggle.on("click", function (e) {
+                e.preventDefault();
+                e.stopPropagation();
+                if (menu.hasClass("is-active")) {
+                    menu.removeClass("is-active");
+                    overlay.removeClass("is-active");
+                }
+                if (mobileSearch.hasClass("active")) {
+                    blurSearchInputForIPhone();
+                }
                 mobileSearch.toggleClass("active");
             });
         }
@@ -1696,6 +1891,25 @@ video {
         if (navbarCollapse.length && mobileSearch.length) {
             navbarCollapse.on("click", function () {
                 mobileSearch.removeClass("active");
+                blurSearchInputForIPhone();
+            });
+        }
+
+        // iPhone-only: ensure suggestions render while typing and prevent iOS zoom on search input.
+        if (isIPhone) {
+            document.documentElement.classList.add("iphone-device");
+
+            const iPhoneSearchInputs = document.querySelectorAll('input[name="search_bar"]');
+            iPhoneSearchInputs.forEach(function (inputEl) {
+                inputEl.style.fontSize = "16px";
+
+                inputEl.addEventListener("input", function () {
+                    fetchSuggestions(this);
+                });
+
+                inputEl.addEventListener("search", function () {
+                    fetchSuggestions(this);
+                });
             });
         }
     });

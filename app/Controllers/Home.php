@@ -393,6 +393,16 @@ GROUP BY `product_id` HAVING SUM(`prod_count`)<=10";
         return array_values($filtered);
     }
 
+    private function ensureTableName(array $products, string $tableName): array
+    {
+        return array_map(function ($product) use ($tableName) {
+            if (!isset($product['tbl_name']) || $product['tbl_name'] === '') {
+                $product['tbl_name'] = $tableName;
+            }
+            return $product;
+        }, $products);
+    }
+
     public function detail($segName, $prodID)
     {
 
@@ -446,6 +456,9 @@ GROUP BY `product_id` HAVING SUM(`prod_count`)<=10";
         // to get similar products
         $product = $res['product'];
         $res['similarProducts'] = $this->getSimilarProducts($product, 0.5, 5);
+        $res['similarProducts'] = $this->filterProductsByActiveMenus(
+            $this->ensureTableName($res['similarProducts'], 'tbl_products')
+        );
 
 
         $res['tbl_name'] = "tbl_products";
@@ -1120,6 +1133,9 @@ GROUP BY `product_id` HAVING SUM(`prod_count`)<=10";
 
 
         $res['similarProducts'] = $this->getSimilarAccessories($product, 0.5, 5);
+        $res['similarProducts'] = $this->filterProductsByActiveMenus(
+            $this->ensureTableName($res['similarProducts'], 'tbl_accessories_list')
+        );
 
 
 
@@ -1149,6 +1165,7 @@ GROUP BY `product_id` HAVING SUM(`prod_count`)<=10";
         }
 
         $res['recent_products'] = $recent;
+        $res['recent_products'] = $this->filterProductsByActiveMenus($res['recent_products']);
         // Recently viewed products END 
 
 
@@ -1158,6 +1175,9 @@ GROUP BY `product_id` HAVING SUM(`prod_count`)<=10";
 
         $q1 = "SELECT DISTINCT * FROM `tbl_accessories_list` WHERE `flag` = 1 AND `sub_access_id` = ?  AND `flag` = 1 AND prod_id <> ?";
         $res['similar'] = $db->query($q1, [$subMenu, $PRODID])->getResultArray();
+        $res['similar'] = $this->filterProductsByActiveMenus(
+            $this->ensureTableName($res['similar'], 'tbl_accessories_list')
+        );
         /* SIMILAR PRODUCTS NEW   END*/
 
         $res['meta_title'] = "Bike Performance Accessories in Coimbatore | Superbike Parts Tamilnadu";
@@ -1774,6 +1794,9 @@ GROUP BY `product_id` HAVING SUM(`prod_count`)<=10";
         $product = $res['product'];
 
         $res['similarProducts'] = $this->getSimilarRidingProducts($product, 0.5, 5);
+        $res['similarProducts'] = $this->filterProductsByActiveMenus(
+            $this->ensureTableName($res['similarProducts'], 'tbl_rproduct_list')
+        );
 
 
         // to get cart count 
@@ -1815,6 +1838,7 @@ GROUP BY `product_id` HAVING SUM(`prod_count`)<=10";
         }
 
         $res['recent_products'] = $recent;
+        $res['recent_products'] = $this->filterProductsByActiveMenus($res['recent_products']);
         // Recently viewed products END 
 
 
@@ -1825,6 +1849,9 @@ GROUP BY `product_id` HAVING SUM(`prod_count`)<=10";
 
         $q1 = "SELECT DISTINCT * FROM `tbl_rproduct_list` WHERE `flag` = 1 AND `r_sub_id` = ?  AND `flag` = 1 AND prod_id <> ?";
         $res['similar'] = $db->query($q1, [$subMenu, $PRODID])->getResultArray();
+        $res['similar'] = $this->filterProductsByActiveMenus(
+            $this->ensureTableName($res['similar'], 'tbl_rproduct_list')
+        );
         /* SIMILAR PRODUCTS NEW   END*/
 
         $res['meta_title'] = "Best Riding Gear Shop in Coimbatore | Riding Gear in Tamilnadu";
@@ -2046,6 +2073,9 @@ GROUP BY `product_id` HAVING SUM(`prod_count`)<=10";
         $product = $res['product'];
 
         $res['similarProducts'] = $this->getSimilartouring($product, 0.5, 5);
+        $res['similarProducts'] = $this->filterProductsByActiveMenus(
+            $this->ensureTableName($res['similarProducts'], 'tbl_luggagee_products')
+        );
 
         // to get cart count 
         $userID = session()->get('user_id');
@@ -2089,6 +2119,7 @@ GROUP BY `product_id` HAVING SUM(`prod_count`)<=10";
         }
 
         $res['recent_products'] = $recent;
+        $res['recent_products'] = $this->filterProductsByActiveMenus($res['recent_products']);
         // Recently viewed products END 
 
 
@@ -2098,6 +2129,9 @@ GROUP BY `product_id` HAVING SUM(`prod_count`)<=10";
 
         $q1 = "SELECT DISTINCT * FROM `tbl_luggagee_products` WHERE `flag` = 1 AND `lug_submenu_id` = ?  AND `flag` = 1 AND prod_id <> ?";
         $res['similar'] = $db->query($q1, [$subMenu, $PRODID])->getResultArray();
+        $res['similar'] = $this->filterProductsByActiveMenus(
+            $this->ensureTableName($res['similar'], 'tbl_luggagee_products')
+        );
         /* SIMILAR PRODUCTS NEW   END*/
 
         $res['meta_title'] = "Touring Bike Accessories in Tamilnadu | Touring Bike Gear Tamilnadu";
@@ -2341,6 +2375,9 @@ GROUP BY `product_id` HAVING SUM(`prod_count`)<=10";
         // to get similar products
         $product = $res['product'];
         $res['similarProducts'] = $this->getSimilarhelmets($product, 0.5, 5);
+        $res['similarProducts'] = $this->filterProductsByActiveMenus(
+            $this->ensureTableName($res['similarProducts'], 'tbl_helmet_products')
+        );
 
         $res['current_url'] = current_url();
         $res['user_idd'] = $userID;
@@ -2366,6 +2403,7 @@ GROUP BY `product_id` HAVING SUM(`prod_count`)<=10";
         }
 
         $res['recent_products'] = $recent;
+        $res['recent_products'] = $this->filterProductsByActiveMenus($res['recent_products']);
         // Recently viewed products END 
 
         /* SIMILAR PRODUCTS NEW */
@@ -2374,6 +2412,9 @@ GROUP BY `product_id` HAVING SUM(`prod_count`)<=10";
 
         $q1 = "SELECT DISTINCT * FROM `tbl_helmet_products` WHERE `flag` = 1 AND `h_submenu_id` = ?  AND `flag` = 1 AND prod_id <> ?";
         $res['similar'] = $db->query($q1, [$subMenu, $PRODID])->getResultArray();
+        $res['similar'] = $this->filterProductsByActiveMenus(
+            $this->ensureTableName($res['similar'], 'tbl_helmet_products')
+        );
 
         /* SIMILAR PRODUCTS NEW   END*/
 
@@ -3972,6 +4013,9 @@ LIMIT ? OFFSET ?
         // to get similar products
         $product = $res['product'];
         $res['similarProducts'] = $this->getSimilarCampProducts($product, 0.5, 5);
+        $res['similarProducts'] = $this->filterProductsByActiveMenus(
+            $this->ensureTableName($res['similarProducts'], 'tbl_camping_products')
+        );
 
         $res['tbl_name'] = "tbl_camping_products";
         // to get cart count 
@@ -4012,6 +4056,7 @@ LIMIT ? OFFSET ?
         }
 
         $res['recent_products'] = $recent;
+        $res['recent_products'] = $this->filterProductsByActiveMenus($res['recent_products']);
         // Recently viewed products END 
 
         /* SIMILAR PRODUCTS NEW */
@@ -4020,6 +4065,9 @@ LIMIT ? OFFSET ?
 
         $q1 = "SELECT DISTINCT * FROM `tbl_camping_products` WHERE `flag` = 1 AND `c_submenu_id` = ?  AND `flag` = 1 AND prod_id <> ?";
         $res['similar'] = $db->query($q1, [$subMenu, $PRODID])->getResultArray();
+        $res['similar'] = $this->filterProductsByActiveMenus(
+            $this->ensureTableName($res['similar'], 'tbl_camping_products')
+        );
 
         $res['meta_title'] = "Top Camping Gear Dealers in Coimbatore | Camping Gear Store Tamilnadu";
         $res['meta_description'] = "Adventure Shoppe is the Top Camping Equipment shop in Coimbatore, Tamilnadu. Find quality tents, gear & outdoor tools for your next adventure!";

@@ -40,13 +40,32 @@ $(document).ready(function () {
     );
   });
 
-  $(".addto_cart").click(function () {
+  $(".addto_cart").click(function (event) {
+    event.preventDefault();
+    const $btn = $(this);
+
+    if (parseInt($btn.data("added"), 10) === 1) {
+      return;
+    }
+
     var form = $(this).closest(".wishlistForm")[0];
-    insertData(form);
+    insertData(form, $btn);
   });
 
-  function insertData(form) {
+  function insertData(form, $btn) {
     var formData = new FormData(form);
+    const setAddedState = function () {
+      $btn
+        .closest(".cart_wrapper")
+        .addClass("added-to-cart");
+      $btn
+        .text("Item added to cart")
+        .addClass("is-added")
+        .css({
+          "pointer-events": "none",
+        })
+        .data("added", 1);
+    };
 
     $.ajax({
       type: "POST",
@@ -60,6 +79,8 @@ $(document).ready(function () {
         var result = JSON.parse(data);
         console.log(result);
         if (result.code == 200) {
+          setAddedState();
+
           $.toast({
             icon: "success",
             heading: "Suucess",
@@ -71,7 +92,24 @@ $(document).ready(function () {
             stack: false,
             showHideTransition: "fade",
           });
-          // $("#addtocart").html("Goto cart");
+        } else if (
+          result.code == 400 &&
+          typeof result.msg === "string" &&
+          result.msg.toLowerCase().includes("already in cart")
+        ) {
+          setAddedState();
+
+          $.toast({
+            icon: "info",
+            heading: "Info",
+            text: result.msg,
+            position: "top-right",
+            bgColor: "#28292d",
+            loader: true,
+            hideAfter: 2000,
+            stack: false,
+            showHideTransition: "fade",
+          });
         } else {
           $.toast({
             icon: "error",

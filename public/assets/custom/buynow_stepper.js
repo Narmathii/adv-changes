@@ -27,8 +27,7 @@ $(document).ready(function () {
       error: function (error) {
         let status = error.status;
         if (status === 401) {
-          localStorage.removeItem("token");
-          window.location.href = base_Url;
+          window.location.href = base_Url + "login";
         }
         console.log(error);
       },
@@ -133,8 +132,7 @@ $(document).ready(function () {
       error: function (error) {
         let status = error.status;
         if (status === 401) {
-          localStorage.removeItem("token");
-          window.location.href = base_Url;
+          window.location.href = base_Url + "login";
         }
         console.log(error);
       },
@@ -168,8 +166,7 @@ $(document).ready(function () {
         error: function (error) {
           let status = error.status;
           if (status === 401) {
-            localStorage.removeItem("token");
-            window.location.href = base_Url;
+            window.location.href = base_Url + "login";
           }
           console.log(error);
         },
@@ -435,8 +432,7 @@ $(document).ready(function () {
       error: function (error) {
         let status = error.status;
         if (status === 401) {
-          localStorage.removeItem("token");
-          window.location.href = base_Url;
+          window.location.href = base_Url + "login";
         }
         console.log(error);
       },
@@ -477,8 +473,7 @@ $(document).ready(function () {
       error: function (error) {
         let status = error.status;
         if (status === 401) {
-          localStorage.removeItem("token");
-          window.location.href = base_Url;
+          window.location.href = base_Url + "login";
         }
         console.log(error);
       },

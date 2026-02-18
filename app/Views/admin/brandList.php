@@ -57,6 +57,7 @@
                                                 <th>S.No</th>
                                                 <th>Brand Name</th>
                                                 <th>Brand Image </th>
+                                                <th>Active Status</th>
                                                 <th>Action</th>
 
                                             </tr>

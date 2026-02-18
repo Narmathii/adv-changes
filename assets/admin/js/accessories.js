@@ -164,57 +164,54 @@ $(document).ready(function () {
     access_id = res_DATA[index].access_id;
   });
 
-    $("#datatable").on("change", ".statusToggle", function () {
-      var index = $(this).data("id");
-      access_id = res_DATA[index].access_id;
-      var isChecked = $(this).is(":checked") ? 1 : 0;
+  $("#datatable").on("change", ".statusToggle", function () {
+  var $this = $(this);
+  var index = $this.data("id");
+  var access_id = res_DATA[index].access_id;
 
-      Swal.fire({
-        title: "Are you sure?",
-        text: "You want to update the active status?",
-        icon: "warning",
-        showCancelButton: true,
-        confirmButtonColor: "#3085d6",
-        cancelButtonColor: "#d33",
-        confirmButtonText: "Yes!",
-      }).then((result) => {
-        if (result.isConfirmed) {
-          $.ajax({
-            type: "POST",
-            url: base_Url + "deactivate-menu",
-            data: {
-              id: access_id,
-              column_name: "access_id",
-              tbl_name: "tbl_access_master",
-              active_status: isChecked,
-            },
+  var previousState = !$this.is(":checked"); // state before change
+  var isChecked = $this.is(":checked") ? 1 : 0;
 
-            success: function (data) {
-              var resData = $.parseJSON(data);
+  Swal.fire({
+    title: "Are you sure?",
+    text: "You want to update the active status?",
+    icon: "warning",
+    showCancelButton: true,
+    confirmButtonColor: "#3085d6",
+    cancelButtonColor: "#d33",
+    confirmButtonText: "Yes!",
+  }).then((result) => {
+    if (result.isConfirmed) {
 
-              if (resData.code == 200) {
-                Swal.fire({
-                  title: "Congratulations!",
-                  text: resData["msg"],
-                  icon: "success",
-                });
-                $("#model-data").modal("hide");
-                refreshDetails();
-              } else {
-                Swal.fire({
-                  title: "Failure",
-                  text: resData["msg"],
-                  icon: "danger",
-                });
+      $.ajax({
+        type: "POST",
+        url: base_Url + "deactivate-menu",
+        data: {
+          id: access_id,
+          column_name: "access_id",
+          tbl_name: "tbl_access_master",
+          active_status: isChecked,
+        },
+        success: function (data) {
+          var resData = $.parseJSON(data);
 
-                $("#model-data").modal("hide");
-                refreshDetails();
-              }
-            },
-          });
-        }
+          if (resData.code == 200) {
+            Swal.fire("Success", resData.msg, "success");
+            refreshDetails();
+          } else {
+            Swal.fire("Failure", resData.msg, "error");
+            $this.prop("checked", previousState);
+          }
+        },
       });
-    });
+
+    } else {
+    
+      $this.prop("checked", previousState);
+    }
+  });
+});
+
 
   // $(document).on("change", ".statusToggle", function () {
   //   console.log("Changed", this);

@@ -55,6 +55,43 @@ class LoginControllerr extends BaseController
 
     return $res;
   }
+
+  private function setPendingOtpSession($userId, $username, $type, $flow)
+  {
+    $this->session = \Config\Services::session();
+
+    $sess = [
+      'type' => $type,
+      'pending_user_id' => $userId,
+      'pending_username' => $username,
+      'pending_flow' => $flow,
+      'pending_callback_url' => session()->get('callback_url')
+    ];
+
+    $this->session->set($sess);
+  }
+
+  private function clearPendingOtpSession()
+  {
+    $this->session = \Config\Services::session();
+    $this->session->remove([
+      'pending_user_id',
+      'pending_username',
+      'pending_flow',
+      'pending_callback_url'
+    ]);
+  }
+
+  private function normalizeMobileNumber($mobile)
+  {
+    return preg_replace('/\D+/', '', (string) $mobile);
+  }
+
+  private function isValidMobileNumber($mobile)
+  {
+    return preg_match('/^[6-9]\d{9}$/', $mobile) === 1;
+  }
+
   public function login()
   {
 
@@ -174,9 +211,15 @@ class LoginControllerr extends BaseController
     $response = [];
 
     $username = $this->request->getPost('username');
-    $number = $this->request->getPost('number');
+    $number = $this->normalizeMobileNumber($this->request->getPost('number'));
     $useremail = $this->request->getPost('email');
     $pwd = $this->request->getPost('password');
+
+    if (!$this->isValidMobileNumber($number)) {
+      $response['code'] = 400;
+      $response['msg'] = 'Please enter a valid mobile number';
+      return json_encode($response);
+    }
 
 
     $query = "SELECT COUNT('user_id') AS  count FROM `tbl_users` WHERE `number` = ? AND `flag` = 1";
@@ -222,6 +265,7 @@ class LoginControllerr extends BaseController
           'password' => $pwd,
           'email' => $useremail,
           'otp' => $otp,
+          'flag' => 0,
         ];
 
         $insertData = $loginModel->insert($data);
@@ -229,14 +273,19 @@ class LoginControllerr extends BaseController
         $affectedRows = $db->affectedRows();
 
         if ($affectedRows === 1 && $insertData) {
+          $this->setPendingOtpSession($lastInsertID, $username, 'EMAIL', 'SIGNUP_EMAIL');
+
           $response['code'] = 200;
           $response['user_id'] = $lastInsertID;
           $response['username'] = $username;
-          return $this->signupSessionEmail($response);
+          $response['msg'] = 'OTP sent successfully';
+          $response['csrf_test_name'] = csrf_hash();
+          return json_encode($response);
         } else {
           $response['code'] = 400;
-
-          return $this->signupSessionEmail($response);
+          $response['msg'] = 'Unable to process signup';
+          $response['csrf_test_name'] = csrf_hash();
+          return json_encode($response);
         }
       }
     }
@@ -297,32 +346,51 @@ class LoginControllerr extends BaseController
 
     $verifyOTP = $this->request->getPost('verify-otp');
 
-    $userID = session()->get('user_id');
-    $OTP = $db->query("SELECT `otp`, username,user_id   FROM `tbl_users` WHERE `flag`= 1  AND user_id = $userID")->getRow();
+    $userID = session()->get('pending_user_id') ?? session()->get('user_id');
+    $pendingFlow = session()->get('pending_flow');
+
+    if (!$userID) {
+      $res['code'] = 400;
+      $res['status'] = 'failure';
+      $res['msg'] = 'Session expired. Please try again.';
+      $res['csrf_test_name'] = csrf_hash();
+      return $this->response->setJSON($res);
+    }
+
+    $OTP = $db->query("SELECT `otp`, username, user_id FROM `tbl_users` WHERE user_id = ?", [$userID])->getRow();
+
+    if (!$OTP) {
+      $res['code'] = 400;
+      $res['status'] = 'failure';
+      $res['msg'] = 'User not found.';
+      $res['csrf_test_name'] = csrf_hash();
+      return $this->response->setJSON($res);
+    }
 
     $username = $OTP->username;
     $userID = $OTP->user_id;
 
     if ($OTP->otp == $verifyOTP) {
-      $sessData = [
-        'otp_verify' => "YES",
-        'username' => $username,
-        'user_id' => $userID,
-        'signupsts' => "YES"
-      ];
-      $this->session->set($sessData);
+      if ($pendingFlow === 'SIGNUP_EMAIL') {
+        $db->query("UPDATE `tbl_users` SET `flag` = 1 WHERE `user_id` = ?", [$userID]);
+      }
 
-      $callbackURL = session()->get('callback_url');
+      $callbackURL = session()->get('pending_callback_url');
       if ($callbackURL) {
         $session->remove('callback_url');
-        $res['c_url'] = $callbackURL;
-      } else {
-        $res['c_url'] = "";
       }
-      $res['code'] = 200;
-      $res['status'] = 'Success';
-      $res['msg'] = 'Verified!';
-      $res['csrf_test_name'] = csrf_hash();
+
+      $response = [
+        'code' => 200,
+        'user_id' => $userID,
+        'username' => $username,
+        'c_url' => $callbackURL ?: ""
+      ];
+
+      $this->clearPendingOtpSession();
+
+      $finalResponse = json_decode($this->replaceloginSession($response), true);
+      return $this->response->setJSON($finalResponse);
     } else {
       $res['code'] = 400;
       $res['status'] = 'failure';
@@ -401,8 +469,8 @@ class LoginControllerr extends BaseController
   {
     $this->session = \Config\Services::session();
     $db = \Config\Database::connect();
-    $userID = session()->get('user_id');
-    $getEmail = $db->query("SELECT `email` ,`username` FROM `tbl_users` WHERE `flag`= 1  AND user_id = $userID")->getRow();
+    $userID = session()->get('pending_user_id') ?? session()->get('user_id');
+    $getEmail = $db->query("SELECT `email` ,`username` FROM `tbl_users` WHERE user_id = ?", [$userID])->getRow();
 
     $userEmail = $getEmail->email;
     $userName = $getEmail->username;
@@ -426,18 +494,11 @@ class LoginControllerr extends BaseController
 
     $result = $mailjet->sendEmail($toEmail, $toName, $subject, $body);
     if ($result) {
-      $query = "UPDATE tbl_users SET otp = $otp WHERE user_id = $userID";
-      $update = $db->query($query);
+      $query = "UPDATE tbl_users SET otp = ? WHERE user_id = ?";
+      $update = $db->query($query, [$otp, $userID]);
       $affectedRow = $db->affectedRows();
 
       if ($update && $affectedRow == 1) {
-
-        $sessData = [
-          'otp_verify' => "yes",
-          'signupsts' => "YES"
-        ];
-        $this->session->set($sessData);
-
         $res['code'] = 200;
         $res['status'] = 'Success';
         $res['msg'] = 'Check Your Email!';
@@ -460,10 +521,16 @@ class LoginControllerr extends BaseController
   public function signupOTP()
   {
     $db = \Config\Database::connect();
-    $to = $this->request->getPost('number');
+    $to = $this->normalizeMobileNumber($this->request->getPost('number'));
     $uname = $this->request->getPost('uname');
 
     $data = $this->request->getPost();
+
+    if (!$this->isValidMobileNumber($to)) {
+      $res['code'] = 400;
+      $res['msg'] = 'Please enter a valid mobile number';
+      return json_encode($res);
+    }
 
     $apiKey = $_ENV['SMS_API_KEY'];
 
@@ -488,33 +555,39 @@ class LoginControllerr extends BaseController
       echo json_encode($res);
     } else {
 
-      $response = $this->signupAPI($apiKey, $to, $otp, $templateName);
-      $status = $response['Status'];
+      // $response = $this->signupAPI($apiKey, $to, $otp, $templateName);
+      // $status = $response['Status'];
+      $status = "Success";
 
 
       if ($status == "Success") {
-        $query = "INSERT INTO tbl_users (username , number , otp) VALUES ( ? , ? ,?)";
+        $query = "INSERT INTO tbl_users (username , number , otp, flag) VALUES ( ? , ? ,?, 0)";
         $insertData = $db->query($query, [$uname, $to, $otp]);
         $affectedRows = $db->affectedRows();
         $lastInsertID = $db->insertID();
 
         if ($affectedRows == 1) {
+          $this->setPendingOtpSession($lastInsertID, $uname, 'SMS', 'SIGNUP_SMS');
 
           $response['code'] = 200;
           $response['user_id'] = $lastInsertID;
           $response['username'] = $uname;
-          return $this->signupSessionSMS($response);
+          $response['msg'] = 'OTP sent successfully';
+          $response['csrf_test_name'] = csrf_hash();
+          return json_encode($response);
 
         } else {
           $response['code'] = 400;
-
-          return $this->signupSessionSMS($response);
+          $response['msg'] = 'Unable to process signup';
+          $response['csrf_test_name'] = csrf_hash();
+          return json_encode($response);
         }
 
       } else {
         $response['code'] = 400;
-
-        return $this->signupSessionSMS($response);
+        $response['msg'] = 'Unable to send OTP';
+        $response['csrf_test_name'] = csrf_hash();
+        return json_encode($response);
       }
     }
   }
@@ -552,35 +625,51 @@ class LoginControllerr extends BaseController
 
     $verifyOTP = $this->request->getPost('verify-otp');
 
-    $userID = session()->get('user_id');
-    $OTP = $db->query("SELECT `otp`, username,user_id   FROM `tbl_users` WHERE `flag`= 1  AND user_id = $userID")->getRow();
+    $userID = session()->get('pending_user_id') ?? session()->get('user_id');
+    $pendingFlow = session()->get('pending_flow');
+
+    if (!$userID) {
+      $res['code'] = 400;
+      $res['status'] = 'failure';
+      $res['msg'] = 'Session expired. Please try again.';
+      $res['csrf_test_name'] = csrf_hash();
+      return $this->response->setJSON($res);
+    }
+
+    $OTP = $db->query("SELECT `otp`, username, user_id FROM `tbl_users` WHERE user_id = ?", [$userID])->getRow();
+
+    if (!$OTP) {
+      $res['code'] = 400;
+      $res['status'] = 'failure';
+      $res['msg'] = 'User not found.';
+      $res['csrf_test_name'] = csrf_hash();
+      return $this->response->setJSON($res);
+    }
 
     $username = $OTP->username;
     $userID = $OTP->user_id;
 
     if ($OTP->otp == $verifyOTP) {
-      $sessData = [
-        'otp_verify' => "YES",
-        'username' => $username,
-        'user_id' => $userID,
-        'signupsts' => "YES"
-      ];
-      $this->session->set($sessData);
+      if ($pendingFlow === 'SIGNUP_SMS') {
+        $db->query("UPDATE `tbl_users` SET `flag` = 1 WHERE `user_id` = ?", [$userID]);
+      }
 
-
-      $callbackURL = session()->get('callback_url');
-
-
+      $callbackURL = session()->get('pending_callback_url');
       if ($callbackURL) {
         $session->remove('callback_url');
-        $res['c_url'] = $callbackURL;
-      } else {
-        $res['c_url'] = "";
       }
-      $res['code'] = 200;
-      $res['status'] = 'Success';
-      $res['msg'] = 'Verified!';
-      $res['csrf_test_name'] = csrf_hash();
+
+      $response = [
+        'code' => 200,
+        'user_id' => $userID,
+        'username' => $username,
+        'c_url' => $callbackURL ?: ""
+      ];
+
+      $this->clearPendingOtpSession();
+
+      $finalResponse = json_decode($this->replaceloginSession($response), true);
+      return $this->response->setJSON($finalResponse);
     } else {
       $res['code'] = 400;
       $res['status'] = 'failure';
@@ -595,12 +684,12 @@ class LoginControllerr extends BaseController
   {
     $this->session = \Config\Services::session();
     $db = \Config\Database::connect();
-    $userID = session()->get('user_id');
+    $userID = session()->get('pending_user_id') ?? session()->get('user_id');
     $Type = session()->get('type');
 
 
     if ($Type == "SMS") {
-      $details = $db->query("SELECT `number` FROM `tbl_users` WHERE `flag`= 1  AND user_id = $userID")->getRow();
+      $details = $db->query("SELECT `number` FROM `tbl_users` WHERE user_id = ?", [$userID])->getRow();
       $to = $details->number;
 
       $sign1 = $_ENV['SIGNUP_TEMPLATE1'];
@@ -618,18 +707,11 @@ class LoginControllerr extends BaseController
       $status = $response['Status'];
 
       if ($status == "Success") {
-        $query = "UPDATE tbl_users SET otp = $otp WHERE user_id = $userID";
-        $update = $db->query($query);
+        $query = "UPDATE tbl_users SET otp = ? WHERE user_id = ?";
+        $update = $db->query($query, [$otp, $userID]);
         $affectedRow = $db->affectedRows();
 
         if ($update && $affectedRow == 1) {
-
-          $sessData = [
-            'otp_verify' => "yes",
-            'signupsts' => "YES"
-          ];
-          $this->session->set($sessData);
-
           $res['code'] = 200;
           $res['status'] = 'Success';
           $res['msg'] = 'Check your phone for OTP verification!';
@@ -645,7 +727,7 @@ class LoginControllerr extends BaseController
 
     } else if ($Type == "EMAIL") {
 
-      $getEmail = $db->query("SELECT `email` ,`username` FROM `tbl_users` WHERE `flag`= 1  AND user_id = $userID")->getRow();
+      $getEmail = $db->query("SELECT `email` ,`username` FROM `tbl_users` WHERE user_id = ?", [$userID])->getRow();
 
       $userEmail = $getEmail->email;
       $userName = $getEmail->username;
@@ -671,18 +753,11 @@ class LoginControllerr extends BaseController
       $email->setMessage($message);
 
       if ($email->send()) {
-        $query = "UPDATE tbl_users SET otp = $otp WHERE user_id = $userID";
-        $update = $db->query($query);
+        $query = "UPDATE tbl_users SET otp = ? WHERE user_id = ?";
+        $update = $db->query($query, [$otp, $userID]);
         $affectedRow = $db->affectedRows();
 
         if ($update && $affectedRow == 1) {
-
-          $sessData = [
-            'otp_verify' => "yes",
-            'signupsts' => "YES"
-          ];
-          $this->session->set($sessData);
-
           $res['code'] = 200;
           $res['status'] = 'Success';
           $res['msg'] = 'Check Your Email!';
@@ -754,6 +829,9 @@ class LoginControllerr extends BaseController
       $response['csrf_test_name'] = csrf_hash();
       $response['token'] = $newToken;
 
+      echo "<pre>";
+      print_r($response);
+      die;
       return json_encode($response);
     } else {
       $response['code'] = 400;
@@ -790,10 +868,16 @@ class LoginControllerr extends BaseController
     $session = $this->session = \Config\Services::session();
 
     $db = \Config\Database::connect();
-    $to = $this->request->getPost('num');
+    $to = $this->normalizeMobileNumber($this->request->getPost('num'));
 
     $response = [];
     $loginModel = new LoginModel;
+
+    if (!$this->isValidMobileNumber($to)) {
+      $response['code'] = '400';
+      $response['message'] = 'Please enter a valid mobile number';
+      return json_encode($response);
+    }
 
     $query = "SELECT * FROM `tbl_users` WHERE `flag` = 1 AND `number` = ?";
     $userData = $db->query($query, [$to])->getResultArray();
@@ -819,24 +903,20 @@ class LoginControllerr extends BaseController
         $insertData = $db->query($query, [$otp, $userID, $to]);
         $affectedRows = $db->affectedRows();
         if ($affectedRows == 1) {
-          $response['c_url'] = "myprofile";
           $response['code'] = '200';
           $response['user_id'] = $userID;
           $response['username'] = $userData[0]['username'];
-
-          $sess = [
-            'type' => 'SMS',
-
-          ];
-          $this->session->set($sess);
-          return $this->replaceloginSession($response);
+          $response['msg'] = 'OTP sent successfully';
+          $response['csrf_test_name'] = csrf_hash();
+          $this->setPendingOtpSession($userID, $userData[0]['username'], 'SMS', 'LOGIN_SMS');
+          return json_encode($response);
         }
 
 
       } else {
         $response['code'] = '400';
         $response['message'] = 'Invalid Number';
-        return $this->replaceloginSession($response);
+        return json_encode($response);
       }
     } else {
       $response['code'] = '400';
@@ -873,12 +953,12 @@ class LoginControllerr extends BaseController
   {
     $this->session = \Config\Services::session();
     $db = \Config\Database::connect();
-    $userID = session()->get('user_id');
+    $userID = session()->get('pending_user_id') ?? session()->get('user_id');
     $Type = session()->get('type');
 
 
     if ($Type == "SMS") {
-      $details = $db->query("SELECT `number` FROM `tbl_users` WHERE `flag`= 1  AND user_id = $userID")->getRow();
+      $details = $db->query("SELECT `number` FROM `tbl_users` WHERE user_id = ?", [$userID])->getRow();
       $to = $details->number;
       $otp = rand(1000, 9999);
 
@@ -897,18 +977,11 @@ class LoginControllerr extends BaseController
       $status = $response['Status'];
 
       if ($status == "Success") {
-        $query = "UPDATE tbl_users SET otp = $otp WHERE user_id = $userID";
-        $update = $db->query($query);
+        $query = "UPDATE tbl_users SET otp = ? WHERE user_id = ?";
+        $update = $db->query($query, [$otp, $userID]);
         $affectedRow = $db->affectedRows();
 
         if ($update && $affectedRow == 1) {
-
-          $sessData = [
-            'otp_verify' => "yes",
-            'signupsts' => "YES"
-          ];
-          $this->session->set($sessData);
-
           $res['code'] = 200;
           $res['status'] = 'Success';
           $res['msg'] = 'Check your phone for OTP verification!';
@@ -924,7 +997,7 @@ class LoginControllerr extends BaseController
 
     } else if ($Type == "EMAIL") {
 
-      $getEmail = $db->query("SELECT `email` ,`username` FROM `tbl_users` WHERE `flag`= 1  AND user_id = $userID")->getRow();
+      $getEmail = $db->query("SELECT `email` ,`username` FROM `tbl_users` WHERE user_id = ?", [$userID])->getRow();
 
       $userEmail = $getEmail->email;
       $userName = $getEmail->username;
@@ -952,18 +1025,11 @@ class LoginControllerr extends BaseController
       $email->setMessage($message);
 
       if ($email->send()) {
-        $query = "UPDATE tbl_users SET otp = $otp WHERE user_id = $userID";
-        $update = $db->query($query);
+        $query = "UPDATE tbl_users SET otp = ? WHERE user_id = ?";
+        $update = $db->query($query, [$otp, $userID]);
         $affectedRow = $db->affectedRows();
 
         if ($update && $affectedRow == 1) {
-
-          $sessData = [
-            'otp_verify' => "yes",
-            'signupsts' => "YES"
-          ];
-          $this->session->set($sessData);
-
           $res['code'] = 200;
           $res['status'] = 'Success';
           $res['msg'] = 'Check Your Email!';

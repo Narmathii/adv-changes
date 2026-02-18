@@ -6,6 +6,75 @@ class SearchController extends BaseController
 {
 
 
+    private function getActiveProductLookup()
+    {
+        $db = \Config\Database::connect();
+
+        return [
+            'bike_brand' => array_map('intval', array_column($db->query("SELECT brand_id FROM tbl_brand_master WHERE flag = 1 AND is_active = 1")->getResultArray(), 'brand_id')),
+            'bike_model' => array_map('intval', array_column($db->query("SELECT modal_id FROM tbl_modal_master WHERE flag = 1 AND is_active = 1")->getResultArray(), 'modal_id')),
+            'access' => array_map('intval', array_column($db->query("SELECT access_id FROM tbl_access_master WHERE flag = 1 AND is_active = 1")->getResultArray(), 'access_id')),
+            'sub_access' => array_map('intval', array_column($db->query("SELECT sub_access_id FROM tbl_subaccess_master WHERE flag = 1 AND is_active = 1")->getResultArray(), 'sub_access_id')),
+            'r_menu' => array_map('intval', array_column($db->query("SELECT r_menu_id FROM tbl_riding_menu WHERE flag = 1 AND is_active = 1")->getResultArray(), 'r_menu_id')),
+            'r_sub' => array_map('intval', array_column($db->query("SELECT r_sub_id FROM tbl_riding_submenu WHERE flag = 1 AND is_active = 1")->getResultArray(), 'r_sub_id')),
+            'h_menu' => array_map('intval', array_column($db->query("SELECT h_menu_id FROM tbl_helmet_menu WHERE flag = 1 AND is_active = 1")->getResultArray(), 'h_menu_id')),
+            'h_sub' => array_map('intval', array_column($db->query("SELECT h_submenu_id FROM tbl_helmet_submenu WHERE flag = 1 AND is_active = 1")->getResultArray(), 'h_submenu_id')),
+            'lug_menu' => array_map('intval', array_column($db->query("SELECT lug_menu_id FROM tbl_luggage_menu WHERE flag = 1 AND is_active = 1")->getResultArray(), 'lug_menu_id')),
+            'lug_sub' => array_map('intval', array_column($db->query("SELECT lug_submenu_id FROM tbl_luggage_submenu WHERE flag = 1 AND is_active = 1")->getResultArray(), 'lug_submenu_id')),
+            'camp_menu' => array_map('intval', array_column($db->query("SELECT camp_menu_id FROM tbl_camping_menu WHERE flag = 1 AND is_active = 1")->getResultArray(), 'camp_menu_id')),
+            'camp_sub' => array_map('intval', array_column($db->query("SELECT c_submenu_id FROM tbl_camping_submenu WHERE flag = 1 AND is_active = 1")->getResultArray(), 'c_submenu_id')),
+        ];
+    }
+
+    private function filterProductsByActiveMenus(array $products): array
+    {
+        $active = $this->getActiveProductLookup();
+
+        $filtered = array_filter($products, function ($product) use ($active) {
+            $table = $product['tbl_name'] ?? '';
+
+            if ($table === 'tbl_products') {
+                $brandId = (int) ($product['brand_id'] ?? 0);
+                $modalId = (int) ($product['modal_id'] ?? 0);
+                return in_array($brandId, $active['bike_brand'], true) && in_array($modalId, $active['bike_model'], true);
+            }
+
+            if ($table === 'tbl_accessories_list') {
+                $accessId = (int) ($product['access_id'] ?? $product['brand_id'] ?? 0);
+                $subAccessId = (int) ($product['sub_access_id'] ?? $product['modal_id'] ?? 0);
+                return in_array($accessId, $active['access'], true) && in_array($subAccessId, $active['sub_access'], true);
+            }
+
+            if ($table === 'tbl_rproduct_list') {
+                $menuId = (int) ($product['r_menu_id'] ?? $product['brand_id'] ?? 0);
+                $subMenuId = (int) ($product['r_sub_id'] ?? $product['modal_id'] ?? 0);
+                return in_array($menuId, $active['r_menu'], true) && in_array($subMenuId, $active['r_sub'], true);
+            }
+
+            if ($table === 'tbl_helmet_products') {
+                $menuId = (int) ($product['h_menu_id'] ?? $product['brand_id'] ?? 0);
+                $subMenuId = (int) ($product['h_submenu_id'] ?? $product['modal_id'] ?? 0);
+                return in_array($menuId, $active['h_menu'], true) && in_array($subMenuId, $active['h_sub'], true);
+            }
+
+            if ($table === 'tbl_luggagee_products') {
+                $menuId = (int) ($product['lug_menu_id'] ?? $product['brand_id'] ?? 0);
+                $subMenuId = (int) ($product['lug_submenu_id'] ?? $product['modal_id'] ?? 0);
+                return in_array($menuId, $active['lug_menu'], true) && in_array($subMenuId, $active['lug_sub'], true);
+            }
+
+            if ($table === 'tbl_camping_products') {
+                $menuId = (int) ($product['camp_menu_id'] ?? $product['brand_id'] ?? 0);
+                $subMenuId = (int) ($product['c_submenu_id'] ?? $product['modal_id'] ?? 0);
+                return in_array($menuId, $active['camp_menu'], true) && in_array($subMenuId, $active['camp_sub'], true);
+            }
+
+            return true;
+        });
+
+        return array_values($filtered);
+    }
+
     private function headerlist()
     {
         $db = \Config\Database::connect();
@@ -117,6 +186,7 @@ class SearchController extends BaseController
             $searchPattern,
             $searchPattern
         ])->getResultArray();
+        $searchData = $this->filterProductsByActiveMenus($searchData);
 
         // Pagination calculation
         $page = $this->request->getVar('page') ?? 1;
@@ -125,20 +195,8 @@ class SearchController extends BaseController
         $totalPages = ceil($totalRows / $perPage);
         $offset = ($page - 1) * $perPage;
 
-        // Append LIMIT and OFFSET with placeholders
-        $query1 .= " LIMIT ? OFFSET ?";
-
         // Fetch paginated results
-        $res['search_data'] = $db->query($query1, [
-            $searchPattern,
-            $searchPattern,
-            $searchPattern,
-            $searchPattern,
-            $searchPattern,
-            $searchPattern,
-            $perPage,
-            $offset
-        ])->getResultArray();
+        $res['search_data'] = array_slice($searchData, $offset, $perPage);
 
 
 
@@ -304,7 +362,7 @@ class SearchController extends BaseController
          tbl_camping_products
          WHERE  `product_name` LIKE ? AND `flag` = 1 
     ORDER BY 
-        order_col, prod_id  LIMIT 10";
+        order_col, prod_id";
 
         $searchData = $db->query($query1, [
             $searchPattern,
@@ -314,6 +372,8 @@ class SearchController extends BaseController
             $searchPattern,
             $searchPattern
         ])->getResultArray();
+        $searchData = $this->filterProductsByActiveMenus($searchData);
+        $searchData = array_slice($searchData, 0, 10);
 
 
 
@@ -406,6 +466,7 @@ class SearchController extends BaseController
             $searchPattern,
             $searchPattern
         ])->getResultArray();
+        $searchData = $this->filterProductsByActiveMenus($searchData);
 
         // Pagination calculation
         $page = $this->request->getVar('page') ?? 1;
@@ -414,20 +475,8 @@ class SearchController extends BaseController
         $totalPages = ceil($totalRows / $perPage);
         $offset = ($page - 1) * $perPage;
 
-        // Append LIMIT and OFFSET with placeholders
-        $query1 .= " LIMIT ? OFFSET ?";
-
         // Fetch paginated results
-        $res['search_data'] = $db->query($query1, [
-            $searchPattern,
-            $searchPattern,
-            $searchPattern,
-            $searchPattern,
-            $searchPattern,
-            $searchPattern,
-            $perPage,
-            $offset
-        ])->getResultArray();
+        $res['search_data'] = array_slice($searchData, $offset, $perPage);
 
         // Calculate Visible Page Links
         $maxVisibleLinks = 5; // Number of page links visible at a time
@@ -664,10 +713,27 @@ class SearchController extends BaseController
         $orderby_mob = $this->request->getPost('orderby_mob');
 
         $tablename = $this->request->getPost('tablename');
+        $tbl_name = $this->request->getPost('tbl_name');
+        $menu_id = (int) $this->request->getPost('menu_id');
         $submenu_id = $this->request->getPost('submenu_id');
         $discount = $this->request->getPost('discount');
         $discount_mob = $this->request->getPost('discount_mob');
 
+        $menu = "false";
+        $tableForMenuCheck = !empty($tbl_name) ? $tbl_name : $tablename;
+        if ($this->isMenuAndSubmenuActive($tableForMenuCheck, $menu_id, (int) $submenu_id)) {
+            $menu = "true";
+        }
+
+        if ($menu === "false") {
+            echo json_encode([
+                'status' => 400,
+                'data' => 'This category or subcategory is inactive.',
+                'products' => [],
+                'pagination' => []
+            ]);
+            return;
+        }
 
 
 
@@ -831,6 +897,98 @@ class SearchController extends BaseController
             'pagination' => $paginationLinks
         ]);
 
+    }
+
+    private function isMenuAndSubmenuActive($tableName, $menuId, $submenuId)
+    {
+        $db = \Config\Database::connect();
+
+        if ($tableName === 'tbl_helmet_products') {
+            if (empty($menuId) || empty($submenuId)) {
+                return false;
+            }
+
+            $menuActive = $db->query(
+                "SELECT h_menu_id FROM tbl_helmet_menu WHERE h_menu_id = ? AND flag = 1 AND is_active = 1 LIMIT 1",
+                [$menuId]
+            )->getRowArray();
+            $submenuActive = $db->query(
+                "SELECT h_submenu_id FROM tbl_helmet_submenu WHERE h_submenu_id = ? AND h_menu_id = ? AND flag = 1 AND is_active = 1 LIMIT 1",
+                [$submenuId, $menuId]
+            )->getRowArray();
+
+            return !empty($menuActive) && !empty($submenuActive);
+        }
+
+        if ($tableName === 'tbl_accessories_list') {
+            if (empty($menuId) || empty($submenuId)) {
+                return false;
+            }
+
+            $menuActive = $db->query(
+                "SELECT access_id FROM tbl_access_master WHERE access_id = ? AND flag = 1 AND is_active = 1 LIMIT 1",
+                [$menuId]
+            )->getRowArray();
+            $submenuActive = $db->query(
+                "SELECT sub_access_id FROM tbl_subaccess_master WHERE sub_access_id = ? AND access_id = ? AND flag = 1 AND is_active = 1 LIMIT 1",
+                [$submenuId, $menuId]
+            )->getRowArray();
+
+            return !empty($menuActive) && !empty($submenuActive);
+        }
+
+        if ($tableName === 'tbl_camping_products') {
+            if (empty($menuId) || empty($submenuId)) {
+                return false;
+            }
+
+            $menuActive = $db->query(
+                "SELECT camp_menu_id FROM tbl_camping_menu WHERE camp_menu_id = ? AND flag = 1 AND is_active = 1 LIMIT 1",
+                [$menuId]
+            )->getRowArray();
+            $submenuActive = $db->query(
+                "SELECT c_submenu_id FROM tbl_camping_submenu WHERE c_submenu_id = ? AND camp_menuid = ? AND flag = 1 AND is_active = 1 LIMIT 1",
+                [$submenuId, $menuId]
+            )->getRowArray();
+
+            return !empty($menuActive) && !empty($submenuActive);
+        }
+
+        if ($tableName === 'tbl_luggagee_products') {
+            if (empty($menuId) || empty($submenuId)) {
+                return false;
+            }
+
+            $menuActive = $db->query(
+                "SELECT lug_menu_id FROM tbl_luggage_menu WHERE lug_menu_id = ? AND flag = 1 AND is_active = 1 LIMIT 1",
+                [$menuId]
+            )->getRowArray();
+            $submenuActive = $db->query(
+                "SELECT lug_submenu_id FROM tbl_luggage_submenu WHERE lug_submenu_id = ? AND lug_menu_id = ? AND flag = 1 AND is_active = 1 LIMIT 1",
+                [$submenuId, $menuId]
+            )->getRowArray();
+
+            return !empty($menuActive) && !empty($submenuActive);
+        }
+
+        if ($tableName === 'tbl_rproduct_list') {
+            if (empty($menuId) || empty($submenuId)) {
+                return false;
+            }
+
+            $menuActive = $db->query(
+                "SELECT r_menu_id FROM tbl_riding_menu WHERE r_menu_id = ? AND flag = 1 AND is_active = 1 LIMIT 1",
+                [$menuId]
+            )->getRowArray();
+            $submenuActive = $db->query(
+                "SELECT r_sub_id FROM tbl_riding_submenu WHERE r_sub_id = ? AND r_menu_id = ? AND flag = 1 AND is_active = 1 LIMIT 1",
+                [$submenuId, $menuId]
+            )->getRowArray();
+
+            return !empty($menuActive) && !empty($submenuActive);
+        }
+
+        return true;
     }
 
 

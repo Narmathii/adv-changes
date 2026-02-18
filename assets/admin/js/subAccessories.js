@@ -179,60 +179,56 @@ $(document).ready(function () {
   });
 
   $("#datatable").on("change", ".statusToggle", function () {
-    var index = $(this).data("id");
-    sub_access_id = res_DATA[index].sub_access_id;
-    var isChecked = $(this).is(":checked") ? 1 : 0;
+  var $this = $(this);
+  var index = $this.data("id");
+  var sub_access_id = res_DATA[index].sub_access_id;
+  var accessID = res_DATA[index].access_id;
 
-    let accessID = res_DATA[index].access_id;
+  var previousState = !$this.is(":checked"); 
+  var isChecked = $this.is(":checked") ? 1 : 0;
 
-    Swal.fire({
-      title: "Are you sure?",
-      text: "You want to update the active status?",
-      icon: "warning",
-      showCancelButton: true,
-      confirmButtonColor: "#3085d6",
-      cancelButtonColor: "#d33",
-      confirmButtonText: "Yes!",
-    }).then((result) => {
-      if (result.isConfirmed) {
-        $.ajax({
-          type: "POST",
-          url: base_Url + "deactivate-submenu",
-          data: {
-            menu_id: accessID,
-            sub_menu_id: sub_access_id,
-            menu_col: "access_id",
-            sub_menu_col: "sub_access_id",
-            tbl_name: "tbl_subaccess_master",
-            active_status: isChecked,
-          },
+  Swal.fire({
+    title: "Are you sure?",
+    text: "You want to update the active status?",
+    icon: "warning",
+    showCancelButton: true,
+    confirmButtonColor: "#3085d6",
+    cancelButtonColor: "#d33",
+    confirmButtonText: "Yes!",
+  }).then((result) => {
+    if (result.isConfirmed) {
+      $.ajax({
+        type: "POST",
+        url: base_Url + "deactivate-submenu",
+        data: {
+          menu_id: accessID,
+          sub_menu_id: sub_access_id,
+          menu_col: "access_id",
+          sub_menu_col: "sub_access_id",
+          tbl_name: "tbl_subaccess_master",
+          active_status: isChecked,
+        },
+        success: function (data) {
+          var resData = $.parseJSON(data);
 
-          success: function (data) {
-            var resData = $.parseJSON(data);
-
-            if (resData.code == 200) {
-              Swal.fire({
-                title: "Congratulations!",
-                text: resData["msg"],
-                icon: "success",
-              });
-              $("#model-data").modal("hide");
-              refreshDetails();
-            } else {
-              Swal.fire({
-                title: "Failure",
-                text: resData["msg"],
-                icon: "danger",
-              });
-
-              $("#model-data").modal("hide");
-              refreshDetails();
-            }
-          },
-        });
-      }
-    });
+          if (resData.code == 200) {
+            Swal.fire("Success", resData.msg, "success");
+            refreshDetails();
+          } else {
+            Swal.fire("Failure", resData.msg, "error");
+            $this.prop("checked", previousState);
+          }
+        },
+        error: function () {
+          $this.prop("checked", previousState);
+        }
+      });
+    } else {
+      $this.prop("checked", previousState);
+    }
   });
+});
+
 
   // *************************** [Delete Data] *************************************************************************
   $(document).on("click", ".BtnDelete", function () {

@@ -339,7 +339,7 @@ a#sms-login {
                                     <form id="form_login" class="mt-0">
                                         <input type="hidden" name="<?= csrf_token() ?>" value="<?= csrf_hash() ?>" />
                                         <div class="inputBox">
-                                            <input type="number" id='sms-number' name='sms-number'>
+                                            <input type="tel" id='sms-number' name='sms-number' maxlength="10" inputmode="numeric" autocomplete="tel">
                                             <span>Mobile Number</span>
                                             <i></i>
                                         </div>

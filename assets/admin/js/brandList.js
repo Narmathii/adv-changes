@@ -158,6 +158,22 @@ $(document).ready(function () {
             else return "";
           },
         },
+        {
+          mDataProp: function (data, type, full, meta) {
+            return `
+            <div class="toggle-switch">
+              <input
+                type="checkbox"
+                class="statusToggle"
+                id="toggle-${meta.row}"
+                data-id="${meta.row}"
+                ${data.is_active == 1 ? "checked" : ""}
+              >
+              <label for="toggle-${meta.row}"></label>
+            </div>
+    `;
+          },
+        },
 
         {
           mDataProp: function (data, type, full, meta) {
@@ -174,6 +190,54 @@ $(document).ready(function () {
       ],
     });
   }
+
+  $("#datatable").on("change", ".statusToggle", function () {
+    var $this = $(this);
+    var index = $this.data("id");
+    var brand_id = res_DATA[index].brand_id;
+
+    var previousState = !$this.is(":checked");
+    var isChecked = $this.is(":checked") ? 1 : 0;
+
+    Swal.fire({
+      title: "Are you sure?",
+      text: "You want to update the active status?",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes!",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        $.ajax({
+          type: "POST",
+          url: base_Url + "deactivate-menu",
+          data: {
+            id: brand_id,
+            column_name: "brand_id",
+            tbl_name: "tbl_brand_master",
+            active_status: isChecked,
+          },
+          success: function (data) {
+            var resData = $.parseJSON(data);
+
+            if (resData.code == 200) {
+              Swal.fire("Success", resData.msg, "success");
+              refreshDetails();
+            } else {
+              Swal.fire("Failure", resData.msg, "error");
+              $this.prop("checked", previousState);
+            }
+          },
+          error: function () {
+            $this.prop("checked", previousState);
+          },
+        });
+      } else {
+        $this.prop("checked", previousState);
+      }
+    });
+  });
 
   // *************************** [Edit Data] *************************************************************************
 

@@ -56,6 +56,9 @@ $(document).ready(function () {
           var redirectURL = data.c_url;
         }
         if (data.code == 200) {
+          if (data.token) {
+            localStorage.setItem("token", data.token);
+          }
           window.location.href = redirectURL;
           update_csrf_fields(data.csrf_test_name);
         } else if (data.code == 400) {

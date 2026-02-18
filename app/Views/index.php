@@ -702,7 +702,7 @@ $buildBannerHref = static function ($link) {
                 </div>
                 <div class="col-12 col-carousel p-0">
                     <div class="owl-carousel carousel-main">
-                        <?php for ($i = 0; $i < 8; $i++) { ?>
+                        <?php for ($i = 0; $i < (count($new_arrivals) <= 8 ? count($new_arrivals) : 8); $i++) { ?>
                             <div class="">
                                 <div class="item">
                                     <p class="d-flex wish-status m-0">
@@ -812,7 +812,7 @@ $buildBannerHref = static function ($link) {
                 </div>
                 <div class="col-12 col-carousel p-0">
                     <div class="owl-carousel carousel-main">
-                        <?php for ($i = 0; $i < 8; $i++) { ?>
+                        <?php for ($i = 0; $i < (count($hotsale) <= 8 ? count($hotsale) : 8); $i++) { ?>
                             <div class="">
                                 <div class="item">
                                     <p class="d-flex wish-status m-0">

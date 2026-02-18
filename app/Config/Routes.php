@@ -95,41 +95,41 @@ $routes->get('get-inital-cart', 'CartController::getInitialCart');
 $routes->get('logout-view', 'LoginControllerr::Logout');
 
 
-$routes->post('change-address', 'CartController::changeAddress', ['filter' => 'AuthFilter']);
-$routes->post('update-cart-address', 'CartController::updateCartAddress', ['filter' => 'AuthFilter']);
-$routes->post('insert-cart-address', 'CartController::insertCartAddress', ['filter' => 'AuthFilter']);
+$routes->post('change-address', 'CartController::changeAddress', ['filter' => 'SessionAuth']);
+$routes->post('update-cart-address', 'CartController::updateCartAddress', ['filter' => 'SessionAuth']);
+$routes->post('insert-cart-address', 'CartController::insertCartAddress', ['filter' => 'SessionAuth']);
 
 $routes->post('user-cart-details', 'CartController::userCart');
 $routes->post('delete-cart', 'CartController::deleteCart');
 
-$routes->post('update-default-addr', 'CartController::updateDefaultAddr', ['filter' => 'AuthFilter']);
-$routes->post('assign-couriercharge', 'CartController::assignCharges', ['filter' => 'AuthFilter']);
+$routes->post('update-default-addr', 'CartController::updateDefaultAddr', ['filter' => 'SessionAuth']);
+$routes->post('assign-couriercharge', 'CartController::assignCharges', ['filter' => 'SessionAuth']);
 
 //  Tested and Error handled  /////
-$routes->post('getcartdist-data', 'CartController::getDistrict', ['filter' => 'AuthFilter']);
-$routes->post('insert-email', 'CartController::insertEmail', ['filter' => 'AuthFilter']);
-$routes->post('update-email', 'CartController::updateEmail', ['filter' => 'AuthFilter']);
+$routes->post('getcartdist-data', 'CartController::getDistrict', ['filter' => 'SessionAuth']);
+$routes->post('insert-email', 'CartController::insertEmail', ['filter' => 'SessionAuth']);
+$routes->post('update-email', 'CartController::updateEmail', ['filter' => 'SessionAuth']);
 
 
-$routes->get('get-email', 'CartController::getEmail', ['filter' => 'AuthFilter']);
+$routes->get('get-email', 'CartController::getEmail', ['filter' => 'SessionAuth']);
 
-$routes->post('get-dist', 'CartController::getDist', ['filter' => 'AuthFilter']);
+$routes->post('get-dist', 'CartController::getDist', ['filter' => 'SessionAuth']);
 
 $routes->get('myprofile', 'UserController::myprofile', ['filter' => 'SessionAuth']);
 
 
 $routes->get('address', 'UserController::address', ['filter' => 'SessionAuth']);
-$routes->post('getdist-data', 'AddressController::getDist', ['filter' => 'AuthFilter']);
-$routes->post('insert-address', 'AddressController::insertAddress', ['filter' => 'AuthFilter']);
+$routes->post('getdist-data', 'AddressController::getDist', ['filter' => 'SessionAuth']);
+$routes->post('insert-address', 'AddressController::insertAddress', ['filter' => 'SessionAuth']);
 
-$routes->get('get-address', 'AddressController::getAddress', ['filter' => 'AuthFilter']);
-$routes->post('update-address', 'AddressController::updateAddress', ['filter' => 'AuthFilter']);
-$routes->post('delete-address', 'AddressController::deleteAddress', ['filter' => 'AuthFilter']);
+$routes->get('get-address', 'AddressController::getAddress', ['filter' => 'SessionAuth']);
+$routes->post('update-address', 'AddressController::updateAddress', ['filter' => 'SessionAuth']);
+$routes->post('delete-address', 'AddressController::deleteAddress', ['filter' => 'SessionAuth']);
 
 //  ----------------------------------------------  Auth Filter  ------------------------------------------------------
-$routes->get('get-profile', 'UserController::getprofile', ['filter' => 'AuthFilter']);
-$routes->post('update-profile', 'UserController::updateprofile', ['filter' => 'AuthFilter']);
-$routes->post('cart-checkout', 'CartCheckoutController::cartCheckout', ['filter' => 'AuthFilter']);
+$routes->get('get-profile', 'UserController::getprofile', ['filter' => 'SessionAuth']);
+$routes->post('update-profile', 'UserController::updateprofile', ['filter' => 'SessionAuth']);
+$routes->post('cart-checkout', 'CartCheckoutController::cartCheckout', ['filter' => 'SessionAuth']);
 $routes->get('check-userlogin', 'CartCheckoutController::checkLoginRes');
 $routes->get('check-address', 'CartCheckoutController::checkAddress', ['filter' => 'SessionAuth']);
 $routes->get('place-order', 'CartCheckoutController::placeOrder', ['filter' => 'SessionAuth']);
@@ -190,10 +190,10 @@ $routes->get('terms-conditions', 'Home::terms');
 $routes->get('buy-now', 'BuynowController::buynowView');
 $routes->get('check-loginsts', 'BuynowController::checkLogin');
 $routes->post('buynow-products', 'BuynowController::buyProductsList', ['filter' => 'SessionAuth']);
-$routes->post('buynow-checkout', 'BuynowController::buynowCheckout', ['filter' => 'AuthFilter']);
+$routes->post('buynow-checkout', 'BuynowController::buynowCheckout', ['filter' => 'SessionAuth']);
 // $routes->post('check-email-input', 'BuynowController::checkEmailInput');
 
-$routes->post('couriercharge-buynow', 'BuynowController::courierCharge', ['filter' => 'AuthFilter']);
+$routes->post('couriercharge-buynow', 'BuynowController::courierCharge', ['filter' => 'SessionAuth']);
 
 
 

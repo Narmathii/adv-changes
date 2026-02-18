@@ -10,7 +10,7 @@ $(document).ready(function () {
       var table = $("#datatable").DataTable();
       table.clear();
       table.rows.add(brandDetails);
-      table.draw();
+      table.draw();Z
       window.location.reload();
     });
   }

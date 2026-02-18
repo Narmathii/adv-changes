@@ -51,8 +51,6 @@ class AuthMiddleware implements FilterInterface
 
     private function unauthorizedResponse($message)
     {
-        $session = session();
-        $session->destroy();
         return \Config\Services::response()
             ->setStatusCode(401)
             ->setJSON(['code' => 401, 'message' => $message]);

@@ -110,6 +110,14 @@ padding: 10px 20px 10px;
 
 }
 
+/* Krish  */
+.d-text.address-field {
+    background-color: rgba(0, 0, 0, 0.05);
+}
+.save_cancel_btn {
+    background-color: rgba(0, 0, 0, 0.05);
+}
+
 </style>
 
 <body onload="initialize()" class="dark-scheme address_page">
@@ -124,7 +132,7 @@ padding: 10px 20px 10px;
         ?>
         <!-- header close -->
         <!-- content begin -->
-        <div class="no-bottom no-top zebra" id="content">
+        <div class="no-bottom no-top zebra">
             <div id="top"></div>
 
             <section id="section-address" class="bg-gray-100">

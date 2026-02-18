@@ -454,7 +454,9 @@ require("components/head.php");
     display: block !important;      
     height: auto !important;        
 }
-
+#multi-step-form li, #multi-step-form span, #multi-step-form p, #multi-step-form input, #multi-step-form label {
+    color: #000 !important;
+}
 
 </style>
 

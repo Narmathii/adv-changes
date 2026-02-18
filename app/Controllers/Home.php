@@ -2590,14 +2590,34 @@ GROUP BY `product_id` HAVING SUM(`prod_count`)<=10";
             $prodID = $item['prod_id'];
             $size = $item['size'];
             $size_stock = $item['size_stock'];
-            $query = "SELECT a.prod_id,a.product_name, a.product_price, a.offer_price, a.product_img, a.stock_status,
-       b.wishlist_id,b.tbl_name
-       FROM $tableName AS a 
-       
-       INNER JOIN tbl_wishlist AS b 
-       ON a.prod_id = b.prod_id
-       WHERE b.flag = 1 AND a.prod_id = $prodID AND b.user_id = '$userID'";
-            $result = $db->query($query)->getRow();
+            $query = "SELECT 
+                a.prod_id,
+                a.product_name, 
+                a.product_price, 
+                a.offer_price, 
+                a.product_img, 
+                a.stock_status,
+                b.wishlist_id,
+                b.tbl_name,
+                CASE WHEN c.cart_id IS NULL THEN 0 ELSE 1 END AS in_cart
+            FROM $tableName AS a
+            INNER JOIN tbl_wishlist AS b
+                ON a.prod_id = b.prod_id
+            LEFT JOIN tbl_user_cart AS c
+                ON c.prod_id = a.prod_id
+                AND c.table_name = b.tbl_name
+                AND c.user_id = b.user_id
+                AND c.flag = 1
+                AND c.size = ?
+            WHERE b.flag = 1
+                AND a.prod_id = ?
+                AND b.user_id = ?";
+
+            $result = $db->query($query, [$size, $prodID, $userID])->getRow();
+            if (!$result) {
+                continue;
+            }
+
             $result->size = $size;
             $result->size_stock = $size_stock;
             $data[] = $result;

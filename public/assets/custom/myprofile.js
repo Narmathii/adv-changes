@@ -4,12 +4,9 @@ $(document).ready(function () {
   // ****************************************************************** get data **************************************************************
 
   function getProfileData() {
-    var token = localStorage.getItem("token");
-
     $.ajax({
       url: base_Url + "get-profile",
       dataType: "json",
-      headers: { Authorization: "Bearer " + token },
       success: function (data) {
         $("#username").val(data[0]["username"]);
         $("#email").val(data[0]["email"]);
@@ -22,8 +19,7 @@ $(document).ready(function () {
       error: function (error) {
         let status = error.status;
         if (status === 401) {
-          localStorage.removeItem("token");
-          window.location.href = base_Url;
+          window.location.href = base_Url + "login";
         }
         console.log(error);
       },
@@ -90,7 +86,6 @@ $(document).ready(function () {
     function updateData() {
       var form = $("#profile_form")[0];
       var data = new FormData(form);
-      var token = localStorage.getItem("token");
       $.ajax({
         type: "POST",
         data: data,
@@ -98,7 +93,6 @@ $(document).ready(function () {
         dataType: "json",
         contentType: false,
         processData: false,
-        headers: { Authorization: "Bearer " + token },
         success: function (data) {
           if (data.code == 200) {
             successData(data.msg);
@@ -112,8 +106,7 @@ $(document).ready(function () {
         error: function (error) {
           let status = error.status;
           if (status === 401) {
-            localStorage.removeItem("token");
-            window.location.href = base_Url;
+            window.location.href = base_Url + "login";
           }
           console.log(error);
         },

@@ -298,7 +298,7 @@
                                         </div>
                                         <span id="invalid-name"></span>
                                         <div class="inputBox">
-                                            <input type="number" id="number" name="number" required="">
+                                            <input type="tel" id="number" name="number" required="" maxlength="10" inputmode="numeric" autocomplete="tel">
                                             <span>Mobile Number</span>
                                             <i></i>
                                         </div>
@@ -340,7 +340,7 @@
                                         </div>
                                         <span class="invalid-data input-data" id="invalid-smsuname"></span>
                                         <div class="inputBox">
-                                            <input type="number" id="sms-number" name="sms-number">
+                                            <input type="tel" id="sms-number" name="sms-number" maxlength="10" inputmode="numeric" autocomplete="tel">
                                             <span>Mobile Number</span>
                                             <i></i>
                                         </div>

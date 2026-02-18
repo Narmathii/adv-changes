@@ -1,5 +1,26 @@
 $(document).ready(function () {
   var csrfToken = $('meta[name="csrf-token"]').attr("content");
+  bindMobileInput("#sms-number");
+
+  function bindMobileInput(selector) {
+    $(selector).on("input", function () {
+      this.value = normalizeMobile(this.value).slice(0, 10);
+    });
+
+    $(selector).on("keypress", function (e) {
+      var ch = String.fromCharCode(e.which || e.keyCode);
+      if (!/[0-9]/.test(ch)) {
+        e.preventDefault();
+      }
+    });
+
+    $(selector).on("paste", function (e) {
+      e.preventDefault();
+      var pasted = (e.originalEvent || e).clipboardData.getData("text");
+      this.value = normalizeMobile(pasted).slice(0, 10);
+      $(this).trigger("input");
+    });
+  }
 
   $("#btn-login").click(function () {
     if ($("#email").val() == "") {
@@ -35,9 +56,14 @@ $(document).ready(function () {
     }
   });
 
+  function normalizeMobile(phone_no) {
+    return String(phone_no || "").replace(/\D/g, "");
+  }
+
   function isPhoneNumber(phone_no) {
-    var pattern = /^\d{10}$/;
-    return pattern.test(phone_no);
+    var normalized = normalizeMobile(phone_no);
+    var pattern = /^[6-9]\d{9}$/;
+    return pattern.test(normalized);
   }
   function IsEmail(email) {
     var regex =
@@ -61,7 +87,9 @@ $(document).ready(function () {
 
       success: function (res) {
         let resData = $.parseJSON(res);
-        localStorage.setItem("token", resData.token);
+        if (resData.token) {
+          localStorage.setItem("token", resData.token);
+        }
 
         if (resData.c_url == "myprofile") {
           var redirectURL = base_Url + resData.c_url;
@@ -81,7 +109,7 @@ $(document).ready(function () {
   }
 
   function sendOTP() {
-    var num = $("#sms-number").val();
+    var num = normalizeMobile($("#sms-number").val());
     $.ajax({
       type: "POST",
       url: base_Url + "login-otp",
@@ -89,7 +117,9 @@ $(document).ready(function () {
       datatype: "json",
       success: function (Data) {
         var resData = $.parseJSON(Data);
-        localStorage.setItem("token", resData.token);
+        if (resData.token) {
+          localStorage.setItem("token", resData.token);
+        }
         if (resData.code == 200) {
           // update_csrf_fields(resData.csrf_test_name);
           window.location.href = base_Url + "login-otppage";

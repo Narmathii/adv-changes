@@ -76,7 +76,7 @@
                                             Orders</a></li>
 
                                     <!-- <li><a href="account-favorite.html"><i class="fa fa-car"></i>My Favorite Cars</a></li> -->
-                                    <li><a href="<?php echo base_url() ?>logout-view"><i class="fa fa-sign-out"></i>Sign
+                                    <li><a href="<?php echo base_url() ?>logout-view" class="confirm-signout" data-logout-href="<?php echo base_url() ?>logout-view"><i class="fa fa-sign-out"></i>Sign
                                             Out</a></li>
                                 </ul>
                             </div>
@@ -181,6 +181,27 @@
                                             </div>
                                         </div>
                                     </div>
+
+                                    <div id="signout_modal" class="modal fade">
+                                        <div class="modal-dialog modal-confirm">
+                                            <div class="modal-content delete_modal">
+                                                <div class="modal-header flex-column p-0">
+                                                    <div class="icon-box">
+                                                        <i class="fa fa-sign-out m-0" style="font-size: 30px;"></i>
+                                                    </div>
+                                                    <h4 class="modal-title w-100">Are you sure?</h4>
+                                                    <button type="button" id="signout-close-btn" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    <p class="m-0">Do you really want to sign out?</p>
+                                                </div>
+                                                <div class="modal-footer justify-content-center p-0">
+                                                    <a type="button" id="signout-cancel-btn" class="btn btn-secondary btnclose button_close" data-dismiss="modal">Cancel</a>
+                                                    <a type="button" id="confirm-signout-btn" class="btn btn-danger btndelete">Sign Out</a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -194,6 +215,28 @@
 
 
         <script src="<?php echo base_url() ?>public/assets/custom/myprofile.js"></script>
+        <script>
+            jQuery(function ($) {
+                var signoutHref = "";
+
+                $(document).on("click", ".confirm-signout", function (e) {
+                    e.preventDefault();
+                    signoutHref = $(this).data("logout-href") || $(this).attr("href");
+                    $("#signout_modal").modal("show");
+                });
+
+                $(document).on("click", "#confirm-signout-btn", function () {
+                    if (signoutHref) {
+                        window.location.href = signoutHref;
+                    }
+                });
+
+                $(document).on("click", "#signout-cancel-btn, #signout-close-btn", function (e) {
+                    e.preventDefault();
+                    $("#signout_modal").modal("hide");
+                });
+            });
+        </script>
 
 
 </body>

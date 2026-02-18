@@ -1,4 +1,27 @@
 $(document).ready(function () {
+  bindMobileInput("#number");
+  bindMobileInput("#sms-number");
+
+  function bindMobileInput(selector) {
+    $(selector).on("input", function () {
+      this.value = normalizeMobile(this.value).slice(0, 10);
+    });
+
+    $(selector).on("keypress", function (e) {
+      var ch = String.fromCharCode(e.which || e.keyCode);
+      if (!/[0-9]/.test(ch)) {
+        e.preventDefault();
+      }
+    });
+
+    $(selector).on("paste", function (e) {
+      e.preventDefault();
+      var pasted = (e.originalEvent || e).clipboardData.getData("text");
+      this.value = normalizeMobile(pasted).slice(0, 10);
+      $(this).trigger("input");
+    });
+  }
+
   // ****************************************************************** Validation **************************************************************
   $("#btn-signup").click(function () {
     if ($("#username").val() == "") {
@@ -42,6 +65,10 @@ $(document).ready(function () {
     }
   });
 
+  function normalizeMobile(phone_no) {
+    return String(phone_no || "").replace(/\D/g, "");
+  }
+
   function IsEmail(email) {
     var regex =
       /^([a-zA-Z0-9_\.\-\+])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;
@@ -49,14 +76,15 @@ $(document).ready(function () {
   }
 
   function isPhoneNumber(phone_no) {
-    var pattern = /^\d{10}$/;
-    return pattern.test(phone_no);
+    var normalized = normalizeMobile(phone_no);
+    var pattern = /^[6-9]\d{9}$/;
+    return pattern.test(normalized);
   }
 
   function sendOTP() {
     var form = $("#sms_form")[0];
     // var data = new FormData(form);
-    var number = $("#sms-number").val();
+    var number = normalizeMobile($("#sms-number").val());
     var uname = $("#sms-uname").val();
 
     $.ajax({
@@ -65,7 +93,9 @@ $(document).ready(function () {
       data: { number: number, uname: uname },
       dataType: "json",
       success: function (data) {
-        localStorage.setItem("token", data.token);
+        if (data.token) {
+          localStorage.setItem("token", data.token);
+        }
         if (data.code == 400) {
           $("#loading").addClass("d-none");
           $("#invalid-data").text(data.msg).removeClass("d-none");
@@ -86,6 +116,7 @@ $(document).ready(function () {
   function insertData() {
     var form = $("#form_register")[0];
     var formData = new FormData(form);
+    formData.set("number", normalizeMobile($("#number").val()));
 
     $.ajax({
       type: "POST",
@@ -97,7 +128,9 @@ $(document).ready(function () {
       cache: false,
       success: function (data) {
         var JSONdata = $.parseJSON(data);
-        localStorage.setItem("token", JSONdata.token);
+        if (JSONdata.token) {
+          localStorage.setItem("token", JSONdata.token);
+        }
 
         if (JSONdata.code == 400) {
           $("#loading").addClass("d-none");

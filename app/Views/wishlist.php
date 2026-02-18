@@ -25,6 +25,63 @@ require("components/head.php");
         box-shadow: 0px 4px 6px rgba(207, 207, 207, 0.25), 0px 2px 4px rgba(0, 0, 0, 0.25);
         background-color: #fff;
     }
+
+    .wishlist_section .cart_wrapper {
+        width: auto !important;
+        min-width: 175px;
+        padding: 0 12px !important;
+        background: #c77a00;
+        height: 38px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 7px;
+        border-radius: 6px;
+    }
+
+    .wishlist_section .cart_wrapper.added-to-cart {
+        background: #6b7d1f;
+    }
+
+    .wishlist_section .addto_cart {
+        color: #fff !important;
+        font-weight: 600;
+        white-space: nowrap;
+        line-height: 1;
+        font-size: 14px;
+    }
+
+    .wishlist_section .addto_cart.is-added {
+        pointer-events: none;
+        cursor: default;
+    }
+
+    .wishlist_section .cart_wrapper.added-to-cart .icon_cart_alt {
+        display: none;
+    }
+
+    .wishlist_section .cart_action {
+        display: flex;
+        justify-content: flex-end;
+        align-items: center;
+        gap: 8px;
+    }
+
+    .wishlist_section #delete_cart {
+        width: 44px !important;
+        height: 37px !important;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+        margin-left: 0px !important;
+    }
+
+    @media (max-width: 767px) {
+        .wishlist_section #delete_cart {
+            margin-right: 8px;
+        }
+    }
 </style>
 
 
@@ -123,10 +180,15 @@ require("components/head.php");
                                             <input type="hidden" name="color" class="color-option" value="0">
                                             <!-- <input type="hidden" name="size" class="color-option" value="0"> -->
                                             <div class="cart_action">
-                                                <div class="demo-icon-wrap-s2 cart_wrapper">
+                                                <div
+                                                    class="demo-icon-wrap-s2 cart_wrapper <?php echo ($wishListProd[$i]->in_cart == 1) ? 'added-to-cart' : ''; ?>">
                                                     <span aria-hidden="true" class="icon_cart_alt mb-0"></span>
-                                                    <a type="button" class="mb-0 addto_cart" id="addtocart">Add to
-                                                        cart</a>
+                                                    <a
+                                                        type="button"
+                                                        class="mb-0 addto_cart <?php echo ($wishListProd[$i]->in_cart == 1) ? 'is-added' : ''; ?>"
+                                                        data-added="<?php echo ($wishListProd[$i]->in_cart == 1) ? '1' : '0'; ?>">
+                                                        <?php echo ($wishListProd[$i]->in_cart == 1) ? 'Item added to cart' : 'Add to cart'; ?>
+                                                    </a>
                                                 </div>
                                                 <a class="trigger-btn m-0 delete_cart" data-toggle="modal" id="delete_cart"
                                                     prod_id="<?php echo $wishListProd[$i]->prod_id ?>">

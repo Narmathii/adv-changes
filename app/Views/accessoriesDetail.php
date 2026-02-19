@@ -1180,17 +1180,49 @@
 
 
     <script>
+        (function () {
+            const $popup = $(".popup");
+            if (!$popup.length) {
+                return;
+            }
 
-        $(".share-btn").click(function (e) {
-            e.preventDefault();
-            $(".popup").toggleClass("show");
-        })
+            if (!$(".share-backdrop").length) {
+                $("body").append('<div class="share-backdrop"></div>');
+            }
 
+            const $backdrop = $(".share-backdrop");
 
+            function openShareModal() {
+                $popup.addClass("show");
+                $backdrop.addClass("show");
+                $("html, body").addClass("share-modal-open");
+            }
 
-        $(".popup .close").click(function () {
-            $(".popup").removeClass("show");
-        });
+            function closeShareModal() {
+                $popup.removeClass("show");
+                $backdrop.removeClass("show");
+                $("html, body").removeClass("share-modal-open");
+            }
+
+            $(".share-btn").on("click", function (e) {
+                e.preventDefault();
+                e.stopPropagation();
+                openShareModal();
+            });
+
+            $(".popup .close").on("click", function (e) {
+                e.preventDefault();
+                closeShareModal();
+            });
+
+            $backdrop.on("click", closeShareModal);
+
+            $(document).on("keydown", function (e) {
+                if (e.key === "Escape") {
+                    closeShareModal();
+                }
+            });
+        })();
 
 
 

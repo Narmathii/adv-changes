@@ -1,19 +1,24 @@
 $(document).ready(function () {
-  var mode, JSON, res_DATA, courier_id;
+  var mode, res_DATA, courier_id;
 
-  getCourierDetails();
-
-  $.when(getCourierDetails()).done(function () {
-    dispCourierDetails(JSON);
+  getCourierDetails(function (courierDetails) {
+    dispCourierDetails(courierDetails);
   });
 
   function refreshDetails() {
-    $.when(getCourierDetails()).done(function (brandDetails) {
+    var currentPage = 0;
+
+    if ($.fn.DataTable.isDataTable("#datatable")) {
+      currentPage = $("#datatable").DataTable().page();
+    }
+
+    getCourierDetails(function (courierDetails) {
+      dispCourierDetails(courierDetails);
+
       var table = $("#datatable").DataTable();
-      table.clear();
-      table.rows.add(brandDetails);
-      table.draw();
-      window.location.reload();
+      var pageInfo = table.page.info();
+      var targetPage = Math.min(currentPage, Math.max(pageInfo.pages - 1, 0));
+      table.page(targetPage).draw("page");
     });
   }
 
@@ -37,11 +42,11 @@ $(document).ready(function () {
         stack: false,
         showHideTransition: "fade",
       });
-    } else if ($("#c_url").val() == "") {
+    } else if ($("#disp_order").val() == "") {
       $.toast({
         icon: "error",
         heading: "Error",
-        text: "Please Enter Couerier link ",
+        text: "Please Enter Display Order",
         position: "top-right",
         bgColor: "#red",
         loader: true,
@@ -104,14 +109,16 @@ $(document).ready(function () {
   }
 
   // *************************** [get Data] *************************************************************************
-  function getCourierDetails() {
-    $.ajax({
+  function getCourierDetails(callback) {
+    return $.ajax({
       type: "POST",
       url: base_Url + "get-courier",
       dataType: "json",
       success: function (data) {
         res_DATA = data;
-        dispCourierDetails(res_DATA);
+        if (typeof callback === "function") {
+          callback(res_DATA);
+        }
       },
       error: function () {
         console.log("Error");
@@ -138,6 +145,27 @@ $(document).ready(function () {
         },
         {
           mDataProp: "c_url",
+        },
+        {
+          mDataProp: function (data) {
+            return data.disp_order ?? "";
+          },
+        },
+        {
+          mDataProp: function (data, type, full, meta) {
+            return `
+            <div class="toggle-switch">
+              <input 
+                type="checkbox"
+                class="statusToggle"
+                id="toggle-${meta.row}"
+                data-id="${meta.row}"
+                ${parseInt(data.active_status, 10) === 1 ? "checked" : ""}
+              >
+              <label for="toggle-${meta.row}"></label>
+            </div>
+    `;
+          },
         },
 
         {
@@ -166,8 +194,54 @@ $(document).ready(function () {
 
     $("#courier_name").val(res_DATA[index].courier_name);
     $("#c_url").val(res_DATA[index].c_url);
+    $("#disp_order").val(res_DATA[index].disp_order);
 
     courier_id = res_DATA[index].courier_id;
+  });
+
+  $("#datatable").on("change", ".statusToggle", function () {
+    var $this = $(this);
+    var index = $this.data("id");
+    var currentCourierId = res_DATA[index].courier_id;
+    var previousState = !$this.is(":checked");
+    var isChecked = $this.is(":checked") ? 1 : 0;
+
+    Swal.fire({
+      title: "Are you sure?",
+      text: "You want to update the active status?",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes!",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        $.ajax({
+          type: "POST",
+          url: base_Url + "update-courier-status",
+          data: {
+            courier_id: currentCourierId,
+            active_status: isChecked,
+          },
+          success: function (data) {
+            var resData = $.parseJSON(data);
+
+            if (resData.code == 200) {
+              Swal.fire("Success", resData.msg, "success");
+              refreshDetails();
+            } else {
+              Swal.fire("Failure", resData.msg, "error");
+              $this.prop("checked", previousState);
+            }
+          },
+          error: function () {
+            $this.prop("checked", previousState);
+          },
+        });
+      } else {
+        $this.prop("checked", previousState);
+      }
+    });
   });
 
   // *************************** [Delete Data] *************************************************************************
@@ -200,7 +274,7 @@ $(document).ready(function () {
                 text: resData["message"],
                 icon: "success",
               });
-              $("#model-data").modal("hide");
+              $("#courier_modal").modal("hide");
               refreshDetails();
             } else {
               Swal.fire({
@@ -208,7 +282,7 @@ $(document).ready(function () {
                 text: resData["message"],
                 icon: "danger",
               });
-              $("#model-data").modal("hide");
+              $("#courier_modal").modal("hide");
               refreshDetails();
             }
           },

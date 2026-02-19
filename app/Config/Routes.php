@@ -369,6 +369,7 @@ $routes->get('courier-partners', 'admin\CourierController::courierPartner');
 $routes->post('insert-courier', 'admin\CourierController::insertCourier');
 $routes->post('get-courier', 'admin\CourierController::getCourier');
 $routes->post('update-courier', 'admin\CourierController::updateCourier');
+$routes->post('update-courier-status', 'admin\CourierController::updateCourierStatus');
 $routes->post('delete-courier', 'admin\CourierController::deleteCourier');
 
 //*************** Courier-Charges  ********************** */

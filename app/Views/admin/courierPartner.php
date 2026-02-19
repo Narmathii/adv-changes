@@ -55,6 +55,8 @@
                                                 <th>S.No</th>
                                                 <th>Courier Partner </th>
                                                 <th>Courier url </th>
+                                                <th>Display Order</th>
+                                                <th>Active Status</th>
                                                 <th>Action</th>
 
                                             </tr>
@@ -97,9 +99,17 @@
                         <div class="col-md-12">
 
                             <div class="my-2">
-                                <label for="c_url" class="form-label">Courier Link</label>
+                                <label for="c_url" class="form-label">Courier Link (Optional)</label>
                                 <input type="text" class="form-control c_url" id="c_url" placeholder="Courier link"
                                     name="c_url" value="">
+                                <span class="error text-danger modal_error mt-10"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="my-2">
+                                <label for="disp_order" class="form-label">Display Order</label>
+                                <input type="number" class="form-control disp_order" id="disp_order"
+                                    placeholder="Display order" name="disp_order" min="1" value="">
                                 <span class="error text-danger modal_error mt-10"></span>
                             </div>
                         </div>

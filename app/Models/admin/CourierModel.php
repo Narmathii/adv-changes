@@ -12,6 +12,9 @@ class CourierModel extends Model
     protected $allowedFields = [
         'courier_name',
         'c_url',
+        'type',
+        'active_status',
+        'disp_order',
 
     ];
 

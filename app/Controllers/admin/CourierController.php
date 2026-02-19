@@ -23,6 +23,14 @@ class CourierController extends BaseController
         $db = \Config\Database::connect();
 
         $data = $this->request->getPost();
+        $courierName = isset($data['courier_name']) ? trim((string) $data['courier_name']) : '';
+        $data['type'] = strtolower((string) preg_replace('/[\s-]+/', '_', $courierName));
+        if (!isset($data['active_status']) || $data['active_status'] === '') {
+            $data['active_status'] = 1;
+        }
+        if (!isset($data['disp_order']) || $data['disp_order'] === '') {
+            $data['disp_order'] = 0;
+        }
         $insertData = $AddModel->insert($data);
         $affectedRows = $db->affectedRows();
         if ($affectedRows === 1 && $insertData) {
@@ -41,7 +49,7 @@ class CourierController extends BaseController
     public function getCourier()
     {
         $db = \Config\Database::connect();
-        $getData = $db->query("SELECT * FROM `tbl_couriers` WHERE `flag` =1")->getResultArray();
+        $getData = $db->query("SELECT * FROM `tbl_couriers` WHERE `flag` = 1 ORDER BY `disp_order` ASC, `courier_id` ASC")->getResultArray();
         echo json_encode($getData);
     }
 
@@ -50,10 +58,13 @@ class CourierController extends BaseController
         $cID = $this->request->getPost('courier_id');
         $courierName = $this->request->getPost("courier_name");
         $courierURL = $this->request->getPost("c_url");
+        $type = strtolower((string) preg_replace('/[\s-]+/', '_', trim((string) $courierName)));
+        $dispOrder = $this->request->getPost("disp_order");
+        $dispOrder = ($dispOrder === null || $dispOrder === '') ? 0 : (int) $dispOrder;
 
         $db = \Config\Database::connect();
-        $query = "UPDATE tbl_couriers SET `courier_name` =? , `c_url` = ? WHERE courier_id = ? AND `flag` =1 ";
-        $updateData = $db->query($query, [$courierName, $courierURL, $cID]);
+        $query = "UPDATE tbl_couriers SET `courier_name` = ?, `c_url` = ?, `type` = ?, `disp_order` = ? WHERE courier_id = ? AND `flag` = 1 ";
+        $updateData = $db->query($query, [$courierName, $courierURL, $type, $dispOrder, $cID]);
 
         $affectedRow = $db->affectedRows();
 
@@ -95,12 +106,36 @@ class CourierController extends BaseController
         }
     }
 
+    public function updateCourierStatus()
+    {
+        $db = \Config\Database::connect();
+
+        $courierID = $this->request->getPost('courier_id');
+        $activeStatus = $this->request->getPost('active_status');
+
+        $query = "UPDATE tbl_couriers SET `active_status` = ? WHERE `courier_id` = ? AND `flag` = 1";
+        $updateData = $db->query($query, [$activeStatus, $courierID]);
+
+        $affectedRows = $db->affectedRows();
+        if ($updateData && $affectedRows === 1) {
+            $res['code'] = 200;
+            $res['msg'] = 'Status updated Successfully';
+            $res['status'] = 'success';
+            echo json_encode($res);
+        } else {
+            $res['code'] = 400;
+            $res['msg'] = 'Status update failed';
+            $res['status'] = 'failure';
+            echo json_encode($res);
+        }
+    }
+
     // *************************** Courier Charges *************************************************************************
     public function courierCharges()
     {
         $db = \Config\Database::connect();
         $res['district'] = $db->query("SELECT * FROM `tbl_district` WHERE `flag` = 1")->getResultArray();
-        $res['couriers'] = $db->query("SELECT * FROM `tbl_couriers` WHERE `flag` = 1")->getResultArray();
+        $res['couriers'] = $db->query("SELECT * FROM `tbl_couriers` WHERE `flag` = 1 AND (`active_status` = 1 OR `active_status` IS NULL) ORDER BY `disp_order` ASC, `courier_id` ASC")->getResultArray();
         $res['state'] = $db->query("SELECT * FROM `tbl_state` WHERE `flag` = 1")->getResultArray();
 
         return view("admin/courierCharges", $res);

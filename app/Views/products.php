@@ -707,7 +707,7 @@ require("components/head.php");
                                         data: { prod_id, tbl_name },
                                         success: function (data) {
                                             let res = $.parseJSON(data);
-                                            if (res.code === 200) {
+                                            if (Number(res.code) === 200) {
                                                 $.toast({
                                                     icon: "success",
                                                     heading: "Success",
@@ -784,3 +784,4 @@ require("components/head.php");
 </body>
 
 </html>
+

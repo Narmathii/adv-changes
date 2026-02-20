@@ -89,7 +89,7 @@ $(document).ready(function () {
         if (res.code == 200) {
           $.toast({
             icon: "success",
-            heading: "Suucess",
+            heading: "Success",
             text: res.msg,
             position: "top-right",
             bgColor: "#28292d",
@@ -154,3 +154,4 @@ $(document).ready(function () {
     });
   }
 });
+

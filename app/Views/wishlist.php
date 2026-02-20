@@ -87,8 +87,30 @@ require("components/head.php");
     }
 
     @media (max-width: 767px) {
+        .wishlist_section .wl_pricewrapper {
+            width: 100%;
+            max-width: 100%;
+            padding-right: 0 !important;
+        }
+
+        .wishlist_section .cart_action {
+            width: 100%;
+            justify-content: space-between;
+            gap: 6px;
+        }
+
+        .wishlist_section .cart_wrapper {
+            flex: 1 1 auto;
+            min-width: 0 !important;
+            max-width: calc(100% - 50px);
+        }
+
+        .wishlist_section .addto_cart {
+            font-size: 13px;
+        }
+
         .wishlist_section #delete_cart {
-            margin-right: 8px;
+            margin-right: 0 !important;
         }
     }
 </style>

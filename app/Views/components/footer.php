@@ -46,7 +46,8 @@
                     <h5 class="text-center">Information</h5>
                     <ul class="list-unstyled text-center" style="line-height: 2.2em;">
                         <li><a href="<?php echo base_url() ?>terms-conditions">Terms &amp; Conditions</a></li>
-                        <li><a href="<?php echo base_url() ?>privacy-policy">Privacy Policy</a></li>
+                        <li><a href="<?php echo base_url() ?>cancellation-policy">Cancellation Policy</a></li>
+                        <li><a href="<?php echo base_url() ?>privacy-policy">Privacy Policy</a></li>                    
                         <li><a href="<?php echo base_url() ?>contact-us">Contact Us</a></li>
                     </ul>
                 </div>
@@ -304,9 +305,19 @@
         var lowerSlider = document.querySelector(minSliderId);
         var upperSlider = document.querySelector(maxSliderId);
         var priceField = document.querySelector(priceFieldId);
+        var minValueInput = document.querySelector(minValueId);
+        var maxValueInput = document.querySelector(maxValueId);
+        if (!lowerSlider || !upperSlider || !priceField || !minValueInput || !maxValueInput) {
+            return;
+        }
+
+        // Display-only values; slider handles are the only input method.
+        minValueInput.readOnly = true;
+        maxValueInput.readOnly = true;
+
         // Set initial values
-        document.querySelector(minValueId).value = lowerSlider.value;
-        document.querySelector(maxValueId).value = upperSlider.value;
+        minValueInput.value = lowerSlider.value;
+        maxValueInput.value = upperSlider.value;
 
         // Function to update the track background color based on slider values
         function updateBackground() {
@@ -337,7 +348,8 @@
             }
 
             // Update the displayed values
-            document.querySelector(maxValueId).value = upperSlider.value;
+            minValueInput.value = lowerSlider.value;
+            maxValueInput.value = upperSlider.value;
             updateBackground();
         }
 
@@ -351,13 +363,15 @@
                     lowerSlider.value = parseInt(upperSlider.max) - 4;
                 }
             }
-            document.querySelector(minValueId).value = lowerSlider.value;
+            minValueInput.value = lowerSlider.value;
             updateValues();
+            lowerSlider.dispatchEvent(new Event('change'));
         };
 
         // Upper slider input event
         upperSlider.oninput = function () {
             updateValues();
+            upperSlider.dispatchEvent(new Event('change'));
         };
 
         // Initial background update

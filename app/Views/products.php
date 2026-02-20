@@ -145,7 +145,7 @@ require("components/head.php");
 
     @media only screen and (max-width :767px) {
         #offcanvasRight {
-            display: block !important;
+            /* display: block !important; */
         }
     }
 

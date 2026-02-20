@@ -2597,6 +2597,7 @@ GROUP BY `product_id` HAVING SUM(`prod_count`)<=10";
                 a.offer_price, 
                 a.product_img, 
                 a.stock_status,
+                a.quantity,
                 b.wishlist_id,
                 b.tbl_name,
                 CASE WHEN c.cart_id IS NULL THEN 0 ELSE 1 END AS in_cart
@@ -2618,8 +2619,32 @@ GROUP BY `product_id` HAVING SUM(`prod_count`)<=10";
                 continue;
             }
 
+            $resolvedSizeStock = 0;
+            $hasSize = ($size != 0 && $size != '0' && $size != '');
+            if ($hasSize) {
+                $resolvedSizeStock = (int) $size_stock;
+                $configQuery = "SELECT `size`, `soldout_status` FROM `tbl_configuration` WHERE `flag` = 1 AND `prod_id` = ? AND `tbl_name` = ?";
+                $config = $db->query($configQuery, [$prodID, $tableName])->getRow();
+
+                if ($config) {
+                    $sizeList = json_decode($config->size, true);
+                    $stockList = json_decode($config->soldout_status, true);
+
+                    if (is_array($sizeList) && is_array($stockList)) {
+                        $sizeList = array_map('strval', $sizeList);
+                        $matchedIndex = array_search((string) $size, $sizeList, true);
+                        if ($matchedIndex !== false && isset($stockList[$matchedIndex])) {
+                            $resolvedSizeStock = (int) $stockList[$matchedIndex];
+                        }
+                    }
+                }
+            }
+
+            $isAvailable = $hasSize ? ($resolvedSizeStock > 0) : ((int) $result->quantity > 0);
+
             $result->size = $size;
-            $result->size_stock = $size_stock;
+            $result->size_stock = $resolvedSizeStock;
+            $result->is_available = $isAvailable ? 1 : 0;
             $data[] = $result;
 
         }
@@ -2968,6 +2993,27 @@ GROUP BY `product_id` HAVING SUM(`prod_count`)<=10";
         }
 
         return view('policies', $res);
+    }
+    public function cancellationPolicy()
+    {
+        $db = \Config\Database::connect();
+        $res = $this->headerlist();
+
+        // to get wishlist count 
+        $res['wishlist_count'] = $this->getWishlistCount();
+
+        // toget cart count
+        $userID = session()->get('user_id');
+        $query = "SELECT * FROM tbl_user_cart WHERE user_id = ? AND flag =1";
+        $usercount = $db->query($query, [$userID])->getResultArray();
+        if ($usercount > 0) {
+            $res['cart_count'] = sizeof($usercount);
+
+        } else {
+            $res['cart_count'] = 0;
+        }
+
+        return view('cancellation_policy', $res);
     }
 
     public function newArrivalViewall($page_number)

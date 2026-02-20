@@ -76,12 +76,13 @@ $(document).ready(function () {
     var prod_id = $("#prod_id").val();
     var tbl_name = $("#tbl_name").val();
     var size = $(".size-details").val();
+    var size_stock = $("#size_stock").val() || 0;
     console.log(size);
 
     $.ajax({
       type: "POST",
       url: base_Url + "add-wishlist",
-      data: { prod_id: prod_id, tbl_name: tbl_name, size: size },
+      data: { prod_id: prod_id, tbl_name: tbl_name, size: size, size_stock: size_stock },
 
       success: function (data) {
         let res = $.parseJSON(data);

@@ -20,26 +20,35 @@ class WishlistController extends BaseController
         $tblName = $this->request->getPost('tbl_name');
         $quantity = $this->request->getPost('quantity');
         $size = $this->request->getPost('size');
+        $postedSizeStock = $this->request->getPost('size_stock');
 
         $sizeData = $size != '' ? $size : 0;
+        $resolvedSizeStock = 0;
 
 
         if ($size != '') {
-            $sizequery = "SELECT `size` FROM `tbl_configuration` WHERE flag = 1 AND `prod_id` = ? AND `tbl_name` = ?;";
+            $sizequery = "SELECT `size`, `soldout_status` FROM `tbl_configuration` WHERE flag = 1 AND `prod_id` = ? AND `tbl_name` = ?;";
             $getSize = $db->query($sizequery, [$prodID, $tblName])->getRow();
 
-            $sizeArray = json_decode($getSize->size);
+            if ($getSize) {
+                $sizeArray = json_decode($getSize->size, true);
+                $stockArray = json_decode($getSize->soldout_status, true);
 
+                if (is_array($sizeArray) && is_array($stockArray)) {
+                    $sizeArray = array_map('strval', $sizeArray);
+                    $matchedIndex = array_search((string) $size, $sizeArray, true);
+                    if ($matchedIndex !== false && isset($stockArray[$matchedIndex])) {
+                        $resolvedSizeStock = (int) $stockArray[$matchedIndex];
+                    }
+                }
+            }
 
-            if (is_array($sizeArray)) {
-                $sizeStock = implode(',', $sizeArray);
-                $count = count($sizeArray);
-
-                $sizeCount = $count;
+            if ($resolvedSizeStock <= 0 && is_numeric($postedSizeStock)) {
+                $resolvedSizeStock = (int) $postedSizeStock;
             }
 
         } else {
-            $sizeCount = 0;
+            $resolvedSizeStock = 0;
         }
 
 
@@ -48,7 +57,7 @@ class WishlistController extends BaseController
             'tbl_name' => $tblName,
             'user_id' => $userID,
             'size' => $sizeData,
-            'size_stock' => $sizeCount
+            'size_stock' => $resolvedSizeStock
         ];
 
 

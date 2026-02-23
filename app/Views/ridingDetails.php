@@ -419,8 +419,7 @@
 
 
                                     <div class="col-lg-4  pl-0 product-order">
-                                        <a type='button' id='addtocart' class="btn-main btn-fullwidth addto_cartbtn">Add
-                                            cart</a>
+                                        <a type='button' id='addtocart' class="btn-main btn-fullwidth addto_cartbtn">Add to cart</a>
                                     </div>
                                     <div class="col-lg-4  pl-0 product-order">
                                         <a id='buynowBtn' class="btn-main btn-fullwidth book_now">Buy

@@ -56,6 +56,15 @@ require("components/head.php");
         cursor: default;
     }
 
+    .wishlist_section .cart_wrapper.disabled-cart {
+        background: #868686;
+    }
+
+    .wishlist_section .addto_cart.is-disabled {
+        pointer-events: none;
+        cursor: not-allowed;
+    }
+
     .wishlist_section .cart_wrapper.added-to-cart .icon_cart_alt {
         display: none;
     }
@@ -78,10 +87,35 @@ require("components/head.php");
     }
 
     @media (max-width: 767px) {
+        .wishlist_section .wl_pricewrapper {
+            width: 100%;
+            max-width: 100%;
+            padding-right: 0 !important;
+        }
+
+        .wishlist_section .cart_action {
+            width: 100%;
+            justify-content: space-between;
+            gap: 6px;
+        }
+
+        .wishlist_section .cart_wrapper {
+            flex: 1 1 auto;
+            min-width: 0 !important;
+            max-width: calc(100% - 50px);
+        }
+
+        .wishlist_section .addto_cart {
+            font-size: 13px;
+        }
+
         .wishlist_section #delete_cart {
-            margin-right: 8px;
+            margin-right: 0 !important;
         }
     }
+    .product_name {
+            white-space: normal !important;
+}
 </style>
 
 
@@ -149,24 +183,22 @@ require("components/head.php");
 
                                             <?php
                                             $size = $wishListProd[$i]->size;
-                                            $res = $size != 0 ? $size : ' ';
+                                            $sizeValue = $size != 0 ? $size : ' ';
+                                            $isAvailable = isset($wishListProd[$i]->is_available) ? ((int) $wishListProd[$i]->is_available === 1) : ((int) $wishListProd[$i]->stock_status === 1);
+                                            $statusText = $isAvailable ? 'Available' : 'Out of Stock';
+                                            $stockclass = $isAvailable ? "product_status" : "product_status out_ofstock";
+                                            $isInCart = ((int) $wishListProd[$i]->in_cart === 1);
                                             ?>
 
                                             <?php
                                             if ($size != 0) { ?>
                                                 <p class="d-flex wish-status">Size: <span class="d-flex align-items-center">
-                                                        <span class="<?= $stockclass ?>"></span>
-                                                        <?= $res ?></span></p>
+                                                        <?= $sizeValue ?></span></p>
 
                                             <?php } ?>
-                                            <?php
-                                            $stockSts = $wishListProd[$i]->stock_status;
-                                            $res = $stockSts == 1 ? 'Available' : 'Outof Stock';
-                                            $stockclass = $stockSts == 1 ? "product_status" : "product_outofstock";
-                                            ?>
                                             <p class="d-flex wish-status">Status: <span class="d-flex align-items-center">
                                                     <span class="<?= $stockclass ?>"></span>
-                                                    <?= $res ?></span></p>
+                                                    <?= $statusText ?></span></p>
                                         </div>
 
                                         <div class="col-lg-4 col-md-6 wl_pricewrapper">
@@ -181,13 +213,14 @@ require("components/head.php");
                                             <!-- <input type="hidden" name="size" class="color-option" value="0"> -->
                                             <div class="cart_action">
                                                 <div
-                                                    class="demo-icon-wrap-s2 cart_wrapper <?php echo ($wishListProd[$i]->in_cart == 1) ? 'added-to-cart' : ''; ?>">
+                                                    class="demo-icon-wrap-s2 cart_wrapper <?php echo $isInCart ? 'added-to-cart' : ''; ?> <?php echo !$isAvailable ? 'disabled-cart' : ''; ?>">
                                                     <span aria-hidden="true" class="icon_cart_alt mb-0"></span>
                                                     <a
                                                         type="button"
-                                                        class="mb-0 addto_cart <?php echo ($wishListProd[$i]->in_cart == 1) ? 'is-added' : ''; ?>"
-                                                        data-added="<?php echo ($wishListProd[$i]->in_cart == 1) ? '1' : '0'; ?>">
-                                                        <?php echo ($wishListProd[$i]->in_cart == 1) ? 'Item added to cart' : 'Add to cart'; ?>
+                                                        class="mb-0 addto_cart <?php echo $isInCart ? 'is-added' : ''; ?> <?php echo !$isAvailable ? 'is-disabled' : ''; ?>"
+                                                        data-added="<?php echo $isInCart ? '1' : '0'; ?>"
+                                                        data-stock="<?php echo $isAvailable ? '1' : '0'; ?>">
+                                                        <?php echo $isInCart ? 'Item added to cart' : ($isAvailable ? 'Add to cart' : 'Out of stock'); ?>
                                                     </a>
                                                 </div>
                                                 <a class="trigger-btn m-0 delete_cart" data-toggle="modal" id="delete_cart"

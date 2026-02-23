@@ -442,7 +442,10 @@ class CartController extends BaseController
 
         $tblName = $this->request->getPost('table_name');
         $prodID = $this->request->getPost('prod_id');
-        $qty = $this->request->getPost('quantity');
+        $qty = (int) $this->request->getPost('quantity');
+        if ($qty <= 0) {
+            $qty = 1;
+        }
         $prodPrice = $this->request->getPost('prod_price');
         $configImage = $this->request->getPost('config_image1');
         $size = $this->request->getPost('size');
@@ -458,21 +461,64 @@ class CartController extends BaseController
         $sql = "SELECT * FROM tbl_user_cart WHERE  prod_id= ? AND table_name = ? AND size = ? AND user_id =? AND flag = 1";
         $getResult = $db->query($sql, [$prodID, $tblName, $size, $userID])->getResultArray();
 
-        $cartID = $getResult[0]['cart_id'];
-
-
         // getOrginal Products Price 
         $q1 = "SELECT `offer_price` ,`quantity`  FROM $tblName WHERE  `flag` = 1 AND `prod_id` = ?";
         $getOriginalProducts = $db->query($q1, [$prodID])->getRow();
+        if (!$getOriginalProducts) {
+            $result["status"] = "fail";
+            $result["code"] = 400;
+            $result["msg"] = "Product not found.";
+            echo json_encode($result);
+            return;
+        }
 
         $OriginalPrice = $getOriginalProducts->offer_price;
         $OriginalQty = $getOriginalProducts->quantity;
+        $availableStock = (int) $OriginalQty;
+
+        if ($size != 0 && $size != '0' && $size != '') {
+            $configQuery = "SELECT `size`, `soldout_status` FROM `tbl_configuration` WHERE `flag` = 1 AND `prod_id` = ? AND `tbl_name` = ?";
+            $config = $db->query($configQuery, [$prodID, $tblName])->getRow();
+
+            if ($config) {
+                $sizeList = json_decode($config->size, true);
+                $stockList = json_decode($config->soldout_status, true);
+
+                if (is_array($sizeList) && is_array($stockList)) {
+                    $sizeList = array_map('strval', $sizeList);
+                    $matchedIndex = array_search((string) $size, $sizeList, true);
+                    if ($matchedIndex !== false && isset($stockList[$matchedIndex])) {
+                        $availableStock = (int) $stockList[$matchedIndex];
+                    }
+                }
+            }
+            $size_Stock = $availableStock;
+        } else {
+            $size_Stock = 0;
+        }
+
+        if ($availableStock <= 0) {
+            $result["status"] = "fail";
+            $result["code"] = 400;
+            $result["msg"] = "Product is out of stock.";
+            echo json_encode($result);
+            return;
+        }
+
+        if ($qty > $availableStock) {
+            $result["status"] = "fail";
+            $result["code"] = 400;
+            $result["msg"] = "Only $availableStock item(s) available in stock.";
+            echo json_encode($result);
+            return;
+        }
 
 
 
         if (count($getResult) > 0) {
+            $cartID = $getResult[0]['cart_id'];
 
-            if ($prodPrice == $OriginalPrice && $qty <= $OriginalQty) {
+            if ($prodPrice == $OriginalPrice && $qty <= $availableStock) {
                 $finalProdPrice = $prodPrice;
             } else {
                 $finalProdPrice = $OriginalPrice;
@@ -483,7 +529,7 @@ class CartController extends BaseController
             $subTotal = number_format((float) $totalAmt, 2, '.', '');
 
             $query = "UPDATE tbl_user_cart 
-                      SET quantity = ?, prod_price = ?, sub_total = ?, color = ?, hex_code = ?, size = ?, config_image1 = ?  
+                      SET quantity = ?, prod_price = ?, sub_total = ?, color = ?, hex_code = ?, size = ?, config_image1 = ?, size_stock = ?  
                       WHERE user_id = ? AND table_name = ? AND prod_id = ? AND flag = 1 AND cart_id = ? ";
 
             $updateData = $db->query($query, [
@@ -494,6 +540,7 @@ class CartController extends BaseController
                 0,
                 $size,
                 $configImage,
+                $size_Stock,
                 $userID,
                 $tblName,
                 $prodID,
@@ -519,7 +566,7 @@ class CartController extends BaseController
 
         } else {
 
-            if ($prodPrice == $OriginalPrice && $qty <= $OriginalQty) {
+            if ($prodPrice == $OriginalPrice && $qty <= $availableStock) {
                 $finalProdPrice = $prodPrice;
             } else {
                 $finalProdPrice = $OriginalPrice;

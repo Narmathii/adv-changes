@@ -119,7 +119,7 @@
 }
 @media (max-width: 768px) {
   .price-field.price-field.mobile-view {
-    padding-left: 9px !important;
+    padding-left: 0 !important;
   }
 }
 
@@ -1035,11 +1035,19 @@ span {
 
 .addto_cartbtn {
   background: #ff9800 !important;
+  color: #fff !important;
 }
 
 .book_now {
   background-color: #ffeb3b;
-  color: #000;
+  color: #fff !important;
+}
+
+.buynow_btn,
+.buynow_btn:visited,
+.buynow_btn:focus,
+.buynow_btn:active {
+  color: #fff !important;
 }
 
 main {
@@ -3863,6 +3871,24 @@ body #section-newarrivals .owl-stage .owl-item {
   right: 7px;
 }
 
+@media only screen and (min-width: 769px) {
+  #section-newArrival .owl-prev,
+  #section-hotsale .owl-prev,
+  #section-offers .owl-prev,
+  #products_page .owl-prev {
+    left: 20px !important;
+    top: -12px !important;
+  }
+
+  #section-newArrival .owl-next,
+  #section-hotsale .owl-next,
+  #section-offers .owl-next,
+  #products_page .owl-next {
+    right: 10px !important;
+    top: -12px !important;
+  }
+}
+
 /* removing blue outline from buttons */
 
 button:focus,
@@ -5658,6 +5684,17 @@ nav,
   padding-left: 30px !important;
 }
 
+@media (max-width: 768px) {
+  #products_page .price-field.price-field.mobile-view {
+    padding-left: 0 !important;
+  }
+
+  #products_page .price-field.mobile-view input[type="range"]::-webkit-slider-runnable-track {
+    padding-left: 0 !important;
+    width: 100% !important;
+  }
+}
+
 .min-max {
   padding: 5px;
 }
@@ -5667,6 +5704,12 @@ nav,
   padding: 12px !important;
   border-radius: 10px !important;
 }
+
+#products_page .filter-price .price-field input[type="range"] {
+  padding-right: 0px !important;
+  padding-left: 0px !important;
+}
+
 /* Style for input value block */
 
 .price-wrap {
@@ -5851,6 +5894,14 @@ nav,
 .btn-main.buynow_btn {
   align-self: flex-end;
   margin-top: auto;
+}
+
+@media only screen and (max-width: 767px) {
+  .addto_cartbtn.btn-fullwidth,
+  .book_now.btn-fullwidth {
+    white-space: nowrap;
+    font-size: 15px !important;
+  }
 }
 /* .offer {
   position: absolute;
@@ -6368,6 +6419,80 @@ a.youtube::before{
 .accordion-button:not(:hover):focus {
   background-color: inherit !important;
   box-shadow: inherit !important;
+}
+
+/* Product detail media badges/actions: keep size + spacing consistent across views */
+.web-view .offer,
+.mob-view .offer {
+  width: 36px !important;
+  height: 36px !important;
+  top: 12px !important;
+  left: 16px !important;
+  padding: 0 !important;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+}
+.mob-view .offer {
+  left: 24px !important;
+}
+
+
+.web-view .wishlist-btn,
+.mob-view .wishlist-btn {
+  width: 36px !important;
+  height: 36px !important;
+  top: 12px !important;
+  right: 16px !important;
+  padding: 0 !important;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.mob-view .wishlist-btn {
+  right: 24px !important;
+}
+
+.web-view .wishlist-btn::before,
+.mob-view .wishlist-btn::before {
+  font-size: 20px !important;
+  line-height: 1;
+}
+
+.web-view .share-btn,
+.mob-view .share-btn {
+  width: 36px !important;
+  height: 36px !important;
+  top: 58px !important;
+  right: 16px !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  position: absolute;
+  z-index: 99;
+  color: #fff !important;
+  background: #85a229;
+  border-radius: 50%;
+  box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14),
+    0 3px 1px -2px rgba(0, 0, 0, 0.12), 0 1px 5px 0 rgba(0, 0, 0, 0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 17px !important;
+  line-height: 1;
+}
+.mob-view .share-btn {
+  right: 24px !important;
+}
+
+
+.tab-default .nav-tabs {
+  border-bottom: 0 !important;
+}
+
+.tab-default .nav-link.active,
+.tab-default .nav-link:hover {
+  border-bottom: 0 !important;
 }
 
 .dark-scheme section {

@@ -1,50 +1,62 @@
 $(document).ready(function () {
-  $(".delete_cart").click(function () {
+  let deleteProdID = null;
+
+  $(".delete_cart").on("click", function () {
+    deleteProdID = $(this).attr("prod_id");
     $("#myModal").modal("show");
+  });
 
-    let prodID = $(this).attr("prod_id");
+  $(".btnclose, .modal .close").on("click", function () {
+    $("#myModal").modal("hide");
+  });
 
-    if (
-      $(".deleteBtn").on("click", function () {
-        $.ajax({
-          type: "POST",
-          url: base_Url + "delete-wishlist",
-          data: { prod_id: prodID },
-          //   headers: {
-          //     "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
-          //   },
+  $(".deleteBtn").on("click", function () {
+    if (!deleteProdID) {
+      return;
+    }
 
-          success: function (data) {
-            $("#myModal").modal("hide");
-            var resData = $.parseJSON(data);
-
-            if (resData.code == 200) {
-              //   updateCSRF(resData.csrf);
-              location.reload();
-            } else {
-              //   updateCSRF(resData.csrf);
-              $.toast({
-                text: resData.msg,
-                hideAfter: 2000,
-                position: "top-center",
-              });
-            }
-          },
-        });
-      })
-    );
-    if (
-      $(".btnclose").on("click", function () {
+    $.ajax({
+      type: "POST",
+      url: base_Url + "delete-wishlist",
+      data: { prod_id: deleteProdID },
+      success: function (data) {
         $("#myModal").modal("hide");
-      })
-    );
+        var resData = $.parseJSON(data);
+
+        if (resData.code == 200) {
+          location.reload();
+        } else {
+          $.toast({
+            text: resData.msg,
+            hideAfter: 2000,
+            position: "top-center",
+          });
+        }
+      },
+    });
   });
 
   $(".addto_cart").click(function (event) {
     event.preventDefault();
     const $btn = $(this);
+    const stock = parseInt($btn.data("stock"), 10) || 0;
 
     if (parseInt($btn.data("added"), 10) === 1) {
+      return;
+    }
+
+    if (stock <= 0) {
+      $.toast({
+        icon: "warning",
+        heading: "Warning",
+        text: "Product is out of stock",
+        position: "top-right",
+        bgColor: "#28292d",
+        loader: true,
+        hideAfter: 2000,
+        stack: false,
+        showHideTransition: "fade",
+      });
       return;
     }
 
@@ -92,6 +104,9 @@ $(document).ready(function () {
             stack: false,
             showHideTransition: "fade",
           });
+          setTimeout(function () {
+            location.reload();
+          }, 700);
         } else if (
           result.code == 400 &&
           typeof result.msg === "string" &&
@@ -110,6 +125,9 @@ $(document).ready(function () {
             stack: false,
             showHideTransition: "fade",
           });
+          setTimeout(function () {
+            location.reload();
+          }, 700);
         } else {
           $.toast({
             icon: "error",

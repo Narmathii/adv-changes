@@ -602,8 +602,17 @@ class SearchController extends BaseController
             $query .= " AND prod_id IN ($idStr)";
         }
 
-        if (!empty($minPrice) && !empty($maxPrice)) {
-            $query .= " AND offer_price BETWEEN $minPrice AND $maxPrice";
+        $minPrice = is_numeric($minPrice) ? (float) $minPrice : null;
+        $maxPrice = is_numeric($maxPrice) ? (float) $maxPrice : null;
+        if ($minPrice !== null && $maxPrice !== null) {
+            if ($minPrice > $maxPrice) {
+                [$minPrice, $maxPrice] = [$maxPrice, $minPrice];
+            }
+            $query .= " AND offer_price BETWEEN {$minPrice} AND {$maxPrice}";
+        } elseif ($minPrice !== null) {
+            $query .= " AND offer_price >= {$minPrice}";
+        } elseif ($maxPrice !== null) {
+            $query .= " AND offer_price <= {$maxPrice}";
         }
 
         if (!empty($available)) {
@@ -751,16 +760,23 @@ class SearchController extends BaseController
         $query = "SELECT * FROM $tablename WHERE `flag` = 1 AND $submenu = $submenu_id";
 
 
-        if (isset($minPrice, $maxPrice) && !empty($minPrice) && !empty($maxPrice)) {
-            $query .= "
-                AND offer_price BETWEEN '" . $minPrice . "' AND '" . $maxPrice . "'
-            ";
+        $minPrice = is_numeric($minPrice) ? (float) $minPrice : null;
+        $maxPrice = is_numeric($maxPrice) ? (float) $maxPrice : null;
+        if ($minPrice !== null && $maxPrice !== null) {
+            if ($minPrice > $maxPrice) {
+                [$minPrice, $maxPrice] = [$maxPrice, $minPrice];
+            }
+            $query .= " AND offer_price BETWEEN {$minPrice} AND {$maxPrice}";
+        } elseif ($minPrice !== null) {
+            $query .= " AND offer_price >= {$minPrice}";
+        } elseif ($maxPrice !== null) {
+            $query .= " AND offer_price <= {$maxPrice}";
         }
 
         if (isset($available) && !empty($available)) {
-            if ($available[0] == 1) {
+            if (in_array("1", $available, true)) {
                 $query .= " AND quantity > 0";
-            } else if ($available[1] == 0) {
+            } else if (in_array("0", $available, true)) {
                 $query .= " AND quantity <= 0";
             }
         }
@@ -1175,18 +1191,27 @@ class SearchController extends BaseController
     private function buildAdditionalConditions($minPrice, $maxPrice, $available, $brand, $tableAlias, $discount, $discount_mob)
     {
         $conditions = "";
-        if (isset($minPrice, $maxPrice) && !empty($minPrice) && !empty($maxPrice)) {
+        $minPrice = is_numeric($minPrice) ? (float) $minPrice : null;
+        $maxPrice = is_numeric($maxPrice) ? (float) $maxPrice : null;
+        if ($minPrice !== null && $maxPrice !== null) {
+            if ($minPrice > $maxPrice) {
+                [$minPrice, $maxPrice] = [$maxPrice, $minPrice];
+            }
             $conditions .= " AND {$tableAlias}.offer_price BETWEEN {$minPrice} AND {$maxPrice}";
+        } elseif ($minPrice !== null) {
+            $conditions .= " AND {$tableAlias}.offer_price >= {$minPrice}";
+        } elseif ($maxPrice !== null) {
+            $conditions .= " AND {$tableAlias}.offer_price <= {$maxPrice}";
         }
         if (isset($available) && !empty($available)) {
-
-            if ($available[0] == 1) {
+            if (in_array("1", $available, true)) {
                 $availableCondition = " > 0";
-            } else if ($available[0] == 0) {
+            } else if (in_array("0", $available, true)) {
                 $availableCondition = " <= 0";
             }
-
-            $conditions .= " AND {$tableAlias}.quantity {$availableCondition}";
+            if (!empty($availableCondition)) {
+                $conditions .= " AND {$tableAlias}.quantity {$availableCondition}";
+            }
         }
         if (isset($brand) && !empty($brand)) {
             $placeholders = implode("','", $brand);

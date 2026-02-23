@@ -112,10 +112,15 @@ padding: 10px 20px 10px;
 
 /* Krish  */
 .d-text.address-field {
-    background-color: rgba(0, 0, 0, 0.05);
+    background-color: rgba(0, 0, 0, 0.05) !important;
 }
-.save_cancel_btn {
-    background-color: rgba(0, 0, 0, 0.05);
+.address_detail .save_cancel_btn {
+    margin-top: 0px !important;
+    background-color: rgba(0, 0, 0, 0.05) !important;
+}
+
+#add_form .save_cancel_btn {
+    background-color: #fff !important;
 }
 
 </style>

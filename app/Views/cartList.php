@@ -422,6 +422,11 @@ require("components/head.php");
     padding-top: 75px !important;
   }
 
+  #cartlist_page #nav-header {
+    padding-left: 25px !important;
+    padding-right: 25px !important;
+  }
+
   @media only screen and (max-width: 425px) {
     .change-address {
       top: 2px !important;

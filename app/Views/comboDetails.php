@@ -84,7 +84,7 @@
                                         
                                                 
                                                 <div class="col-lg-4 ">
-                                                <a  type='button' id='addtocart' class="btn-main btn-fullwidth addto_cartbtn">Add cart</a>
+                                                <a  type='button' id='addtocart' class="btn-main btn-fullwidth addto_cartbtn">Add to cart</a>
                                                 </div>
                                                 <div class="col-lg-4 ">
                                                     <a href="<?php echo base_url()?>buy-now"  type='button' id='send_message' class="btn-main btn-fullwidth book_now">Buy Now</a>

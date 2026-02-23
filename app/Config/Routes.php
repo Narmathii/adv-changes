@@ -170,6 +170,7 @@ $routes->get('get-search-suggestions', 'SearchController::searchSuggesstions');
 
 
 $routes->get('privacy-policy', 'Home::policies');
+$routes->get('cancellation-policy', 'Home::cancellationPolicy');
 $routes->get('myorders', 'Home::myorders', ['filter' => 'PaymentAuth']);
 
 $routes->get('hotsale/(:any)', 'Home::hotsale/$1');

@@ -113,6 +113,9 @@ require("components/head.php");
             margin-right: 0 !important;
         }
     }
+    .product_name {
+            white-space: normal !important;
+}
 </style>
 
 

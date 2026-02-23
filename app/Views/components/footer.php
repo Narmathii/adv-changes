@@ -21,7 +21,7 @@
                     
                     <address class="s1">
                         <span style="cursor: default;">
-                            <i class="id-color fa fa-map-marker fa-lg"></i><span class="footer_address">Old no 44A, new no 69A, G.K.D.Nagar third Street, Pappanaickenpalayam, Coimbatore - 641037, Tamil Nadu , India
+                            <i class="id-color fa fa-map-marker fa-lg"></i><span class="footer_address" style="cursor: default;">Old no 44A, new no 69A, G.K.D.Nagar third Street, Pappanaickenpalayam, Coimbatore - 641037, Tamil Nadu , India
                             </span>
                         </span>
                         
@@ -74,7 +74,7 @@
             <div class="row align-items-center">
                 
                 <div class="col-md-6 text-copy-left mb-2 mb-md-0">
-                    <span>Copyright © <span id="current-year"></span> AdventureShoppe All rights reserved</span>
+                    <span>Copyright © <span id="current-year"></span> <a href="https://adventureshoppe.com/" class="dev-link">AdventureShoppe </a>All rights reserved</span>
                 </div>
 
                 <div class="col-md-6 text-copy-right">

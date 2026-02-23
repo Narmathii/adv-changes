@@ -135,7 +135,7 @@ class CourierController extends BaseController
     {
         $db = \Config\Database::connect();
         $res['district'] = $db->query("SELECT * FROM `tbl_district` WHERE `flag` = 1")->getResultArray();
-        $res['couriers'] = $db->query("SELECT * FROM `tbl_couriers` WHERE `flag` = 1 AND (`active_status` = 1 OR `active_status` IS NULL) ORDER BY `disp_order` ASC, `courier_id` ASC")->getResultArray();
+        $res['couriers'] = $db->query("SELECT * FROM `tbl_couriers` WHERE `flag` = 1 ORDER BY `disp_order` ASC, `courier_id` ASC")->getResultArray();
         $res['state'] = $db->query("SELECT * FROM `tbl_state` WHERE `flag` = 1")->getResultArray();
 
         return view("admin/courierCharges", $res);

@@ -256,7 +256,7 @@ $buildBannerHref = static function ($link) {
 
     .social-icons {
         padding: 30px;
-        background-color: #000000cf;
+        background-color: #000;
         text-align: center;
         width: 100%;
         /* position: absolute; */
@@ -272,7 +272,11 @@ $buildBannerHref = static function ($link) {
         text-decoration: none;
         background: #505050;
         width: 25%;
-        transform: skew(-23deg);
+        transform: none;
+    }
+
+    .social-icons .socialmedia_content {
+        transform: none !important;
     }
 
 
@@ -488,10 +492,6 @@ $buildBannerHref = static function ($link) {
                                                     <div class="col-lg-12 text-center p-3 mb-sm-30">
                                                         <div class="banner_container">
                                                             <div class="banner_content">
-                                                                <a href="<?php echo $buildBannerHref($slide['link']); ?>"
-                                                                    class="btn-main btn-fullwidth shop_now">
-                                                                    Shop Now
-                                                                </a>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -550,8 +550,6 @@ $buildBannerHref = static function ($link) {
                                     <div class="mask">
                                         <div class="container banner_container">
                                             <div class="banner_content">
-                                                <a href="<?php echo $buildBannerHref($slide['link']); ?>" type='button'
-                                                    class="btn-main btn-fullwidth shop_now">Shop Now</a>
                                             </div>
                                         </div>
                                     </div>

@@ -250,7 +250,7 @@
                                          <?php  }  else { ?>
                                             <div class="col-lg-4 ">
                                             <a type='button' id='addtocart'
-                                                class="btn-main btn-fullwidth addto_cartbtn">Add cart</a>
+                                                class="btn-main btn-fullwidth addto_cartbtn">Add to cart</a>
                                         </div>
                                         <div class="col-lg-4 ">
                                             <a id='buynowBtn' class="btn-main btn-fullwidth book_now">Buy Now</a>

@@ -215,28 +215,6 @@ require("components/head.php");
                             <div class="item_filter_group">
                                 <h4>Price (₹)</h4>
                                 <fieldset class="filter-price">
-                                    <div class="price-field">
-                                        <input type="range" min="0" class="input-min common_selector" max="50000"
-                                            value="0" id="mob_min_val">
-                                        <input type="range" min="0" class="input-max common_selector" max="50000"
-                                            value="50000" id="mob_max_val">
-                                    </div>
-                                    <div class="price-wrap">
-                                        <div class="price-wrap-1">
-
-                                            <input id="mob_one">
-                                            <label for="one"></label>
-                                        </div>
-                                        <div class="price-wrap_line">-</div>
-
-                                        <div class="price-wrap-2">
-
-                                            <input id="mob_two">
-                                            <label for="two"></label>
-                                        </div>
-                                    </div>
-                                </fieldset>
-                                <fieldset class="filter-price">
                                     <div class="price-field mobile-view">
                                         <input type="range" min="0" class="input-min common_selector" max="50000"
                                             value="0" id="mob_min_val">
